@@ -2,12 +2,12 @@
 
 #include <Logger.hh>
 
+#include <algorithm>
 #include <array>
 #include <cstddef>
 #include <cstdint>
 #include <limits>
 #include <type_traits>
-#include <algorithm>
 
 namespace Kinoko {
 

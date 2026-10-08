@@ -49,7 +49,8 @@ void KartCamera::DestroyInstance() {
 KartCamera::KartCamera()
     : m_hopPosY(0), m_fov(0), m_pitchDeg(0), m_forward(EGG::Vector3f::zero), m_camParams(nullptr) {}
 
-/// The field of view widens by 6 degrees while boosting (10% of the gap per frame) and eases back at 3% per frame.
+/// The field of view widens by 6 degrees while boosting (10% of the gap per frame) and eases back
+/// at 3% per frame.
 void KartCamera::calcFov(const Kart::KartObjectProxy *proxy) {
     constexpr f32 BOOST_FOV_ADD = 6.0f;
     constexpr f32 RISE_RATE = 0.1f;

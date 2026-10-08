@@ -21,9 +21,9 @@ public:
     /// @addr{0x80768734}
     void createCollision() override {}
 
-    /// Added for Kinoko web's renderer: same issue as ObjectFirebar -- this spawner doesn't override
-    /// loadGraphics() so it loads a real fireball model but never moves itself, leaving a permanent
-    /// extra frozen fireball on top of the ring it manages.
+    /// Added for Kinoko web's renderer: same issue as ObjectFirebar -- this spawner doesn't
+    /// override loadGraphics() so it loads a real fireball model but never moves itself, leaving a
+    /// permanent extra frozen fireball on top of the ring it manages.
     [[nodiscard]] bool isVisible() const override {
         return false;
     }

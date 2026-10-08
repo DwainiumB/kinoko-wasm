@@ -612,7 +612,8 @@ void KartCollide::calcObjectCollision() {
     calcPoleTimer();
 }
 
-/// Kart-to-kart collision -- see the header comment on this method for what this approximates and why.
+/// Kart-to-kart collision -- see the header comment on this method for what this approximates and
+/// why.
 void KartCollide::calcKartCollision() {
     using Kart::eStatus;
 
@@ -634,24 +635,27 @@ void KartCollide::calcKartCollision() {
         KartObject *other = mgr->object(i);
         const auto &otherStatus = other->status();
         if (otherStatus.onBit(eStatus::BeforeRespawn, eStatus::InRespawn, eStatus::TriggerRespawn,
-                    eStatus::CannonStart, eStatus::InCannon, eStatus::AfterCannon, eStatus::Burnout)) {
+                    eStatus::CannonStart, eStatus::InCannon, eStatus::AfterCannon,
+                    eStatus::Burnout)) {
             continue;
         }
 
-        // A quick reject against the two karts' single combined bounding spheres before the real check below,
-        // which is worth doing since that one below is O(hitboxes^2).
+        // A quick reject against the two karts' single combined bounding spheres before the real
+        // check below, which is worth doing since that one below is O(hitboxes^2).
         EGG::Vector3f coarseDelta = pos() - other->pos();
         f32 coarseMinDist = m_boundingRadius + other->collide()->boundingRadius();
         if (coarseDelta.squaredLength() >= coarseMinDist * coarseMinDist) {
             continue;
         }
 
-        // The real per-vehicle hitbox shape: each kart's body is several spheres (this data is real, not a guess --
-        // community-documented from the game files, e.g. https://docs.google.com/spreadsheets/d/1ohyehngjXd1cpbXR0gJVwS61aBKjsPaV0PmEtXcwsGI
-        // -- and Kinoko already loads the same BSP hitbox data for this exact CollisionGroup, just previously only
-        // used here as one crude combined circle via boundingRadius()). Using each hitbox's real position and radius
-        // instead makes the collision shape match the kart's actual elongated/offset body instead of a circle
-        // centred on it. The deepest-overlapping pair decides the push.
+        // The real per-vehicle hitbox shape: each kart's body is several spheres (this data is
+        // real, not a guess -- community-documented from the game files, e.g.
+        // https://docs.google.com/spreadsheets/d/1ohyehngjXd1cpbXR0gJVwS61aBKjsPaV0PmEtXcwsGI
+        // -- and Kinoko already loads the same BSP hitbox data for this exact CollisionGroup, just
+        // previously only used here as one crude combined circle via boundingRadius()). Using each
+        // hitbox's real position and radius instead makes the collision shape match the kart's
+        // actual elongated/offset body instead of a circle centred on it. The deepest-overlapping
+        // pair decides the push.
         auto *myGroup = collisionGroup();
         auto *otherGroup = other->collisionGroup();
         f32 bestOverlap = 0.0f;
@@ -683,22 +687,25 @@ void KartCollide::calcKartCollision() {
             continue;
         }
 
-        // Weight isn't in the real SmallBump formula (it's only ever used against static objects there), but a real
-        // recording of bumps between two racers (via a Dolphin memory logger, kart_collision_logger.lua) shows the
-        // same asymmetry community documentation describes: one side of a bump consistently loses much more speed
-        // than the other. Splitting the push by weight share approximates that direction; equal weights still split
-        // evenly, a much heavier kart holds its line while the lighter one takes most of the push.
+        // Weight isn't in the real SmallBump formula (it's only ever used against static objects
+        // there), but a real recording of bumps between two racers (via a Dolphin memory logger,
+        // kart_collision_logger.lua) shows the same asymmetry community documentation describes:
+        // one side of a bump consistently loses much more speed than the other. Splitting the push
+        // by weight share approximates that direction; equal weights still split evenly, a much
+        // heavier kart holds its line while the lighter one takes most of the push.
         f32 myWeight = param()->stats().weight, otherWeight = other->param()->stats().weight;
         f32 pushShare = otherWeight / std::max(1.0f, myWeight + otherWeight);
 
-        // The force magnitude (a straight reuse of SmallBump's 30.0f, scaled by weight share) was tuned against that
-        // same recording: 30.0f alone produced a ~29 unit/frame speed loss on the losing side of an equal-weight
-        // bump, versus a real ~6-8 measured in several clean events; 6.0f (kept in the same "double at pushShare=1,
-        // zero at pushShare=0" shape) landed within about 1 unit of the real value for a comparable encounter.
-        // An earlier version of this function also added a direct position correction, to keep two karts holding
-        // station side by side from just sitting overlapped; the same recording showed that was unrealistic (it
-        // dominated the whole effect, producing that ~29-unit anomaly on its own) and, in every recorded case, the
-        // velocity push alone was already enough to separate the pair within a few frames, so it was removed.
+        // The force magnitude (a straight reuse of SmallBump's 30.0f, scaled by weight share) was
+        // tuned against that same recording: 30.0f alone produced a ~29 unit/frame speed loss on
+        // the losing side of an equal-weight bump, versus a real ~6-8 measured in several clean
+        // events; 6.0f (kept in the same "double at pushShare=1, zero at pushShare=0" shape) landed
+        // within about 1 unit of the real value for a comparable encounter. An earlier version of
+        // this function also added a direct position correction, to keep two karts holding station
+        // side by side from just sitting overlapped; the same recording showed that was unrealistic
+        // (it dominated the whole effect, producing that ~29-unit anomaly on its own) and, in every
+        // recorded case, the velocity push alone was already enough to separate the pair within a
+        // few frames, so it was removed.
         move()->applyForce(6.0f * (2.0f * pushShare), hitDir, false);
     }
 }

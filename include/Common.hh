@@ -8,9 +8,9 @@
 #include <egg/core/Heap.hh>
 
 #include <array>
+#include <bit>
 #include <limits>
 #include <utility>
-#include <bit>
 
 namespace Kinoko {
 

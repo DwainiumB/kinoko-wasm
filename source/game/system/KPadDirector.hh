@@ -28,12 +28,14 @@ public:
     void startGhostProxies();
     void endGhostProxies();
 
-    /// @brief The input state of player idx. Players are numbered as in RaceConfig; player 0 is the local one.
+    /// @brief The input state of player idx. Players are numbered as in RaceConfig; player 0 is the
+    /// local one.
     [[nodiscard]] const KPadPlayer &playerInput(size_t idx = 0) const {
         return m_playerInputs[idx];
     }
 
-    /// @brief The externally driven controller of player idx (the local player, or a CPU driven by the host).
+    /// @brief The externally driven controller of player idx (the local player, or a CPU driven by
+    /// the host).
     [[nodiscard]] KPadHostController *hostController(size_t idx = 0) {
         return m_hostControllers[idx];
     }

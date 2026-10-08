@@ -81,7 +81,7 @@ void MapdataCheckPoint::initCheckpointLinks(MapdataCheckPointAccessor &accessor,
 
     // Form the checkpoint's quadrilateral(s)
     size_t i = 0;
-	for (auto &next : m_nextPoints) {
+    for (auto &next : m_nextPoints) {
         if (i < m_nextCount) {
             auto &nextLinked = m_nextPoints[i];
             auto *nextPoint = nextLinked.checkpoint;
@@ -94,7 +94,7 @@ void MapdataCheckPoint::initCheckpointLinks(MapdataCheckPointAccessor &accessor,
             next.p0diff = EGG::Vector2f::zero;
             next.p1diff = EGG::Vector2f::zero;
         }
-		++i;
+        ++i;
     }
 }
 

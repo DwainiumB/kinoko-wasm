@@ -62,10 +62,10 @@ public:
         return m_active;
     }
 
-    /// @addr{N/A} Added for Kinoko web's renderer: half this pool sits inactive/un-positioned at any
-    /// given moment (see ObjectTruckWagon::init()), so exporting it would show a static leftover
-    /// minecart parked at its last reset position (or its never-reset spawn point) that no real draw
-    /// call would reach.
+    /// @addr{N/A} Added for Kinoko web's renderer: half this pool sits inactive/un-positioned at
+    /// any given moment (see ObjectTruckWagon::init()), so exporting it would show a static
+    /// leftover minecart parked at its last reset position (or its never-reset spawn point) that no
+    /// real draw call would reach.
     [[nodiscard]] bool isVisible() const override {
         return m_active;
     }

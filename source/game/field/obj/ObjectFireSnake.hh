@@ -20,12 +20,12 @@ public:
     /// object's collision (loadAABB()) the moment it's created, regardless of this snake's state --
     /// but calcChildren() is the thing that's actually meant to control when a kid first becomes
     /// active (staggered 10/20 frames into the parent's first Falling cycle). Before that first
-    /// cycle ever runs (e.g. while a long per-placement launch delay hasn't elapsed yet), the kid sat
-    /// auto-registered and visible at its raw, never-updated construction position -- a stale
-    /// duplicate on top of every other not-yet-launched kid sharing the same placement. Skipping the
-    /// auto-registration here (but still building the real collision shape via createCollision(), so
-    /// calcCollisionTransform() stays safe once calcChildren() does register it) defers registration
-    /// entirely to that existing, correctly-timed call.
+    /// cycle ever runs (e.g. while a long per-placement launch delay hasn't elapsed yet), the kid
+    /// sat auto-registered and visible at its raw, never-updated construction position -- a stale
+    /// duplicate on top of every other not-yet-launched kid sharing the same placement. Skipping
+    /// the auto-registration here (but still building the real collision shape via
+    /// createCollision(), so calcCollisionTransform() stays safe once calcChildren() does register
+    /// it) defers registration entirely to that existing, correctly-timed call.
     void load() override {
         loadGraphics();
         loadAnims();

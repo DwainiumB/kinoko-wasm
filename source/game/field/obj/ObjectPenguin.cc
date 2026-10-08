@@ -123,8 +123,10 @@ void ObjectPenguinS::calcRail() {
         m_state = State::StandUp;
         m_anmTimer = anmMgr->activeAnim(Render::AnmType::Chr)->frameCount();
     } else if (setting == 1 && (m_state == State::Walk || m_state == State::Dive)) {
-        // Added for Kinoko web: the Dive state (the run before a slide, entered at a setting-2 rail point) never ended, so after the first lap of its rail a penguin ran forever
-        // and never slid again. Each rail runs walk -> run (setting 2) -> slide (setting 1) -> stand up (setting 0) -> walk ...
+        // Added for Kinoko web: the Dive state (the run before a slide, entered at a setting-2 rail
+        // point) never ended, so after the first lap of its rail a penguin ran forever and never
+        // slid again. Each rail runs walk -> run (setting 2) -> slide (setting 1) -> stand up
+        // (setting 0) -> walk ...
         auto *anmMgr = m_drawMdl->anmMgr();
         anmMgr->playAnim(0.0f, 1.0f, 1);
         m_state = State::Slider;

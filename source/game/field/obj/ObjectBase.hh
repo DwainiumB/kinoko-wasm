@@ -93,10 +93,11 @@ public:
         return m_id;
     }
 
-    /// @brief The object's current state, for objects whose visible animation depends on discrete game state (added
-    /// for Kinoko web's renderer, not part of the original game -- most objects have no such thing, hence the -1
-    /// default). Overridden by StateManager-driven objects whose model has one clip per state (e.g. the moles), so
-    /// the renderer can play the right clip instead of guessing with a generic idle loop.
+    /// @brief The object's current state, for objects whose visible animation depends on discrete
+    /// game state (added for Kinoko web's renderer, not part of the original game -- most objects
+    /// have no such thing, hence the -1 default). Overridden by StateManager-driven objects whose
+    /// model has one clip per state (e.g. the moles), so the renderer can play the right clip
+    /// instead of guessing with a generic idle loop.
     [[nodiscard]] virtual s32 animState() const {
         return -1;
     }
@@ -190,10 +191,10 @@ public:
 
     /// @brief Whether this object should currently be drawn. True for almost everything; objects
     /// that cycle through an inactive/parked state in a reusable pool (e.g. ObjectTruckWagonCart,
-    /// which keeps half its pool inactive and un-positioned at a time on Wario's Gold Mine) override
-    /// this to hide themselves while inactive, instead of exporting a static leftover position no
-    /// real draw call would ever reach. Added for Kinoko web's renderer, not part of the original
-    /// game.
+    /// which keeps half its pool inactive and un-positioned at a time on Wario's Gold Mine)
+    /// override this to hide themselves while inactive, instead of exporting a static leftover
+    /// position no real draw call would ever reach. Added for Kinoko web's renderer, not part of
+    /// the original game.
     [[nodiscard]] virtual bool isVisible() const {
         return true;
     }

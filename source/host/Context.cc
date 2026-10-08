@@ -157,7 +157,8 @@ bool Context::operator==(const Context &rhs) const {
     return ret;
 }
 
-size_t Context::CountDifferingPages(size_t *pagesPerMiB, size_t *bytesDiffering, size_t *lastOffset) const {
+size_t Context::CountDifferingPages(size_t *pagesPerMiB, size_t *bytesDiffering,
+        size_t *lastOffset) const {
     constexpr size_t PAGE = 4096;
     const u8 *live = reinterpret_cast<const u8 *>(EGG::SceneManager::s_rootHeap);
     const u8 *snap = static_cast<const u8 *>(m_contextMemory);
@@ -188,7 +189,8 @@ size_t Context::CountDifferingPages(size_t *pagesPerMiB, size_t *bytesDiffering,
 
 void Context::SetActiveContext(const Context &rhs) {
     ASSERT(EGG::SceneManager::s_rootHeap && rhs.m_contextMemory);
-    memcpy(reinterpret_cast<void *>(EGG::SceneManager::s_rootHeap), rhs.m_contextMemory, rhs.m_size);
+    memcpy(reinterpret_cast<void *>(EGG::SceneManager::s_rootHeap), rhs.m_contextMemory,
+            rhs.m_size);
 
     Abstract::Memory::MEMiHeapHead::s_rootList = rhs.m_statics.m_rootList;
     EGG::Archive::s_archiveList = rhs.m_statics.m_archiveList;

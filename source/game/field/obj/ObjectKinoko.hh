@@ -99,17 +99,17 @@ private:
 /// The 4 real placements on this course are NOT synchronized -- each has a different real period
 /// (measured directly, one at a time, via the same memory-capture technique): rotY=+9.7 deg ->
 /// 182 frames, rotY=-3.85 deg -> ~163 frames, rotY=-33.65 deg -> ~137 frames (the 4th, rotY=+80.55
-/// deg, couldn't be pinned down directly -- its animating field wasn't findable at the same relative
-/// offset, likely because the large rotation redistributes it across multiple matrix cells). Those
-/// 3 points fit a roughly linear relationship between period and the placement's own Y rotation
-/// (this course's KMP settings for every KinokoT1 placement are all zero, ruling out a
+/// deg, couldn't be pinned down directly -- its animating field wasn't findable at the same
+/// relative offset, likely because the large rotation redistributes it across multiple matrix
+/// cells). Those 3 points fit a roughly linear relationship between period and the placement's own
+/// Y rotation (this course's KMP settings for every KinokoT1 placement are all zero, ruling out a
 /// settings-driven period or amplitude), so PERIOD below derives it from rot().y at load instead of
 /// a single shared constant -- this reproduces the real desync (each instance ticks at its own real
 /// rate) without needing a per-instance lookup table, though it's a fitted approximation, not a
 /// decompiled formula, and unverified for the 4th (extreme-rotation) placement. The starting phase
 /// (m_oscFrame = 0 on load) is also an assumption, not verified against a real race start -- but
-/// since each instance's period differs, they drift apart over time regardless. If a real decompiled
-/// reference for this object ever surfaces, replace this fitted formula with it.
+/// since each instance's period differs, they drift apart over time regardless. If a real
+/// decompiled reference for this object ever surfaces, replace this fitted formula with it.
 class ObjectKinokoT1 : public ObjectKCL {
 public:
     ObjectKinokoT1(const System::MapdataGeoObj &params);

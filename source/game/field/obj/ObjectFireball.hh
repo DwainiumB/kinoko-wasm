@@ -23,9 +23,9 @@ public:
     }
 
     /// Added for Kinoko web's renderer: Bowser's Castle's koopaFirebar (id 421) lists two resources
-    /// ("koopaFirebar;WLfirebarGC"), which loadGraphics() looked up as one file name and never found,
-    /// so those fire bars had no model and were never reported. The fireballs draw the same model as
-    /// the fire rings (WLfirebarGC: the fire ball and its glow).
+    /// ("koopaFirebar;WLfirebarGC"), which loadGraphics() looked up as one file name and never
+    /// found, so those fire bars had no model and were never reported. The fireballs draw the same
+    /// model as the fire rings (WLfirebarGC: the fire ball and its glow).
     [[nodiscard]] const char *getResources() const override {
         return id() == ObjectId::KoopaFirebar ? "WLfirebarGC" : ObjectBase::getResources();
     }

@@ -21,8 +21,9 @@ public:
         return 1;
     }
 
-    /// Added for Kinoko web's renderer: state * 1000 + frames until the next launch (clamped to 0..999),
-    /// so the page can play the statue's spit animation ahead of the launch and the explosion on cue.
+    /// Added for Kinoko web's renderer: state * 1000 + frames until the next launch (clamped to
+    /// 0..999), so the page can play the statue's spit animation ahead of the launch and the
+    /// explosion on cue.
     [[nodiscard]] s32 animState() const override {
         return static_cast<s32>(m_state) * 1000 + std::clamp<s32>(m_cooldownTimer, 0, 999);
     }

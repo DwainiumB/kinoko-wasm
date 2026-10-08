@@ -66,10 +66,10 @@ public:
         return m_managedObjects;
     }
 
-	[[nodiscard]] const fixed_vector<ObjectBase *> &objects() const {
+    [[nodiscard]] const fixed_vector<ObjectBase *> &objects() const {
         return m_objects;
     }
-	
+
     void setPsea(ObjectPsea *psea) {
         m_psea = psea;
     }

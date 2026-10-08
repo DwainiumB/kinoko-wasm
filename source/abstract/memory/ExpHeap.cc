@@ -139,8 +139,9 @@ void *MEMiExpHeapHead::alloc(size_t size, s32 align) {
         size = 1;
     }
 #ifdef KINOKO_HEAP_ALIGN8
-    // GPU port debugging: the GPU build needs 8-byte alignment (tools/gpu_spike/transform.py); a CPU build with this
-    // define gets the identical heap layout so the two heaps can be compared word by word.
+    // GPU port debugging: the GPU build needs 8-byte alignment (tools/gpu_spike/transform.py); a
+    // CPU build with this define gets the identical heap layout so the two heaps can be compared
+    // word by word.
     size = RoundUp(size, 8);
     if (align >= 0 && align < 8) {
         align = 8;

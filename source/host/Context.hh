@@ -70,9 +70,10 @@ namespace Host {
 /// storage duration, they may exist out of the heap. Thus, we need to manually copy those.
 class Context {
 public:
-    /// @param bytes How much of the start of the game heap to save. The default is all of it. A single-kart race only
-    /// ever changes the first ~0.5 MiB (tools/state_extent.py checks this), so a search can pass 1 MiB and make
-    /// saving and restoring ~64x cheaper; everything beyond is course data and parameters that never change.
+    /// @param bytes How much of the start of the game heap to save. The default is all of it. A
+    /// single-kart race only ever changes the first ~0.5 MiB (tools/state_extent.py checks this),
+    /// so a search can pass 1 MiB and make saving and restoring ~64x cheaper; everything beyond is
+    /// course data and parameters that never change.
     explicit Context(size_t bytes = MEMORY_SPACE_SIZE);
     Context(const Context &c);
     Context(Context &&c);
@@ -85,10 +86,12 @@ public:
 
     static void SetActiveContext(const Context &rhs);
 
-    /// @brief Compares the live game heap with this snapshot and reports how it differs, in 4 KiB pages.
+    /// @brief Compares the live game heap with this snapshot and reports how it differs, in 4 KiB
+    /// pages.
     /// @param pagesPerMiB Out: number of differing pages in each MiB of the heap (64 entries).
     /// @return The number of differing pages.
-    size_t CountDifferingPages(size_t *pagesPerMiB, size_t *bytesDiffering, size_t *lastOffset) const;
+    size_t CountDifferingPages(size_t *pagesPerMiB, size_t *bytesDiffering,
+            size_t *lastOffset) const;
 
 private:
     struct Statics {

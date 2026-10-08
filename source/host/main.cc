@@ -36,9 +36,9 @@ static void InitMemory() {
 }
 
 int main(int argc, char **argv) {
-    #ifndef __EMSCRIPTEN__
-	FlushDenormalsToZero();
-	#endif
+#ifndef __EMSCRIPTEN__
+    FlushDenormalsToZero();
+#endif
     InitMemory();
 
     // The hashmap cannot be constexpr, as it heap-allocates

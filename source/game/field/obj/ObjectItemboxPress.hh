@@ -51,9 +51,9 @@ public:
     }
 
     /// Added for Kinoko web's renderer: every press in the line shares its spawner's placement
-    /// params, so while m_state is 0 (not yet started by ObjectItemboxLine, or reset back to 0 after
-    /// a rail direction change -- see calcRail()) this press has never been positioned by its own
-    /// rail and sits frozen on top of every other still-inactive press in the line.
+    /// params, so while m_state is 0 (not yet started by ObjectItemboxLine, or reset back to 0
+    /// after a rail direction change -- see calcRail()) this press has never been positioned by its
+    /// own rail and sits frozen on top of every other still-inactive press in the line.
     [[nodiscard]] bool isVisible() const override {
         return m_state != 0;
     }

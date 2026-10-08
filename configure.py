@@ -77,7 +77,10 @@ n.rule(
     description='LD $out',
 )
 
-code_in_files = [file for file in glob('**/*.cc', recursive=True)]
+# source/host/web_bridge.cc is the browser (Emscripten) entry point, built by CMakeLists.txt as kinoko_web; it needs emscripten headers
+# and defines its own main(), so it is not part of the native build.
+WEB_ONLY = {os.path.join('source', 'host', 'web_bridge.cc')}
+code_in_files = [file for file in glob('**/*.cc', recursive=True) if os.path.normpath(file) not in WEB_ONLY]
 
 target_code_out_files = []
 debug_code_out_files = []

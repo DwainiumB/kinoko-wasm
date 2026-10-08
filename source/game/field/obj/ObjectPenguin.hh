@@ -80,11 +80,12 @@ public:
         m_state = State::Walk;
     }
 
-    /// Added for Kinoko web's renderer: unlike the base ObjectPenguin (always Walk), this penguin has
-    /// 5 real states (Walk/Dive/Slider/SliderSlow/StandUp) that move it very differently (walking vs.
-    /// belly-sliding down a rail) -- without exposing which one is active, the renderer picked one clip
-    /// at spawn (always "walk", since ANIM_PREFERENCE always finds it) and kept it forever, so the
-    /// model played its walk-cycle leg animation throughout the slide/dive/stand-up sections too.
+    /// Added for Kinoko web's renderer: unlike the base ObjectPenguin (always Walk), this penguin
+    /// has 5 real states (Walk/Dive/Slider/SliderSlow/StandUp) that move it very differently
+    /// (walking vs. belly-sliding down a rail) -- without exposing which one is active, the
+    /// renderer picked one clip at spawn (always "walk", since ANIM_PREFERENCE always finds it) and
+    /// kept it forever, so the model played its walk-cycle leg animation throughout the
+    /// slide/dive/stand-up sections too.
     [[nodiscard]] s32 animState() const override {
         return static_cast<s32>(m_state);
     }

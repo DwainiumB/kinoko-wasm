@@ -47,7 +47,6 @@ public:
     }
 
 private:
-
     /// @brief Angle properties corresponding with the stunts
     struct StuntProperties {
         f32 angleDelta;
