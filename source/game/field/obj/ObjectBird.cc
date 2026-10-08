@@ -77,6 +77,7 @@ void ObjectBirdLeader::init() {
 void ObjectBirdLeader::calc() {
     m_railInterpolator->calc();
     setPos(m_railInterpolator->curPos());
+    setMatrixFromOrthonormalBasisAndPos(m_railInterpolator->curTangentDir());
 }
 
 /// @addr{0x8077CC78}
@@ -127,6 +128,10 @@ void ObjectBirdFollower::init() {
 /// @addr{0x8077C7F0}
 void ObjectBirdFollower::calc() {
     calcPos();
+
+    EGG::Vector3f dir = m_velocity;
+    dir.normalise();
+    setMatrixFromOrthonormalBasisAndPos(dir);
 
     CollisionInfo info;
 

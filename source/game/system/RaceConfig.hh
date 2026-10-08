@@ -28,6 +28,7 @@ public:
     public:
         enum class Type {
             Local = 0, // Inputs managed by ML algorithm
+            Cpu = 1,   // Added in Kinoko: inputs written by the host program each frame (a CPU driver)
             Ghost = 3, // Inputs managed by ghost
             None = 5,
         };

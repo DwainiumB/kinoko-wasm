@@ -43,6 +43,12 @@ public:
         return m_initYSpeed;
     }
 
+    // Debug-only, for the web port's verification tooling (not part of the original game): exposes
+    // the real StateManager state (0 Intangible, 1 Falling, 2 Blinking, 3 Exploding).
+    [[nodiscard]] s32 animState() const override {
+        return static_cast<s32>(m_currentStateId);
+    }
+
 private:
     enum class ExplosionIntensity {
         ExplosionLoseItem = 0,

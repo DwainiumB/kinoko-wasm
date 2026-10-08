@@ -109,6 +109,11 @@ void ObjectCollidable::createCollision() {
     }
 
     switch (static_cast<CollisionMode>(parse<s16>(collisionSet->mode))) {
+    // Purely decorative objects (e.g. the big background penguin on N64 Sherbet Land) have a real,
+    // valid flow-table entry with no collision params at all -- m_collision stays the null it's
+    // constructed with, and ObjectCollidable::load() already skips loadAABB() when that's the case.
+    case CollisionMode::None:
+        break;
     case CollisionMode::Sphere:
         m_collision = EGG::egg_new<ObjectCollisionSphere>(
                 parse<s16>(collisionSet->params.sphere.radius), collisionCenter());

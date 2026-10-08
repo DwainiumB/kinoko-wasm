@@ -30,15 +30,19 @@ static constexpr std::array<StartBoostEntry, 6> START_BOOST_ENTRIES = {{
 KartState::KartState() {
     m_status.makeAllZero();
 
-    m_status.changeBit(inputs()->driftIsAuto(), eStatus::AutoDrift);
-
     m_airtime = 0;
     m_cannonPointId = 0;
     m_startBoostIdx = 0;
 }
 
 /// @addr{0x8059455C}
+/// @details Reads inputs() here rather than in the constructor: unlike the base game, Kinoko's
+/// KartObjectProxy accessor is wired up (via KartObjectProxy::ApplyAll) only after every subsystem
+/// -- including this one -- has finished construction, so inputs() isn't safe to call yet at that
+/// point (see the identical KartItem::init(playerIdx) pattern). reset() expects the AutoDrift bit
+/// to already reflect the controller's drift type, per its own comment, so it's set first here.
 void KartState::init() {
+    m_status.changeBit(inputs()->driftIsAuto(), eStatus::AutoDrift);
     reset();
 }
 

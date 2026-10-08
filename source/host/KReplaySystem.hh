@@ -6,6 +6,8 @@
 
 #include <game/system/RaceConfig.hh>
 
+#include <cstdio>
+
 namespace Kinoko {
 
 /// @brief Kinoko system designed to execute replays.
@@ -33,6 +35,8 @@ private:
     KReplaySystem(KReplaySystem &&) = delete;
 
     bool calcEnd() const;
+    void openDump();
+    void dumpFrame();
     void reportFail(const std::string &msg) const;
 
     bool success() const;
@@ -47,6 +51,10 @@ private:
     const System::GhostFile *m_currentGhost;
     const u8 *m_currentRawGhost;
     size_t m_currentRawGhostSize;
+
+    const char *m_dumpPath; ///< Optional per-frame CSV dump of the replay (--dump).
+    FILE *m_dumpFile;
+    u32 m_dumpFrame;
 };
 
 } // namespace Kinoko

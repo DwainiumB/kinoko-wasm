@@ -23,6 +23,13 @@ public:
         return id() == ObjectId::WLFirebarGC ? "WLfirebarGC" : "koopaFirebar";
     }
 
+    /// Added for Kinoko web's renderer: this spawner doesn't override loadGraphics() so it loads the
+    /// same fireball model as its children, but it never moves itself (only the orbiting fireballs it
+    /// owns do) -- it sat frozen at its own placement, a permanent extra fireball on top of the ring.
+    [[nodiscard]] bool isVisible() const override {
+        return false;
+    }
+
 private:
     owning_span<ObjectFireball *> m_fireballs;
     u32 m_spokes; // The number of fireball "segments"

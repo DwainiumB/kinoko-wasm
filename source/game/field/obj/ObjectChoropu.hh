@@ -29,6 +29,10 @@ public:
         return 1;
     }
 
+    [[nodiscard]] s32 animState() const override {
+        return static_cast<s32>(m_currentStateId);
+    }
+
     Kart::Reaction onCollision(Kart::KartObject *kartObj, Kart::Reaction reactionOnKart,
             Kart::Reaction reactionOnObj, EGG::Vector3f &hitDepth) override;
 

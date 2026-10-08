@@ -13,6 +13,12 @@ enum class EOption {
     Ghost,
     KRKG,
     TargetFrame,
+    Task,
+    Dump,
+    Course,
+    Character,
+    Vehicle,
+    MaxFrames,
 };
 
 namespace Option {

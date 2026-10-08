@@ -23,6 +23,7 @@ enum class ObjectId {
     VolcanoBall = 0xd6,
     PenguinS = 0xd7,
     PenguinM = 0xd8,
+    PenguinL = 0xd9,
     Dossunc = 0xdb,
     DossuncSoko = 0xdc,
     Boble = 0xdd,

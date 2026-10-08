@@ -22,6 +22,12 @@ public:
         return 1;
     }
 
+    /// Added for Kinoko web's renderer: the AnmState (0 still, 1 before fall, 2 falling, 3 grounded, 4
+    /// rising), so the page can open the Thwomp's eyes when it lands.
+    [[nodiscard]] s32 animState() const override {
+        return static_cast<s32>(m_anmState);
+    }
+
     void calcCollisionTransform() override;
     Kart::Reaction onCollision(Kart::KartObject *kartObj, Kart::Reaction reactionOnKart,
             Kart::Reaction reactionOnObj, EGG::Vector3f &hitDepth) override;

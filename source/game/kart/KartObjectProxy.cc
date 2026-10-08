@@ -223,7 +223,7 @@ const CollisionData &KartObjectProxy::collisionData() const {
 
 /// @addr{0x805903F4}
 const System::KPad *KartObjectProxy::inputs() const {
-    return System::RaceManager::Instance()->player().inputs();
+    return System::RaceManager::Instance()->player(param()->playerIdx()).inputs();
 }
 
 /// @addr{0x80590A40}

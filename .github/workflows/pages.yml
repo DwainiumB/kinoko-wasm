@@ -1,0 +1,40 @@
+# Publishes web/ (the engine and page only) to GitHub Pages. web/assets is git-ignored, so no game files are ever part of the site;
+# visitors pick their own assets folder (web/assetgate.js). Enable it under Settings > Pages > Source: "GitHub Actions".
+name: Deploy web player to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths: ['web/**', '.github/workflows/pages.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Refuse to publish game assets
+        run: |
+          if [ -e web/assets ]; then echo "web/assets must not be committed"; exit 1; fi
+          if find web -type f \( -name '*.szs' -o -name '*.brres' -o -name '*.brstm' -o -name '*.kcl' \) | grep -q .; then echo "game files found under web/"; exit 1; fi
+          # the wasm and scripts must be committed (they are built here by hand)
+          test -f web/kinoko_web.wasm && test -f web/kinoko_web.js
+      - run: touch web/.nojekyll
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web
+      - id: deployment
+        uses: actions/deploy-pages@v4

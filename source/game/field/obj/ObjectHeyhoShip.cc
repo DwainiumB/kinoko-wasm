@@ -18,6 +18,26 @@ void ObjectHeyhoShip::init() {
     m_railInterpolator->setPerPointVelocities(true);
     setPos(m_railInterpolator->curPos());
 
+    m_framesSinceLastLaunch = 1000;
+    calcOrientation();
+}
+
+/// @addr{0x806D1B9C}
+void ObjectHeyhoShip::calc() {
+    if (m_railInterpolator->calc() == RailInterpolator::Status::SegmentEnd) {
+        m_framesSinceLastLaunch = 0;
+    } else {
+        ++m_framesSinceLastLaunch;
+    }
+
+    calcPos();
+    calcOrientation();
+}
+
+/// Not part of the original game as a separate function -- the matrix/tangent math in here was
+/// inlined in init() only, leaving the ship frozen at its spawn heading as it slid along the
+/// curving rail every frame thereafter (addr{0x806D19D8}). Factored out so calc() can call it too.
+void ObjectHeyhoShip::calcOrientation() {
     const EGG::Vector3f &railTan = m_railInterpolator->curTangentDir();
     EGG::Vector3f tangent = EGG::Vector3f(railTan.x, 0.0f, railTan.z);
     tangent.normalise2();
@@ -33,19 +53,7 @@ void ObjectHeyhoShip::init() {
         tangent = EGG::Vector3f::ey;
     }
 
-    m_framesSinceLastLaunch = 1000;
     setMatrixTangentTo(EGG::Vector3f::ey, tangent);
-}
-
-/// @addr{0x806D1B9C}
-void ObjectHeyhoShip::calc() {
-    if (m_railInterpolator->calc() == RailInterpolator::Status::SegmentEnd) {
-        m_framesSinceLastLaunch = 0;
-    } else {
-        ++m_framesSinceLastLaunch;
-    }
-
-    calcPos();
 }
 
 /// @addr{0x806D1D10}

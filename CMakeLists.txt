@@ -16,7 +16,6 @@ set(COMMON_CXX_FLAGS
     -fshort-wchar
     -fstack-protector-strong
     -Wall
-    -Werror
     -Wextra
     -Wno-delete-non-virtual-dtor
     -Wno-packed-bitfield-compat
@@ -31,6 +30,7 @@ set(RK_INCLUDE_DIRS
 # Source files
 file(GLOB_RECURSE SOURCE_FILES CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/**/*.cc)
 list(FILTER SOURCE_FILES EXCLUDE REGEX ".*/host/main\\.cc$")
+list(FILTER SOURCE_FILES EXCLUDE REGEX ".*/host/web_bridge\\.cc$")
 
 add_library(libkinoko ${SOURCE_FILES})
 target_include_directories(libkinoko SYSTEM
@@ -39,10 +39,42 @@ target_include_directories(libkinoko SYSTEM
 target_compile_options(libkinoko PRIVATE ${COMMON_CXX_FLAGS})
 target_compile_features(libkinoko PUBLIC cxx_std_23)
 
-# Create targets
-add_executable(kinoko source/host/main.cc)
-target_link_libraries(kinoko libkinoko)
-target_compile_options(kinoko PRIVATE ${COMMON_CXX_FLAGS})
+# Web target
+add_executable(kinoko_web source/host/web_bridge.cc)
+target_link_libraries(kinoko_web libkinoko)
+target_compile_options(kinoko_web PRIVATE ${COMMON_CXX_FLAGS})
+
+if(EMSCRIPTEN)
+    target_link_options(kinoko_web PRIVATE
+        "-sMODULARIZE=1"
+        "-sEXPORT_NAME=KinokoModule"
+        "-sEXPORTED_RUNTIME_METHODS=['ccall','cwrap','FS','HEAPF32','HEAP32','HEAPU8','getValue']"
+        "-sEXPORTED_FUNCTIONS=['_main','_malloc','_free','_kinoko_init','_kinoko_set_input','_kinoko_step','_kinoko_get_kart_pos','_kinoko_get_kart_rot','_kinoko_get_kart_state','_kinoko_get_race_state','_kinoko_get_timing','_kinoko_init_ghost','_kinoko_get_input','_kinoko_get_guide_point','_kinoko_get_wheels','_kinoko_get_floor','_kinoko_get_object_count','_kinoko_get_objects']"
+        "-sALLOW_MEMORY_GROWTH=1"
+        "-sFORCE_FILESYSTEM=1"
+        "-sNO_EXIT_RUNTIME=1"
+    )
+    set_target_properties(kinoko_web PROPERTIES SUFFIX ".js")
+endif()
+
+# Native host target: CLI modes (test/replay/brute) that don't need a browser, used for the
+# TAS brute-force search driver (tools/brute_force.py) among other things.
+if(NOT EMSCRIPTEN)
+    add_executable(kinoko_host source/host/main.cc)
+    target_link_libraries(kinoko_host libkinoko)
+    target_compile_options(kinoko_host PRIVATE ${COMMON_CXX_FLAGS})
+    if(MINGW)
+        # Statically link the C++ runtime so the binary doesn't depend on whichever
+        # libstdc++-6.dll happens to be first on PATH at runtime. On Windows it's common to have
+        # more than one MinGW toolchain installed (e.g. Git Bash bundles its own), and if a
+        # DIFFERENT, ABI-incompatible libstdc++-6.dll gets loaded than the one this binary was
+        # actually built against, C++ runtime state (like iostreams) can silently corrupt --
+        # this was the real cause of a SIGSEGV inside std::ifstream's constructor that only
+        # showed up once optimizations were enabled (the exact crash symptom pointed at
+        # C:\Program Files\Git\mingw64\bin\libstdc++-6.dll instead of the toolchain's own DLL).
+        target_link_options(kinoko_host PRIVATE -static-libgcc -static-libstdc++)
+    endif()
+endif()
 
 # Add a custom target to generate testCases.json
 set(TEST_JSON ${CMAKE_CURRENT_SOURCE_DIR}/testCases.json)

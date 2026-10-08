@@ -80,6 +80,10 @@ public:
         s_rootHeap = heap;
     }
 
+    [[nodiscard]] static Heap *RootHeap() {
+        return s_rootHeap;
+    }
+
 private:
     /*----------*
         Members

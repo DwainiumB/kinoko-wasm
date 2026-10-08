@@ -28,16 +28,21 @@ void RaceConfig::initRace() {
 /// @brief Initializes the controllers.
 /// @details This is normally scoped within RaceConfig::Scenario, but Kinoko doesn't support menus.
 void RaceConfig::initControllers() {
-    switch (m_raceScenario.players[0].type) {
-    case Player::Type::Ghost:
-        initGhost();
-        break;
-    case Player::Type::Local:
-        KPadDirector::Instance()->setHostPad(m_raceScenario.players[0].driftIsAuto);
-        break;
-    default:
-        PANIC("Players must be either local or ghost!");
-        break;
+    for (size_t i = 0; i < m_raceScenario.playerCount; ++i) {
+        const Player &player = m_raceScenario.players[i];
+        switch (player.type) {
+        case Player::Type::Ghost:
+            ASSERT(i == 0);
+            initGhost();
+            break;
+        case Player::Type::Local:
+        case Player::Type::Cpu:
+            KPadDirector::Instance()->setHostPad(player.driftIsAuto, i);
+            break;
+        default:
+            PANIC("Players must be local, CPU or ghost!");
+            break;
+        }
     }
 }
 

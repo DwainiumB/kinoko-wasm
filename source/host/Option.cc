@@ -30,6 +30,30 @@ std::optional<EOption> CheckFlag(const char *arg) {
             return EOption::TargetFrame;
         }
 
+        if (strcmp(verbose_arg, "task") == 0) {
+            return EOption::Task;
+        }
+
+        if (strcmp(verbose_arg, "dump") == 0) {
+            return EOption::Dump;
+        }
+
+        if (strcmp(verbose_arg, "course") == 0) {
+            return EOption::Course;
+        }
+
+        if (strcmp(verbose_arg, "character") == 0) {
+            return EOption::Character;
+        }
+
+        if (strcmp(verbose_arg, "vehicle") == 0) {
+            return EOption::Vehicle;
+        }
+
+        if (strcmp(verbose_arg, "maxframes") == 0) {
+            return EOption::MaxFrames;
+        }
+
         return EOption::Invalid;
     } else {
         switch (arg[1]) {
@@ -45,6 +69,12 @@ std::optional<EOption> CheckFlag(const char *arg) {
         case 'F':
         case 'f':
             return EOption::TargetFrame;
+        case 'T':
+        case 't':
+            return EOption::Task;
+        case 'D':
+        case 'd':
+            return EOption::Dump;
         default:
             return EOption::Invalid;
         }

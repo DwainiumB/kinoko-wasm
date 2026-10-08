@@ -13,14 +13,16 @@ namespace Kinoko::System {
 
 /// @addr{0x80532F88}
 void RaceManager::init() {
-    m_player.init();
+    m_playerCount = RaceConfig::Instance()->raceScenario().playerCount;
+    for (size_t i = 0; i < m_playerCount; ++i) {
+        m_players[i].init(static_cast<u8>(i));
+    }
 }
 
 /// @addr{0x805362DC}
-/// @todo When expanding to other gamemodes, we will need to pass the player index
-void RaceManager::findKartStartPoint(EGG::Vector3f &pos, EGG::Vector3f &angles) {
-    u32 placement = 1;
-    u32 playerCount = 1;
+void RaceManager::findKartStartPoint(u8 idx, EGG::Vector3f &pos, EGG::Vector3f &angles) {
+    u32 placement = idx + 1;
+    u32 playerCount = RaceConfig::Instance()->raceScenario().playerCount;
     u32 startPointIdx = 0;
 
     MapdataStartPoint *kartpoint = CourseMap::Instance()->getStartPoint(startPointIdx);
@@ -34,9 +36,20 @@ void RaceManager::findKartStartPoint(EGG::Vector3f &pos, EGG::Vector3f &angles) 
 }
 
 /// @addr{0x80533C6C}
-void RaceManager::endPlayerRace(u32 /*idx*/) {
-    // We only have one player, so most of the logic is much simpler
-    m_stage = Stage::FinishGlobal;
+void RaceManager::endPlayerRace(u32 idx) {
+    m_players[idx].m_finished = true;
+
+    // The race is over for everyone once every player has crossed the line; before that, the local
+    // player (0) having finished is FinishLocal
+    bool all = true;
+    for (size_t i = 0; i < m_playerCount; ++i) {
+        all = all && m_players[i].m_finished;
+    }
+    if (all) {
+        m_stage = Stage::FinishGlobal;
+    } else if (idx == 0) {
+        m_stage = Stage::FinishLocal;
+    }
 }
 
 /// @addr{0x805331B4}
@@ -44,7 +57,9 @@ void RaceManager::calc() {
     constexpr u16 STAGE_INTRO_DURATION = 172;
 
     m_timerManager.calc();
-    m_player.calc();
+    for (size_t i = 0; i < m_playerCount; ++i) {
+        m_players[i].calc();
+    }
 
     switch (m_stage) {
     case Stage::Intro:
@@ -68,8 +83,8 @@ void RaceManager::calc() {
 }
 
 /// @addr{0x8053621C}
-MapdataJugemPoint *RaceManager::jugemPoint() const {
-    s8 jugemId = std::max<s8>(m_player.jugemId(), 0);
+MapdataJugemPoint *RaceManager::jugemPoint(u8 idx) const {
+    s8 jugemId = std::max<s8>(m_players[idx].jugemId(), 0);
     return System::CourseMap::Instance()->getJugemPoint(static_cast<u16>(jugemId));
 }
 
@@ -90,7 +105,7 @@ void RaceManager::DestroyInstance() {
 
 /// @addr{0x805327A0}
 RaceManager::RaceManager()
-    : m_random(RNG_SEED), m_stage(Stage::Intro), m_introTimer(0), m_timer(0) {}
+    : m_random(RNG_SEED), m_playerCount(0), m_stage(Stage::Intro), m_introTimer(0), m_timer(0) {}
 
 /// @addr{0x80532E3C}
 RaceManager::~RaceManager() {
@@ -119,15 +134,19 @@ RaceManager::Player::Player() {
     m_currentLap = 0;
     m_maxLap = 1;
     m_drivingWrongWay = false;
-    m_inputs = &KPadDirector::Instance()->playerInput();
+    m_idx = 0;
+    m_finished = false;
+    m_inputs = &KPadDirector::Instance()->playerInput(0);
 }
 
 /// @addr{0x80534194}
-void RaceManager::Player::init() {
+void RaceManager::Player::init(u8 idx) {
+    m_idx = idx;
+    m_inputs = &KPadDirector::Instance()->playerInput(idx);
     auto *courseMap = CourseMap::Instance();
 
     if (courseMap->getCheckPointCount() != 0 && courseMap->getCheckPathCount() != 0) {
-        const EGG::Vector3f &pos = Kart::KartObjectManager::Instance()->object(0)->pos();
+        const EGG::Vector3f &pos = Kart::KartObjectManager::Instance()->object(m_idx)->pos();
         f32 distanceRatio;
         s16 checkpointId = courseMap->findSector(pos, 0, distanceRatio);
 
@@ -141,7 +160,7 @@ void RaceManager::Player::init() {
 /// @addr{0x80535304}
 void RaceManager::Player::calc() {
     auto *courseMap = CourseMap::Instance();
-    const auto *kart = Kart::KartObjectManager::Instance()->object(0);
+    const auto *kart = Kart::KartObjectManager::Instance()->object(m_idx);
 
     if (courseMap->getCheckPointCount() == 0 || courseMap->getCheckPathCount() == 0 ||
             kart->status().onBit(Kart::eStatus::BeforeRespawn)) {
@@ -275,7 +294,7 @@ void RaceManager::Player::incrementLap() {
         return;
     }
 
-    const auto *kart = Kart::KartObjectManager::Instance()->object(0);
+    const auto *kart = Kart::KartObjectManager::Instance()->object(m_idx);
     u16 addMs = CourseMap::Instance()->getCheckPointEntryOffsetMs(m_checkpointId, kart->pos(),
             kart->prevPos());
 
@@ -296,7 +315,7 @@ void RaceManager::Player::incrementLap() {
 /// @addr{0x805347F4}
 void RaceManager::Player::endRace(const Timer &finishTime) {
     m_raceTimer = finishTime;
-    RaceManager::Instance()->endPlayerRace(0);
+    RaceManager::Instance()->endPlayerRace(m_idx);
 }
 
 RaceManager *RaceManager::s_instance = nullptr; ///< @addr{0x809BD730}

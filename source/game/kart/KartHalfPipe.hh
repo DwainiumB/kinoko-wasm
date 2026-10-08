@@ -26,7 +26,6 @@ public:
         return 65.0f;
     }
 
-private:
     enum class StuntType {
         None = -1,
         Backflip = 0,
@@ -36,6 +35,18 @@ private:
         Frontside = 4,
         Side720 = 5,
     };
+
+    /// @brief True once a ramp/zipper stunt has actually been entered (StuntType != None), not just
+    /// attempted -- see m_attemptedTrickTimer for the "trying but not yet committed" case.
+    [[nodiscard]] bool isInStunt() const {
+        return m_stunt != StuntType::None;
+    }
+
+    [[nodiscard]] s32 attemptedTrickTimer() const {
+        return m_attemptedTrickTimer;
+    }
+
+private:
 
     /// @brief Angle properties corresponding with the stunts
     struct StuntProperties {

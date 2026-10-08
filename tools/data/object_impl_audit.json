@@ -1,0 +1,2407 @@
+[
+ {
+  "id": 101,
+  "name": "itembox",
+  "total_placements": 669,
+  "tracks": [
+   "beginner_course",
+   "boardcross_course",
+   "castle_course",
+   "desert_course",
+   "factory_course",
+   "farm_course",
+   "kinoko_course",
+   "koopa_course",
+   "old_desert_ds",
+   "old_donkey_64",
+   "old_donkey_gc",
+   "old_falls_ds",
+   "old_garden_ds",
+   "old_heyho_gba",
+   "old_koopa_64",
+   "old_koopa_gba",
+   "old_mario_64",
+   "old_mario_gc",
+   "old_mario_sfc",
+   "old_obake_sfc",
+   "old_peach_gc",
+   "old_sherbet_64",
+   "old_town_ds",
+   "old_waluigi_gc",
+   "rainbow_course",
+   "ridgehighway_course",
+   "senior_course",
+   "shopping_course",
+   "treehouse_course",
+   "truck_course",
+   "volcano_course",
+   "water_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 316,
+  "name": "obakeblockSFCc",
+  "total_placements": 231,
+  "tracks": [
+   "old_obake_sfc"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 367,
+  "name": "obakeblock2SFCc",
+  "total_placements": 209,
+  "tracks": [
+   "old_obake_sfc"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 368,
+  "name": "obakeblock3SFCc",
+  "total_placements": 162,
+  "tracks": [
+   "old_obake_sfc"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 718,
+  "name": "volsmk",
+  "total_placements": 71,
+  "tracks": [
+   "volcano_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 102,
+  "name": "DummyPole",
+  "total_placements": 60,
+  "tracks": [
+   "castle_course",
+   "old_garden_ds",
+   "rainbow_course",
+   "senior_course",
+   "shopping_course"
+  ],
+  "status": "stub",
+  "class": "ObjectCollidable"
+ },
+ {
+  "id": 385,
+  "name": "CarB",
+  "total_placements": 51,
+  "tracks": [
+   "shopping_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 362,
+  "name": "Hanabi",
+  "total_placements": 50,
+  "tracks": [
+   "beginner_course",
+   "castle_course",
+   "desert_course",
+   "old_desert_ds",
+   "old_mario_sfc",
+   "old_peach_gc",
+   "old_sherbet_64",
+   "senior_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 373,
+  "name": "leaf_effect",
+  "total_placements": 50,
+  "tracks": [
+   "treehouse_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 703,
+  "name": "taimatsu",
+  "total_placements": 43,
+  "tracks": [
+   "desert_course",
+   "koopa_course",
+   "old_donkey_64",
+   "volcano_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 201,
+  "name": "f_itembox",
+  "total_placements": 41,
+  "tracks": [
+   "castle_course",
+   "old_falls_ds",
+   "old_koopa_gba",
+   "old_obake_sfc",
+   "ridgehighway_course",
+   "water_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 20,
+  "name": "eline_control",
+  "total_placements": 40,
+  "tracks": [
+   "desert_course",
+   "factory_course",
+   "shopping_course",
+   "volcano_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 344,
+  "name": "DKtreeA64c",
+  "total_placements": 30,
+  "tracks": [
+   "old_donkey_64"
+  ],
+  "status": "stub",
+  "class": "ObjectCollidable"
+ },
+ {
+  "id": 389,
+  "name": "group_monte_a",
+  "total_placements": 30,
+  "tracks": [
+   "old_peach_gc",
+   "old_town_ds",
+   "senior_course",
+   "shopping_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 118,
+  "name": "s_itembox",
+  "total_placements": 29,
+  "tracks": [
+   "koopa_course",
+   "rainbow_course",
+   "volcano_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 219,
+  "name": "dossunc",
+  "total_placements": 28,
+  "tracks": [
+   "koopa_course",
+   "old_koopa_64",
+   "old_koopa_gba"
+  ],
+  "status": "real",
+  "class": "ObjectDossunc"
+ },
+ {
+  "id": 310,
+  "name": "donkytree2GC",
+  "total_placements": 26,
+  "tracks": [
+   "old_donkey_gc"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 234,
+  "name": "HeyhoBallGBA",
+  "total_placements": 25,
+  "tracks": [
+   "old_heyho_gba"
+  ],
+  "status": "real",
+  "class": "ObjectHeyhoBall"
+ },
+ {
+  "id": 325,
+  "name": "PalmTree",
+  "total_placements": 25,
+  "tracks": [
+   "shopping_course"
+  ],
+  "status": "stub",
+  "class": "ObjectCollidable"
+ },
+ {
+  "id": 309,
+  "name": "donkytree1GC",
+  "total_placements": 25,
+  "tracks": [
+   "old_donkey_gc"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 307,
+  "name": "mariotreeGC",
+  "total_placements": 25,
+  "tracks": [
+   "old_mario_gc"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 324,
+  "name": "pylon01",
+  "total_placements": 25,
+  "tracks": [
+   "senior_course"
+  ],
+  "status": "real",
+  "class": "ObjectPylon"
+ },
+ {
+  "id": 3,
+  "name": "lensFX",
+  "total_placements": 23,
+  "tracks": [
+   "beginner_course",
+   "boardcross_course",
+   "castle_course",
+   "desert_course",
+   "factory_course",
+   "farm_course",
+   "kinoko_course",
+   "old_donkey_gc",
+   "old_falls_ds",
+   "old_garden_ds",
+   "old_heyho_gba",
+   "old_mario_64",
+   "old_mario_gc",
+   "old_peach_gc",
+   "old_sherbet_64",
+   "old_town_ds",
+   "old_waluigi_gc",
+   "rainbow_course",
+   "senior_course",
+   "shopping_course",
+   "truck_course",
+   "water_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 399,
+  "name": "BGteresaSFC",
+  "total_placements": 22,
+  "tracks": [
+   "old_obake_sfc"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 302,
+  "name": "dokan_sfc",
+  "total_placements": 21,
+  "tracks": [
+   "beginner_course",
+   "old_mario_sfc"
+  ],
+  "status": "real",
+  "class": "ObjectDokan"
+ },
+ {
+  "id": 238,
+  "name": "sin_itembox",
+  "total_placements": 20,
+  "tracks": [
+   "kinoko_course",
+   "old_koopa_64",
+   "old_obake_sfc",
+   "old_peach_gc"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 111,
+  "name": "sun",
+  "total_placements": 20,
+  "tracks": [
+   "beginner_course",
+   "boardcross_course",
+   "castle_course",
+   "desert_course",
+   "factory_course",
+   "farm_course",
+   "kinoko_course",
+   "old_donkey_gc",
+   "old_falls_ds",
+   "old_garden_ds",
+   "old_heyho_gba",
+   "old_mario_64",
+   "old_mario_gc",
+   "old_peach_gc",
+   "old_sherbet_64",
+   "old_town_ds",
+   "senior_course",
+   "shopping_course",
+   "truck_course",
+   "water_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 303,
+  "name": "castletree1",
+  "total_placements": 19,
+  "tracks": [
+   "castle_course",
+   "farm_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 332,
+  "name": "truckChimSmk",
+  "total_placements": 18,
+  "tracks": [
+   "treehouse_course",
+   "truck_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 346,
+  "name": "DKtreeB64c",
+  "total_placements": 17,
+  "tracks": [
+   "old_donkey_64"
+  ],
+  "status": "stub",
+  "class": "ObjectCollidable"
+ },
+ {
+  "id": 374,
+  "name": "karehayama",
+  "total_placements": 17,
+  "tracks": [
+   "treehouse_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 7,
+  "name": "pocha",
+  "total_placements": 17,
+  "tracks": [
+   "desert_course",
+   "factory_course",
+   "old_desert_ds",
+   "old_donkey_64",
+   "old_donkey_gc",
+   "old_falls_ds",
+   "old_garden_ds",
+   "old_heyho_gba",
+   "old_peach_gc",
+   "old_sherbet_64",
+   "old_town_ds",
+   "ridgehighway_course",
+   "treehouse_course",
+   "water_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 530,
+  "name": "FlamePole_v",
+  "total_placements": 16,
+  "tracks": [
+   "koopa_course",
+   "old_koopa_64",
+   "volcano_course"
+  ],
+  "status": "real",
+  "class": "ObjectFlamePoleV"
+ },
+ {
+  "id": 401,
+  "name": "kuribo",
+  "total_placements": 15,
+  "tracks": [
+   "castle_course",
+   "kinoko_course",
+   "old_mario_gc",
+   "water_course"
+  ],
+  "status": "real",
+  "class": "ObjectKuribo"
+ },
+ {
+  "id": 312,
+  "name": "peachtreeGCc",
+  "total_placements": 15,
+  "tracks": [
+   "old_peach_gc"
+  ],
+  "status": "stub",
+  "class": "ObjectCollidable"
+ },
+ {
+  "id": 509,
+  "name": "FlamePole",
+  "total_placements": 14,
+  "tracks": [
+   "koopa_course"
+  ],
+  "status": "real",
+  "class": "ObjectFlamePoleFoot"
+ },
+ {
+  "id": 508,
+  "name": "VolcanoPiece",
+  "total_placements": 14,
+  "tracks": [
+   "volcano_course"
+  ],
+  "status": "real",
+  "class": "ObjectVolcanoPiece"
+ },
+ {
+  "id": 209,
+  "name": "car_body",
+  "total_placements": 14,
+  "tracks": [
+   "ridgehighway_course"
+  ],
+  "status": "real",
+  "class": "ObjectCarTGE"
+ },
+ {
+  "id": 502,
+  "name": "kinoko_bend",
+  "total_placements": 14,
+  "tracks": [
+   "kinoko_course"
+  ],
+  "status": "real",
+  "class": "ObjectKinokoBend"
+ },
+ {
+  "id": 227,
+  "name": "seagull",
+  "total_placements": 13,
+  "tracks": [
+   "factory_course",
+   "old_peach_gc",
+   "old_town_ds",
+   "senior_course",
+   "water_course"
+  ],
+  "status": "real",
+  "class": "ObjectBird"
+ },
+ {
+  "id": 408,
+  "name": "DKrockGC",
+  "total_placements": 12,
+  "tracks": [
+   "old_donkey_gc"
+  ],
+  "status": "real",
+  "class": "ObjectRock"
+ },
+ {
+  "id": 330,
+  "name": "HeyhoTreeGBAc",
+  "total_placements": 12,
+  "tracks": [
+   "old_heyho_gba"
+  ],
+  "status": "stub",
+  "class": "ObjectCollidable"
+ },
+ {
+  "id": 355,
+  "name": "TownTreeDS",
+  "total_placements": 12,
+  "tracks": [
+   "old_town_ds"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 317,
+  "name": "WLarrowGC",
+  "total_placements": 12,
+  "tracks": [
+   "old_waluigi_gc"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 304,
+  "name": "castletree1c",
+  "total_placements": 12,
+  "tracks": [
+   "castle_course"
+  ],
+  "status": "stub",
+  "class": "ObjectCollidable"
+ },
+ {
+  "id": 520,
+  "name": "dc_pillar",
+  "total_placements": 12,
+  "tracks": [
+   "desert_course"
+  ],
+  "status": "real",
+  "class": "ObjectPillar"
+ },
+ {
+  "id": 336,
+  "name": "gardentreeDS",
+  "total_placements": 11,
+  "tracks": [
+   "old_garden_ds"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 357,
+  "name": "monte_a",
+  "total_placements": 11,
+  "tracks": [
+   "old_peach_gc",
+   "old_town_ds",
+   "shopping_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 341,
+  "name": "FlagB2",
+  "total_placements": 10,
+  "tracks": [
+   "beginner_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 720,
+  "name": "Flash_L",
+  "total_placements": 10,
+  "tracks": [
+   "beginner_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 347,
+  "name": "TownTreeDSc",
+  "total_placements": 10,
+  "tracks": [
+   "old_town_ds"
+  ],
+  "status": "stub",
+  "class": "ObjectCollidable"
+ },
+ {
+  "id": 337,
+  "name": "gardentreeDSc",
+  "total_placements": 10,
+  "tracks": [
+   "old_garden_ds"
+  ],
+  "status": "stub",
+  "class": "ObjectCollidable"
+ },
+ {
+  "id": 208,
+  "name": "kart_truck",
+  "total_placements": 10,
+  "tracks": [
+   "ridgehighway_course"
+  ],
+  "status": "real",
+  "class": "ObjectCarTGE"
+ },
+ {
+  "id": 426,
+  "name": "puchi_pakkun",
+  "total_placements": 10,
+  "tracks": [
+   "old_mario_64"
+  ],
+  "status": "real",
+  "class": "ObjectPuchiPakkun"
+ },
+ {
+  "id": 306,
+  "name": "castleflower1",
+  "total_placements": 9,
+  "tracks": [
+   "castle_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 702,
+  "name": "group_enemy_c",
+  "total_placements": 9,
+  "tracks": [
+   "factory_course",
+   "senior_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 17,
+  "name": "pochaYogan",
+  "total_placements": 9,
+  "tracks": [
+   "koopa_course",
+   "old_koopa_64",
+   "old_koopa_gba",
+   "volcano_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 340,
+  "name": "FlagB1",
+  "total_placements": 8,
+  "tracks": [
+   "truck_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 356,
+  "name": "Ksticketc",
+  "total_placements": 8,
+  "tracks": [
+   "ridgehighway_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 229,
+  "name": "crab",
+  "total_placements": 8,
+  "tracks": [
+   "old_heyho_gba"
+  ],
+  "status": "real",
+  "class": "ObjectCrab"
+ },
+ {
+  "id": 216,
+  "name": "penguin_m",
+  "total_placements": 8,
+  "tracks": [
+   "old_sherbet_64"
+  ],
+  "status": "real",
+  "class": "ObjectPenguin"
+ },
+ {
+  "id": 215,
+  "name": "penguin_s",
+  "total_placements": 8,
+  "tracks": [
+   "old_sherbet_64"
+  ],
+  "status": "real",
+  "class": "ObjectPenguinS"
+ },
+ {
+  "id": 409,
+  "name": "sanbo",
+  "total_placements": 8,
+  "tracks": [
+   "desert_course",
+   "old_desert_ds"
+  ],
+  "status": "real",
+  "class": "ObjectSanbo"
+ },
+ {
+  "id": 388,
+  "name": "Alarm",
+  "total_placements": 7,
+  "tracks": [
+   "factory_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 393,
+  "name": "SentakuDS",
+  "total_placements": 7,
+  "tracks": [
+   "old_town_ds"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 417,
+  "name": "WLfireringGC",
+  "total_placements": 7,
+  "tracks": [
+   "koopa_course",
+   "old_waluigi_gc"
+  ],
+  "status": "real",
+  "class": "ObjectFireRing"
+ },
+ {
+  "id": 205,
+  "name": "basabasa",
+  "total_placements": 7,
+  "tracks": [
+   "desert_course",
+   "truck_course"
+  ],
+  "status": "real",
+  "class": "ObjectBasabasa"
+ },
+ {
+  "id": 305,
+  "name": "castletree2",
+  "total_placements": 7,
+  "tracks": [
+   "castle_course",
+   "farm_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 521,
+  "name": "dc_sandcone",
+  "total_placements": 7,
+  "tracks": [
+   "desert_course"
+  ],
+  "status": "real",
+  "class": "ObjectSandcone"
+ },
+ {
+  "id": 366,
+  "name": "r_parasol",
+  "total_placements": 7,
+  "tracks": [
+   "old_heyho_gba"
+  ],
+  "status": "real",
+  "class": "ObjectParasolR"
+ },
+ {
+  "id": 5,
+  "name": "sound_river",
+  "total_placements": 7,
+  "tracks": [
+   "old_donkey_64",
+   "old_falls_ds",
+   "ridgehighway_course",
+   "water_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 10,
+  "name": "sound_sea",
+  "total_placements": 7,
+  "tracks": [
+   "old_peach_gc",
+   "old_town_ds",
+   "senior_course",
+   "shopping_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 420,
+  "name": "FireSnake",
+  "total_placements": 6,
+  "tracks": [
+   "old_desert_ds"
+  ],
+  "status": "real",
+  "class": "ObjectFireSnake"
+ },
+ {
+  "id": 348,
+  "name": "Piston",
+  "total_placements": 6,
+  "tracks": [
+   "factory_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 387,
+  "name": "Steam",
+  "total_placements": 6,
+  "tracks": [
+   "factory_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 214,
+  "name": "VolcanoBall1",
+  "total_placements": 6,
+  "tracks": [
+   "volcano_course"
+  ],
+  "status": "real",
+  "class": "ObjectVolcanoBallLauncher"
+ },
+ {
+  "id": 327,
+  "name": "cruiser",
+  "total_placements": 6,
+  "tracks": [
+   "senior_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 407,
+  "name": "poihana",
+  "total_placements": 6,
+  "tracks": [
+   "old_peach_gc"
+  ],
+  "status": "real",
+  "class": "ObjectPoihana"
+ },
+ {
+  "id": 343,
+  "name": "DKtreeA64",
+  "total_placements": 5,
+  "tracks": [
+   "old_donkey_64"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 424,
+  "name": "FireSnake_v",
+  "total_placements": 5,
+  "tracks": [
+   "volcano_course"
+  ],
+  "status": "real",
+  "class": "ObjectFireSnakeV"
+ },
+ {
+  "id": 395,
+  "name": "KoopaFigure64",
+  "total_placements": 5,
+  "tracks": [
+   "old_koopa_64"
+  ],
+  "status": "real",
+  "class": "ObjectKoopaFigure64"
+ },
+ {
+  "id": 221,
+  "name": "boble",
+  "total_placements": 5,
+  "tracks": [
+   "old_koopa_gba"
+  ],
+  "status": "real",
+  "class": "ObjectBoble"
+ },
+ {
+  "id": 701,
+  "name": "group_enemy_b",
+  "total_placements": 5,
+  "tracks": [
+   "senior_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 712,
+  "name": "group_enemy_e",
+  "total_placements": 5,
+  "tracks": [
+   "castle_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 714,
+  "name": "group_enemy_f",
+  "total_placements": 5,
+  "tracks": [
+   "castle_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 418,
+  "name": "pakkun_dokan",
+  "total_placements": 5,
+  "tracks": [
+   "old_mario_gc"
+  ],
+  "status": "stub",
+  "class": "ObjectCollidable"
+ },
+ {
+  "id": 404,
+  "name": "pakkun_f",
+  "total_placements": 5,
+  "tracks": [
+   "old_mario_gc"
+  ],
+  "status": "real",
+  "class": "ObjectPakkunF"
+ },
+ {
+  "id": 370,
+  "name": "pukupuku",
+  "total_placements": 5,
+  "tracks": [
+   "water_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 21,
+  "name": "sound_Mii",
+  "total_placements": 5,
+  "tracks": [
+   "beginner_course",
+   "senior_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 212,
+  "name": "w_itembox",
+  "total_placements": 5,
+  "tracks": [
+   "factory_course",
+   "truck_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 750,
+  "name": "EnvFire",
+  "total_placements": 4,
+  "tracks": [
+   "koopa_course",
+   "old_koopa_64",
+   "old_koopa_gba",
+   "volcano_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 422,
+  "name": "Epropeller",
+  "total_placements": 4,
+  "tracks": [
+   "water_course"
+  ],
+  "status": "real",
+  "class": "ObjectPropeller"
+ },
+ {
+  "id": 711,
+  "name": "FlagB4",
+  "total_placements": 4,
+  "tracks": [
+   "water_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 233,
+  "name": "Hwanwan",
+  "total_placements": 4,
+  "tracks": [
+   "old_garden_ds"
+  ],
+  "status": "real",
+  "class": "ObjectHwanwanManager"
+ },
+ {
+  "id": 222,
+  "name": "K_bomb_car",
+  "total_placements": 4,
+  "tracks": [
+   "ridgehighway_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 402,
+  "name": "choropu",
+  "total_placements": 4,
+  "tracks": [
+   "farm_course"
+  ],
+  "status": "real",
+  "class": "ObjectChoropu"
+ },
+ {
+  "id": 410,
+  "name": "choropu2",
+  "total_placements": 4,
+  "tracks": [
+   "old_garden_ds"
+  ],
+  "status": "real",
+  "class": "ObjectChoropu"
+ },
+ {
+  "id": 236,
+  "name": "cruiserR",
+  "total_placements": 4,
+  "tracks": [
+   "senior_course",
+   "water_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 707,
+  "name": "group_enemy_a",
+  "total_placements": 4,
+  "tracks": [
+   "old_peach_gc",
+   "senior_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 322,
+  "name": "kinokoT1",
+  "total_placements": 4,
+  "tracks": [
+   "kinoko_course"
+  ],
+  "status": "real",
+  "class": "ObjectKinokoT1"
+ },
+ {
+  "id": 506,
+  "name": "kinoko_nm",
+  "total_placements": 4,
+  "tracks": [
+   "kinoko_course"
+  ],
+  "status": "real",
+  "class": "ObjectKinokoNm"
+ },
+ {
+  "id": 11,
+  "name": "sound_fountain",
+  "total_placements": 4,
+  "tracks": [
+   "senior_course",
+   "shopping_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 8,
+  "name": "sound_lake",
+  "total_placements": 4,
+  "tracks": [
+   "old_garden_ds"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 213,
+  "name": "w_itemboxline",
+  "total_placements": 4,
+  "tracks": [
+   "factory_course"
+  ],
+  "status": "real",
+  "class": "ObjectItemboxLine"
+ },
+ {
+  "id": 211,
+  "name": "w_woodbox",
+  "total_placements": 4,
+  "tracks": [
+   "factory_course"
+  ],
+  "status": "real",
+  "class": "ObjectWoodboxW"
+ },
+ {
+  "id": 112,
+  "name": "woodbox",
+  "total_placements": 4,
+  "tracks": [
+   "old_town_ds"
+  ],
+  "status": "real",
+  "class": "ObjectWoodbox"
+ },
+ {
+  "id": 345,
+  "name": "DKtreeB64",
+  "total_placements": 3,
+  "tracks": [
+   "old_donkey_64"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 730,
+  "name": "Fall_Y",
+  "total_placements": 3,
+  "tracks": [
+   "old_falls_ds"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 722,
+  "name": "Flash_W",
+  "total_placements": 3,
+  "tracks": [
+   "old_waluigi_gc"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 328,
+  "name": "K_sticklift00",
+  "total_placements": 3,
+  "tracks": [
+   "boardcross_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 411,
+  "name": "TruckWagon",
+  "total_placements": 3,
+  "tracks": [
+   "truck_course"
+  ],
+  "status": "real",
+  "class": "ObjectTruckWagon"
+ },
+ {
+  "id": 503,
+  "name": "VolcanoRock1",
+  "total_placements": 3,
+  "tracks": [
+   "volcano_course"
+  ],
+  "status": "real",
+  "class": "ObjectVolcanoRock"
+ },
+ {
+  "id": 319,
+  "name": "WLdokanGC",
+  "total_placements": 3,
+  "tracks": [
+   "old_waluigi_gc"
+  ],
+  "status": "stub",
+  "class": "ObjectKCL"
+ },
+ {
+  "id": 405,
+  "name": "WLfirebarGC",
+  "total_placements": 3,
+  "tracks": [
+   "old_waluigi_gc"
+  ],
+  "status": "real",
+  "class": "ObjectFirebar"
+ },
+ {
+  "id": 203,
+  "name": "WLwallGC",
+  "total_placements": 3,
+  "tracks": [
+   "old_waluigi_gc"
+  ],
+  "status": "real",
+  "class": "ObjectWLWallGC"
+ },
+ {
+  "id": 412,
+  "name": "heyho",
+  "total_placements": 3,
+  "tracks": [
+   "boardcross_course"
+  ],
+  "status": "real",
+  "class": "ObjectHeyho"
+ },
+ {
+  "id": 421,
+  "name": "koopaFirebar",
+  "total_placements": 3,
+  "tracks": [
+   "koopa_course"
+  ],
+  "status": "real",
+  "class": "ObjectFirebar"
+ },
+ {
+  "id": 748,
+  "name": "mare_b",
+  "total_placements": 3,
+  "tracks": [
+   "old_peach_gc"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 326,
+  "name": "parasol",
+  "total_placements": 3,
+  "tracks": [
+   "shopping_course"
+  ],
+  "status": "stub",
+  "class": "ObjectCollidable"
+ },
+ {
+  "id": 311,
+  "name": "peachtreeGC",
+  "total_placements": 3,
+  "tracks": [
+   "old_peach_gc"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 9,
+  "name": "sound_big_fall",
+  "total_placements": 3,
+  "tracks": [
+   "old_donkey_64",
+   "water_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 507,
+  "name": "Crane",
+  "total_placements": 2,
+  "tracks": [
+   "factory_course"
+  ],
+  "status": "real",
+  "class": "ObjectCrane"
+ },
+ {
+  "id": 715,
+  "name": "FallBsA",
+  "total_placements": 2,
+  "tracks": [
+   "water_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 708,
+  "name": "FlagB3",
+  "total_placements": 2,
+  "tracks": [
+   "water_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 534,
+  "name": "FlamePole_v_big",
+  "total_placements": 2,
+  "tracks": [
+   "old_koopa_64"
+  ],
+  "status": "real",
+  "class": "ObjectFlamePoleV"
+ },
+ {
+  "id": 532,
+  "name": "InsekiA",
+  "total_placements": 2,
+  "tracks": [
+   "rainbow_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 533,
+  "name": "InsekiB",
+  "total_placements": 2,
+  "tracks": [
+   "rainbow_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 320,
+  "name": "MarioGo64c",
+  "total_placements": 2,
+  "tracks": [
+   "old_mario_64"
+  ],
+  "status": "stub",
+  "class": "ObjectCollidable"
+ },
+ {
+  "id": 383,
+  "name": "MiiSphinxY2",
+  "total_placements": 2,
+  "tracks": [
+   "desert_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 413,
+  "name": "Press",
+  "total_placements": 2,
+  "tracks": [
+   "factory_course"
+  ],
+  "status": "real",
+  "class": "ObjectPress"
+ },
+ {
+  "id": 378,
+  "name": "StarRing",
+  "total_placements": 2,
+  "tracks": [
+   "rainbow_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 511,
+  "name": "TownBridgeDSc",
+  "total_placements": 2,
+  "tracks": [
+   "old_town_ds"
+  ],
+  "status": "real",
+  "class": "ObjectTownBridge"
+ },
+ {
+  "id": 237,
+  "name": "bird",
+  "total_placements": 2,
+  "tracks": [
+   "old_donkey_gc"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 504,
+  "name": "bulldozer_left",
+  "total_placements": 2,
+  "tracks": [
+   "factory_course"
+  ],
+  "status": "real",
+  "class": "ObjectBulldozer"
+ },
+ {
+  "id": 505,
+  "name": "bulldozer_right",
+  "total_placements": 2,
+  "tracks": [
+   "factory_course"
+  ],
+  "status": "real",
+  "class": "ObjectBulldozer"
+ },
+ {
+  "id": 403,
+  "name": "cow",
+  "total_placements": 2,
+  "tracks": [
+   "farm_course"
+  ],
+  "status": "real",
+  "class": "ObjectCowHerd"
+ },
+ {
+  "id": 606,
+  "name": "escalator",
+  "total_placements": 2,
+  "tracks": [
+   "shopping_course"
+  ],
+  "status": "real",
+  "class": "ObjectEscalator"
+ },
+ {
+  "id": 608,
+  "name": "escalator_group",
+  "total_placements": 2,
+  "tracks": [
+   "shopping_course"
+  ],
+  "status": "real",
+  "class": "ObjectEscalatorGroup"
+ },
+ {
+  "id": 226,
+  "name": "hanachan",
+  "total_placements": 2,
+  "tracks": [
+   "treehouse_course"
+  ],
+  "status": "real",
+  "class": "ObjectHanachan"
+ },
+ {
+  "id": 329,
+  "name": "heyho2",
+  "total_placements": 2,
+  "tracks": [
+   "boardcross_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 501,
+  "name": "kinoko_ud",
+  "total_placements": 2,
+  "tracks": [
+   "kinoko_course"
+  ],
+  "status": "real",
+  "class": "ObjectKinokoUd"
+ },
+ {
+  "id": 747,
+  "name": "mare_a",
+  "total_placements": 2,
+  "tracks": [
+   "old_peach_gc"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 308,
+  "name": "mariotreeGCc",
+  "total_placements": 2,
+  "tracks": [
+   "old_mario_gc"
+  ],
+  "status": "stub",
+  "class": "ObjectCollidable"
+ },
+ {
+  "id": 349,
+  "name": "oilSFC",
+  "total_placements": 2,
+  "tracks": [
+   "old_mario_sfc"
+  ],
+  "status": "real",
+  "class": "ObjectOilSFC"
+ },
+ {
+  "id": 16,
+  "name": "sound_lift",
+  "total_placements": 2,
+  "tracks": [
+   "boardcross_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 6,
+  "name": "sound_water_fall",
+  "total_placements": 2,
+  "tracks": [
+   "ridgehighway_course",
+   "water_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 406,
+  "name": "wanwan",
+  "total_placements": 2,
+  "tracks": [
+   "castle_course",
+   "old_mario_gc"
+  ],
+  "status": "real",
+  "class": "ObjectWanwan"
+ },
+ {
+  "id": 603,
+  "name": "BeltCrossing",
+  "total_placements": 1,
+  "tracks": [
+   "factory_course"
+  ],
+  "status": "real",
+  "class": "ObjectBeltCrossing"
+ },
+ {
+  "id": 604,
+  "name": "BeltCurveA",
+  "total_placements": 1,
+  "tracks": [
+   "factory_course"
+  ],
+  "status": "real",
+  "class": "ObjectBeltCurveA"
+ },
+ {
+  "id": 602,
+  "name": "BeltEasy",
+  "total_placements": 1,
+  "tracks": [
+   "factory_course"
+  ],
+  "status": "real",
+  "class": "ObjectBeltEasy"
+ },
+ {
+  "id": 204,
+  "name": "CarA1",
+  "total_placements": 1,
+  "tracks": [
+   "shopping_course"
+  ],
+  "status": "real",
+  "class": "ObjectCarA"
+ },
+ {
+  "id": 231,
+  "name": "CarA2",
+  "total_placements": 1,
+  "tracks": [
+   "shopping_course"
+  ],
+  "status": "real",
+  "class": "ObjectCarA"
+ },
+ {
+  "id": 232,
+  "name": "CarA3",
+  "total_placements": 1,
+  "tracks": [
+   "shopping_course"
+  ],
+  "status": "real",
+  "class": "ObjectCarA"
+ },
+ {
+  "id": 755,
+  "name": "DKfalls",
+  "total_placements": 1,
+  "tracks": [
+   "old_donkey_64"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 512,
+  "name": "DKship64",
+  "total_placements": 1,
+  "tracks": [
+   "old_donkey_64"
+  ],
+  "status": "real",
+  "class": "ObjectShip64"
+ },
+ {
+  "id": 514,
+  "name": "DKturibashiGCc",
+  "total_placements": 1,
+  "tracks": [
+   "old_donkey_gc"
+  ],
+  "status": "real",
+  "class": "ObjectTuribashi"
+ },
+ {
+  "id": 601,
+  "name": "DonkyCannonGC",
+  "total_placements": 1,
+  "tracks": [
+   "old_donkey_gc"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 607,
+  "name": "DonkyCannon_wii",
+  "total_placements": 1,
+  "tracks": [
+   "boardcross_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 375,
+  "name": "EarthRing",
+  "total_placements": 1,
+  "tracks": [
+   "rainbow_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 749,
+  "name": "EnvKareha",
+  "total_placements": 1,
+  "tracks": [
+   "treehouse_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 753,
+  "name": "EnvKarehaUp",
+  "total_placements": 1,
+  "tracks": [
+   "treehouse_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 751,
+  "name": "EnvSnow",
+  "total_placements": 1,
+  "tracks": [
+   "boardcross_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 716,
+  "name": "FallBsB",
+  "total_placements": 1,
+  "tracks": [
+   "water_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 729,
+  "name": "Fall_MH",
+  "total_placements": 1,
+  "tracks": [
+   "ridgehighway_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 338,
+  "name": "FlagA1",
+  "total_placements": 1,
+  "tracks": [
+   "truck_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 339,
+  "name": "FlagA2",
+  "total_placements": 1,
+  "tracks": [
+   "farm_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 342,
+  "name": "FlagA3",
+  "total_placements": 1,
+  "tracks": [
+   "old_town_ds"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 384,
+  "name": "FlagA5",
+  "total_placements": 1,
+  "tracks": [
+   "water_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 721,
+  "name": "Flash_B",
+  "total_placements": 1,
+  "tracks": [
+   "boardcross_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 723,
+  "name": "Flash_M",
+  "total_placements": 1,
+  "tracks": [
+   "old_mario_64"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 206,
+  "name": "HeyhoShipGBA",
+  "total_placements": 1,
+  "tracks": [
+   "old_heyho_gba"
+  ],
+  "status": "real",
+  "class": "ObjectHeyhoShip"
+ },
+ {
+  "id": 113,
+  "name": "KmoonZ",
+  "total_placements": 1,
+  "tracks": [
+   "rainbow_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 202,
+  "name": "MashBalloonGC",
+  "total_placements": 1,
+  "tracks": [
+   "old_mario_gc"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 535,
+  "name": "Mdush",
+  "total_placements": 1,
+  "tracks": [
+   "castle_course"
+  ],
+  "status": "stub",
+  "class": "ObjectKCL"
+ },
+ {
+  "id": 398,
+  "name": "MiiKanban",
+  "total_placements": 1,
+  "tracks": [
+   "beginner_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 333,
+  "name": "MiiObj01",
+  "total_placements": 1,
+  "tracks": [
+   "beginner_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 334,
+  "name": "MiiObj02",
+  "total_placements": 1,
+  "tracks": [
+   "beginner_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 335,
+  "name": "MiiObj03",
+  "total_placements": 1,
+  "tracks": [
+   "beginner_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 744,
+  "name": "MiiObjD01",
+  "total_placements": 1,
+  "tracks": [
+   "senior_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 745,
+  "name": "MiiObjD02",
+  "total_placements": 1,
+  "tracks": [
+   "senior_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 746,
+  "name": "MiiObjD03",
+  "total_placements": 1,
+  "tracks": [
+   "senior_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 743,
+  "name": "MiiSighKino",
+  "total_placements": 1,
+  "tracks": [
+   "factory_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 725,
+  "name": "MiiSignNoko",
+  "total_placements": 1,
+  "tracks": [
+   "water_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 738,
+  "name": "MiiSignWario",
+  "total_placements": 1,
+  "tracks": [
+   "truck_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 740,
+  "name": "MiiStatueBD1",
+  "total_placements": 1,
+  "tracks": [
+   "senior_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 739,
+  "name": "MiiStatueBL1",
+  "total_placements": 1,
+  "tracks": [
+   "senior_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 381,
+  "name": "MiiStatueD1",
+  "total_placements": 1,
+  "tracks": [
+   "senior_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 380,
+  "name": "MiiStatueL1",
+  "total_placements": 1,
+  "tracks": [
+   "senior_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 737,
+  "name": "MiiStatueL3",
+  "total_placements": 1,
+  "tracks": [
+   "beginner_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 735,
+  "name": "MiiStatueM2",
+  "total_placements": 1,
+  "tracks": [
+   "boardcross_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 321,
+  "name": "PeachHunsuiGC",
+  "total_placements": 1,
+  "tracks": [
+   "old_peach_gc"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 2,
+  "name": "Psea",
+  "total_placements": 1,
+  "tracks": [
+   "old_peach_gc"
+  ],
+  "status": "real",
+  "class": "ObjectPsea"
+ },
+ {
+  "id": 736,
+  "name": "RhMiiKanban",
+  "total_placements": 1,
+  "tracks": [
+   "ridgehighway_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 359,
+  "name": "ShMiiObj01",
+  "total_placements": 1,
+  "tracks": [
+   "shopping_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 360,
+  "name": "ShMiiObj02",
+  "total_placements": 1,
+  "tracks": [
+   "shopping_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 361,
+  "name": "ShMiiObj03",
+  "total_placements": 1,
+  "tracks": [
+   "shopping_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 376,
+  "name": "SpaceSun",
+  "total_placements": 1,
+  "tracks": [
+   "rainbow_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 510,
+  "name": "TwistedWay",
+  "total_placements": 1,
+  "tracks": [
+   "koopa_course"
+  ],
+  "status": "real",
+  "class": "ObjectTwistedWay"
+ },
+ {
+  "id": 726,
+  "name": "UtsuboDokan",
+  "total_placements": 1,
+  "tracks": [
+   "water_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 318,
+  "name": "WLscreenGC",
+  "total_placements": 1,
+  "tracks": [
+   "old_waluigi_gc"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 526,
+  "name": "ami",
+  "total_placements": 1,
+  "tracks": [
+   "treehouse_course"
+  ],
+  "status": "real",
+  "class": "ObjectAmi"
+ },
+ {
+  "id": 516,
+  "name": "aurora",
+  "total_placements": 1,
+  "tracks": [
+   "rainbow_course"
+  ],
+  "status": "real",
+  "class": "ObjectAurora"
+ },
+ {
+  "id": 396,
+  "name": "b_teresa",
+  "total_placements": 1,
+  "tracks": [
+   "old_obake_sfc"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 218,
+  "name": "castleballoon1",
+  "total_placements": 1,
+  "tracks": [
+   "castle_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 364,
+  "name": "dk_miiobj00",
+  "total_placements": 1,
+  "tracks": [
+   "boardcross_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 706,
+  "name": "dkmonitor",
+  "total_placements": 1,
+  "tracks": [
+   "boardcross_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 354,
+  "name": "dossun",
+  "total_placements": 1,
+  "tracks": [
+   "old_koopa_64"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 18,
+  "name": "entry",
+  "total_placements": 1,
+  "tracks": [
+   "rainbow_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 23,
+  "name": "ice",
+  "total_placements": 1,
+  "tracks": [
+   "old_sherbet_64"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 207,
+  "name": "koopaBall",
+  "total_placements": 1,
+  "tracks": [
+   "koopa_course"
+  ],
+  "status": "real",
+  "class": "ObjectKoopaBall"
+ },
+ {
+  "id": 369,
+  "name": "koopaFigure",
+  "total_placements": 1,
+  "tracks": [
+   "koopa_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 365,
+  "name": "light_house",
+  "total_placements": 1,
+  "tracks": [
+   "senior_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 352,
+  "name": "mii_balloon",
+  "total_placements": 1,
+  "tracks": [
+   "shopping_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 363,
+  "name": "miiposter",
+  "total_placements": 1,
+  "tracks": [
+   "shopping_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 228,
+  "name": "moray",
+  "total_placements": 1,
+  "tracks": [
+   "water_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 217,
+  "name": "penguin_l",
+  "total_placements": 1,
+  "tracks": [
+   "old_sherbet_64"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 19,
+  "name": "pochaMori",
+  "total_placements": 1,
+  "tracks": [
+   "ridgehighway_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 719,
+  "name": "ridgemii00",
+  "total_placements": 1,
+  "tracks": [
+   "ridgehighway_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 210,
+  "name": "skyship",
+  "total_placements": 1,
+  "tracks": [
+   "beginner_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 13,
+  "name": "sound_audience",
+  "total_placements": 1,
+  "tracks": [
+   "senior_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 14,
+  "name": "sound_big_river",
+  "total_placements": 1,
+  "tracks": [
+   "old_falls_ds"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 12,
+  "name": "sound_volcano",
+  "total_placements": 1,
+  "tracks": [
+   "old_donkey_gc"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 114,
+  "name": "sunDS",
+  "total_placements": 1,
+  "tracks": [
+   "old_desert_ds"
+  ],
+  "status": "real",
+  "class": "ObjectSunDS"
+ },
+ {
+  "id": 609,
+  "name": "tree_cannon",
+  "total_placements": 1,
+  "tracks": [
+   "treehouse_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ },
+ {
+  "id": 353,
+  "name": "windmill",
+  "total_placements": 1,
+  "tracks": [
+   "farm_course"
+  ],
+  "status": "unimplemented",
+  "class": "ObjectNoImpl"
+ }
+]

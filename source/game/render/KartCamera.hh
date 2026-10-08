@@ -54,6 +54,43 @@ public:
 
     void calc();
 
+    /// @brief The forward camera's eye position, the point it looks at, and its parameters (for hosts that draw the race).
+    [[nodiscard]] const EGG::Vector3f &forwardPos() const {
+        return m_forwardCamera.m_pos;
+    }
+
+    [[nodiscard]] const EGG::Vector3f &forwardTarget() const {
+        return m_forwardCamera.m_targetPos;
+    }
+
+    [[nodiscard]] const Kart::KartParam::KartCameraParam *camParams() const {
+        return m_camParams;
+    }
+
+    /// @brief The field of view the game is using right now: it widens while boosting and eases back afterwards.
+    /// @details Measured from the real game (camera log of a Standard Kart M run): +0.1 of the remaining gap per frame
+    /// towards fov + 6 while boosting, then fov + 0.97 of the excess per frame once the boost ends.
+    [[nodiscard]] f32 fov() const {
+        return m_fov;
+    }
+
+    /// @brief Height of the point the camera looks at above the kart: targetPosY - 20 + the pitch of the smoothed
+    /// forward direction in degrees (measured from the real game; fits to within 0.2 units).
+    /// @brief Internal camera state, for comparing against the real game: {pitch deg, drift yaw deg, hop pos y,
+    /// pitch factor m_1c, big-air height, big-air fall pitch}.
+    void debugState(f32 *out) const {
+        out[0] = m_pitchDeg;
+        out[1] = m_driftYaw;
+        out[2] = m_hopPosY;
+        out[3] = m_forwardCamera.m_1c;
+        out[4] = m_forwardCamera.m_bigAirHeight;
+        out[5] = m_forwardCamera.m_bigAirFallPitch;
+    }
+
+    [[nodiscard]] f32 targetOffsetY() const {
+        return m_camParams->targetPosY - 20.0f + m_pitchDeg;
+    }
+
     KartCamera();
     ~KartCamera();
 
@@ -72,6 +109,7 @@ private:
     }
 
     void calcDriftOffset(const Kart::KartObjectProxy *proxy);
+    void calcFov(const Kart::KartObjectProxy *proxy);
     void calcCamera(f32 param1, f32 param2, f32 param3, KartCameraState &state, bool isBackwards,
             const Kart::KartObjectProxy *proxy, const EGG::Vector3f &targetPos) const;
     void calcAirtimeHeight(KartCameraState &state, const Kart::KartObjectProxy *proxy) const;
@@ -86,6 +124,8 @@ private:
 
     f32 m_driftYaw; ///< Rotation induced when drifting
     f32 m_hopPosY;  ///< Induces a downwards camera position offset
+    f32 m_fov;      ///< Current field of view (degrees), see fov()
+    f32 m_pitchDeg; ///< Pitch of the smoothed forward direction (degrees), see targetOffsetY()
     EGG::Vector3f m_forward;
     EGG::Vector3f m_right;
 

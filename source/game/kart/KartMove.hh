@@ -229,6 +229,11 @@ public:
         return m_driftState;
     }
 
+    /// @brief True once a stand-still mini-turbo has been charged for 75 frames.
+    [[nodiscard]] bool ssmtCharged() const {
+        return m_flags.onBit(eFlags::SsmtCharged);
+    }
+
     [[nodiscard]] u16 mtCharge() const {
         return m_mtCharge;
     }
@@ -258,6 +263,10 @@ public:
 
     [[nodiscard]] f32 acceleration() const {
         return m_acceleration;
+    }
+
+    [[nodiscard]] const KartBoost &boost() const {
+        return m_boost;
     }
 
     [[nodiscard]] const EGG::Vector3f &scale() const {

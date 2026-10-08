@@ -192,6 +192,7 @@ void KartSub::calcPass1() {
     boxColUnit()->search(flags);
 
     collide()->calcObjectCollision();
+    collide()->calcKartCollision();
     dynamics()->setPos(pos() + collide()->tangentOff());
 
     auto &status = KartObjectProxy::status();

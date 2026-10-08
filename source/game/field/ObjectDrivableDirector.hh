@@ -54,6 +54,14 @@ public:
         return m_obakeManager;
     }
 
+    /// @brief Drivable-platform objects (e.g. the Kinoko-family bouncy mushrooms), for the web
+    /// renderer -- these register here instead of ObjectDirector::m_objects (they're driven ON,
+    /// not just collided with), so kinoko_get_objects() (web_bridge.cc) needs both lists to show
+    /// every Kinoko-simulated object's real position/scale, not just ObjectCollidable ones.
+    [[nodiscard]] const fixed_vector<ObjectDrivable *> &objects() const {
+        return m_objects;
+    }
+
     static ObjectDrivableDirector *CreateInstance();
     static void DestroyInstance();
 

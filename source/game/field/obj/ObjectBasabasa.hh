@@ -39,6 +39,12 @@ public:
         return m_active;
     }
 
+    /// Added for Kinoko web's renderer: inactive bats sit frozen at their last (or never-set) position
+    /// until the spawner cycles them back in, same issue as ObjectTruckWagonCart.
+    [[nodiscard]] bool isVisible() const override {
+        return m_active;
+    }
+
 private:
     /// @addr{0x806B5C80}
     void enterState0() {}
@@ -81,6 +87,13 @@ public:
     /// @addr{0x806B7628}
     [[nodiscard]] u32 loadFlags() const override {
         return 3;
+    }
+
+    /// Added for Kinoko web's renderer: this spawner loads the same bat model as its dummies (it
+    /// doesn't override loadGraphics()) but never moves or enters a state -- it just sits frozen at
+    /// its placement forever, which showed up as a permanently stuck extra bat at every spawn point.
+    [[nodiscard]] bool isVisible() const override {
+        return false;
     }
 
     /// @addr{0x806B761C}

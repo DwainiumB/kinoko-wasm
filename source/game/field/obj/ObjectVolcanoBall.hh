@@ -21,6 +21,13 @@ public:
         StateManager::calc();
     }
 
+    /// Added for Kinoko web's renderer: dormant balls (state 0) all sit parked at the launcher's
+    /// shared starting point until launched, so exporting them stacks several motionless duplicate
+    /// fireballs on top of each other at the crater.
+    [[nodiscard]] bool isVisible() const override {
+        return m_currentStateId != 0;
+    }
+
     /// @addr{0x806E3A7C}
     [[nodiscard]] u32 loadFlags() const override {
         return 1;

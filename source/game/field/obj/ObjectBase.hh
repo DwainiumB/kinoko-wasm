@@ -93,6 +93,14 @@ public:
         return m_id;
     }
 
+    /// @brief The object's current state, for objects whose visible animation depends on discrete game state (added
+    /// for Kinoko web's renderer, not part of the original game -- most objects have no such thing, hence the -1
+    /// default). Overridden by StateManager-driven objects whose model has one clip per state (e.g. the moles), so
+    /// the renderer can play the right clip instead of guessing with a generic idle loop.
+    [[nodiscard]] virtual s32 animState() const {
+        return -1;
+    }
+
     void setPos(const EGG::Vector3f &pos) {
         m_flags.setBit(eFlags::Position);
         m_pos = pos;
@@ -161,6 +169,33 @@ public:
 
     [[nodiscard]] const EGG::Matrix34f &transform() const {
         return m_transform;
+    }
+
+    /// @brief True once this object has had a full orientation matrix set via setTransform() (e.g.
+    /// ObjectHeyho's setMatrixTangentTo(), which tilts it to the floor normal it's riding over), as
+    /// opposed to the plain Euler rot() most objects use. transform() only reflects that tilt when
+    /// this is true. Added for Kinoko web's renderer, not part of the original game.
+    [[nodiscard]] bool usesMatrixTransform() const {
+        return m_flags.onBit(eFlags::Matrix);
+    }
+
+    /// @brief Whether loadGraphics() actually bound a model to draw. False for pure coordinator
+    /// objects that override loadGraphics() to a no-op (e.g. ObjectBird, whose leader/follower
+    /// sub-objects carry the real models) -- the base game would never issue a draw call for one of
+    /// these, so Kinoko web's renderer skips them too instead of treating the bare id/pos/rot as a
+    /// real visible object. Added for Kinoko web's renderer, not part of the original game.
+    [[nodiscard]] bool hasModel() const {
+        return m_drawMdl != nullptr;
+    }
+
+    /// @brief Whether this object should currently be drawn. True for almost everything; objects
+    /// that cycle through an inactive/parked state in a reusable pool (e.g. ObjectTruckWagonCart,
+    /// which keeps half its pool inactive and un-positioned at a time on Wario's Gold Mine) override
+    /// this to hide themselves while inactive, instead of exporting a static leftover position no
+    /// real draw call would ever reach. Added for Kinoko web's renderer, not part of the original
+    /// game.
+    [[nodiscard]] virtual bool isVisible() const {
+        return true;
     }
 
 protected:

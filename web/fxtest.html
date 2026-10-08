@@ -1,0 +1,43 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Effect test</title>
+<style>html,body{margin:0;background:#3a4a3a;color:#fff;font:12px sans-serif}#ui{position:fixed;left:6px;top:6px;background:#000a;padding:6px;z-index:2}canvas{display:block}</style>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script src="nw4r_ef.js?v=5"></script>
+</head><body>
+<div id="ui">effects <input id="names" size="70" value="rk_miniTurbo"> speed <input id="spd" size="4" value="0.1">
+ view <select id="view"><option>rear</option><option>side</option><option>top</option></select>
+ frame <input id="frm" size="3" value=""> <button id="go">play</button> <span id="info"></span></div>
+<script>
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+renderer.setSize(innerWidth, innerHeight); document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color(0x4a5a4a);
+const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 1, 5000);
+const grid = new THREE.GridHelper(600, 30, 0x888888, 0x666666); scene.add(grid);
+// stand-in kart: wheels and body sized like the real kart (rear wheels at (+-58, 0, -43))
+const kart = new THREE.Group(); scene.add(kart);
+const mat = new THREE.MeshBasicMaterial({ color: 0xaa2222 });
+const body = new THREE.Mesh(new THREE.BoxGeometry(90, 30, 130), mat); body.position.set(0, 25, 0); kart.add(body);
+for (const [x, z] of [[58, -43], [-58, -43], [48, 55], [-48, 55]]) { const w = new THREE.Mesh(new THREE.CylinderGeometry(21, 21, 20, 16), new THREE.MeshBasicMaterial({ color: 0x222222 })); w.rotation.z = Math.PI / 2; w.position.set(x, 21, z); kart.add(w); }
+const fx = new EffectSystem(scene, camera); window.fx = fx;
+function setView() {
+  const v = document.getElementById('view').value;
+  if (v === 'rear') { camera.position.set(0, 90, -330); camera.lookAt(0, 20, -40); }
+  if (v === 'side') { camera.position.set(330, 60, -60); camera.lookAt(0, 30, -50); }
+  if (v === 'top') { camera.position.set(0, 400, -60); camera.lookAt(0, 0, -60); }
+}
+let sets = []; let ATP = [0, 21, -70];
+function play() {
+  fx.effects = []; fx.speed = parseFloat(spd.value); setView();
+  kart.updateMatrixWorld(true);
+  const names = document.getElementById('names').value.split(/\s+/).filter(Boolean);
+  names.forEach(n => { const [nm, at] = n.split('@'); const p = at ? at.split(';').join(',').split(',').map(Number) : ATP; fx.play(nm, () => new THREE.Matrix4().makeTranslation(...p)); });
+  if (frm.value !== '') { fx.speed = 0; fx.advance(parseInt(frm.value)); }
+  info.textContent = names.length + ' effects';
+}
+go.onclick = play; view.onchange = setView;
+// keep re-running so the effect can be watched; ?fx=name in the address selects one
+const q = new URLSearchParams(location.search); if (q.get('at')) ATP = q.get('at').split(',').map(Number); if (q.get('fx')) names.value = q.get('fx'); if (q.get('speed')) spd.value = q.get('speed'); if (q.get('view')) view.value = q.get('view'); if (q.get('frame')) frm.value = q.get('frame');
+fx.ready.then(play);
+let last = performance.now();
+(function loop(t) { requestAnimationFrame(loop); const dt = (t - last) / 1000; last = t; fx.update(dt); renderer.render(scene, camera); })(last);
+</script></body></html>

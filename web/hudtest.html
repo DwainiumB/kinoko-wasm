@@ -1,0 +1,47 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>HUD test</title><style>body{margin:0;background:#222}#w{position:relative;width:834px;height:456px}canvas,img{position:absolute;left:0;top:0}</style></head>
+<body><div id="w"><img id="ref" src="assets/ui/_ref_tt.png"><canvas id="c" width="834" height="456"></canvas></div>
+<script src="hud.js"></script>
+<script>
+const h = new GameHud({ canvas: document.getElementById('c'), size: () => ({ W: 834, H: 456 }) });
+window.h = h; h.set({ visible: true, timeMs: 6902, lap: 1, laps: 3, items: 3 });
+const q = new URLSearchParams(location.search);
+if (q.get('off')) document.getElementById('ref').style.display = 'none';
+setInterval(() => h.draw(), 100);
+</script></body></html>
+<script>
+// Fit a group's anchor (x, y, scale) to the reference frame by maximising the overlap of its shape with the reference's yellow pixels
+window.fit = async function (group, box, ranges) {
+  const ref = document.getElementById('ref'), rc = document.createElement('canvas'); rc.width = 834; rc.height = 456;
+  const rg = rc.getContext('2d'); rg.drawImage(ref, 0, 0);
+  const [x0, y0, x1, y1] = box, rd = rg.getImageData(x0, y0, x1 - x0, y1 - y0).data;
+  const yel = new Float32Array((x1 - x0) * (y1 - y0));
+  for (let i = 0; i < yel.length; i++) { const r = rd[4*i], g = rd[4*i+1], b = rd[4*i+2]; yel[i] = (r > 110 && g > 100 && b < 0.55 * g && Math.abs(r - g) < 45) ? 1 : 0; }
+  const tc = document.createElement('canvas'); tc.width = 834; tc.height = 456;
+  const hh = new GameHud({ canvas: tc, size: () => ({ W: 834, H: 456 }) });
+  hh.set(h.state); hh.only = group;
+  const A = h.a[group], best = { s: -1 };
+  for (let sc = ranges.s[0]; sc <= ranges.s[1] + 1e-9; sc += ranges.s[2])
+    for (let x = ranges.x[0]; x <= ranges.x[1]; x += 1)
+      for (let y = ranges.y[0]; y <= ranges.y[1]; y += 1) {
+        hh.a = { ...h.a, [group]: { ...A, x, y, scale: sc } }; hh.draw();
+        const d = tc.getContext('2d').getImageData(x0, y0, x1 - x0, y1 - y0).data;
+        let inter = 0, a = 0, b = 0;
+        for (let i = 0; i < yel.length; i++) { const m = d[4*i+3] > 128 ? 1 : 0; inter += m * yel[i]; a += m; b += yel[i]; }
+        const score = inter / Math.sqrt(a * b + 1);
+        if (score > best.s) { best.s = score; best.x = x; best.y = y; best.scale = +sc.toFixed(3); }
+      }
+  return best;
+};
+</script>
+<script>
+// zoomView([x0,y0,x1,y1], k, dim): the reference frame magnified and dimmed, with this HUD drawn over it
+window.zoomView = (box, k, dim = 0.55) => {
+  let z = document.getElementById('z');
+  if (!z) { z = document.createElement('canvas'); z.id = 'z'; z.style.cssText = 'position:fixed;left:0;top:0;z-index:99;background:#000'; document.body.appendChild(z); }
+  const [x0, y0, x1, y1] = box; z.width = (x1 - x0) * k; z.height = (y1 - y0) * k;
+  const g = z.getContext('2d'); g.imageSmoothingEnabled = false;
+  g.drawImage(document.getElementById('ref'), x0, y0, x1 - x0, y1 - y0, 0, 0, z.width, z.height);
+  g.fillStyle = 'rgba(0,0,60,' + dim + ')'; g.fillRect(0, 0, z.width, z.height);
+  h.draw(); g.imageSmoothingEnabled = true; g.drawImage(document.getElementById('c'), x0, y0, x1 - x0, y1 - y0, 0, 0, z.width, z.height);
+};
+</script>

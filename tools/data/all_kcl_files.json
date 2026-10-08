@@ -1,0 +1,1329 @@
+{
+ "beginner_course": {
+  "course.kcl": {
+   "triangles": 4180,
+   "types": {
+    "SOUND_TRIGGER variant 0": 4,
+    "SOUND_TRIGGER variant 1": 8,
+    "SOUND_TRIGGER variant 2": 8,
+    "SOUND_TRIGGER variant 3": 4,
+    "WALL variant 0": 259,
+    "OFF_ROAD variant 0": 334,
+    "OFF_ROAD variant 4": 608,
+    "EFFECT_TRIGGER variant 1": 77,
+    "ROAD variant 0": 2059,
+    "INVISIBLE_WALL variant 0": 155,
+    "SOLID_OOB variant 6": 2,
+    "BOOST_PAD variant 0": 72,
+    "ROAD2 variant 3": 30,
+    "WALL variant 2": 421,
+    "WALL variant 7": 92,
+    "SPECIAL_WALL variant 6": 47
+   }
+  }
+ },
+ "farm_course": {
+  "course.kcl": {
+   "triangles": 9077,
+   "types": {
+    "OFF_ROAD variant 4": 1372,
+    "ROAD variant 1": 2451,
+    "ITEM_WALL variant 3": 199,
+    "ITEM_ROAD variant 3": 98,
+    "SOLID_OOB variant 5": 2041,
+    "WALL variant 3": 1692,
+    "INVISIBLE_WALL variant 0": 1070,
+    "WALL variant 2": 142,
+    "ROAD variant 4": 2,
+    "STICKY_ROAD variant 4": 8,
+    "BOOST_RAMP variant 1": 2
+   }
+  }
+ },
+ "kinoko_course": {
+  "course.kcl": {
+   "triangles": 5546,
+   "types": {
+    "FALL_BOUNDARY variant 0": 203,
+    "INVISIBLE_WALL variant 0": 377,
+    "EFFECT_TRIGGER variant 1": 35,
+    "ROAD variant 1": 667,
+    "STICKY_ROAD variant 1": 55,
+    "ROAD variant 4": 118,
+    "OFF_ROAD variant 4": 628,
+    "ITEM_ROAD variant 3": 373,
+    "OFF_ROAD variant 0": 134,
+    "WALL variant 1": 1621,
+    "ITEM_WALL variant 5": 6,
+    "SPECIAL_WALL variant 5": 276,
+    "WALL variant 3": 752,
+    "WALL variant 0": 126,
+    "BOOST_PAD variant 0": 12,
+    "JUMP_PAD variant 3": 10,
+    "ROAD variant 3": 129,
+    "EFFECT_TRIGGER variant 0": 4,
+    "SOUND_TRIGGER variant 1": 4,
+    "SOUND_TRIGGER variant 2": 8,
+    "SOUND_TRIGGER variant 3": 4,
+    "SOUND_TRIGGER variant 0": 4
+   }
+  },
+  "kinoko_d_g.kcl": {
+   "triangles": 352,
+   "types": {
+    "SPECIAL_WALL variant 5": 112,
+    "ROAD2 variant 3": 240
+   }
+  },
+  "kinoko_d_r.kcl": {
+   "triangles": 352,
+   "types": {
+    "SPECIAL_WALL variant 5": 112,
+    "JUMP_PAD variant 4": 240
+   }
+  },
+  "kinoko_g.kcl": {
+   "triangles": 352,
+   "types": {
+    "SPECIAL_WALL variant 5": 112,
+    "ROAD2 variant 3": 240
+   }
+  },
+  "kinoko_r.kcl": {
+   "triangles": 352,
+   "types": {
+    "SPECIAL_WALL variant 5": 112,
+    "JUMP_PAD variant 4": 240
+   }
+  }
+ },
+ "factory_course": {
+  "Crane.kcl": {
+   "triangles": 60,
+   "types": {
+    "WALL variant 2": 50,
+    "ROAD variant 0": 10
+   }
+  },
+  "bulldozer_left.kcl": {
+   "triangles": 72,
+   "types": {
+    "ROAD variant 0": 32,
+    "WALL variant 2": 28,
+    "INVISIBLE_WALL variant 0": 12
+   }
+  },
+  "bulldozer_right.kcl": {
+   "triangles": 72,
+   "types": {
+    "ROAD variant 0": 32,
+    "WALL variant 2": 28,
+    "INVISIBLE_WALL variant 0": 12
+   }
+  },
+  "course.kcl": {
+   "triangles": 4843,
+   "types": {
+    "SOUND_TRIGGER variant 7": 6,
+    "SOUND_TRIGGER variant 6": 4,
+    "SOUND_TRIGGER variant 5": 2,
+    "SOUND_TRIGGER variant 4": 4,
+    "SOUND_TRIGGER variant 1": 4,
+    "SOUND_TRIGGER variant 3": 4,
+    "SOUND_TRIGGER variant 0": 4,
+    "SOUND_TRIGGER variant 2": 4,
+    "ROAD variant 0": 1301,
+    "MOVING_ROAD variant 4": 38,
+    "MOVING_ROAD variant 5": 38,
+    "BOOST_RAMP variant 0": 4,
+    "WALL variant 2": 1420,
+    "ITEM_ROAD variant 0": 144,
+    "SOLID_OOB variant 4": 50,
+    "ITEM_WALL variant 2": 677,
+    "INVISIBLE_WALL variant 0": 332,
+    "MOVING_ROAD variant 3": 4,
+    "MOVING_ROAD variant 2": 4,
+    "MOVING_ROAD variant 1": 2,
+    "MOVING_ROAD variant 0": 8,
+    "ROAD variant 6": 8,
+    "BOOST_RAMP variant 1": 16,
+    "EFFECT_TRIGGER variant 0": 2,
+    "BOOST_PAD variant 0": 8,
+    "FALL_BOUNDARY variant 1": 14,
+    "WALL variant 1": 70,
+    "ROAD variant 1": 442,
+    "OFF_ROAD variant 2": 210,
+    "STICKY_ROAD variant 7": 4,
+    "ITEM_STATE_MODIFIER variant 0": 4,
+    "FALL_BOUNDARY variant 0": 11
+   }
+  }
+ },
+ "castle_course": {
+  "Mdush.kcl": {
+   "triangles": 18,
+   "types": {
+    "STICKY_ROAD variant 0": 8,
+    "BOOST_RAMP variant 1": 4,
+    "WALL variant 3": 6
+   }
+  },
+  "course.kcl": {
+   "triangles": 5051,
+   "types": {
+    "SOUND_TRIGGER variant 1": 8,
+    "SOUND_TRIGGER variant 0": 12,
+    "SOUND_TRIGGER variant 2": 4,
+    "OFF_ROAD variant 0": 18,
+    "OFF_ROAD variant 4": 919,
+    "ROAD variant 0": 525,
+    "ROAD variant 2": 1137,
+    "ITEM_WALL variant 0": 457,
+    "WALL variant 2": 238,
+    "WALL variant 0": 309,
+    "INVISIBLE_WALL variant 0": 415,
+    "ITEM_WALL variant 1": 46,
+    "ITEM_WALL variant 2": 111,
+    "ITEM_ROAD variant 0": 237,
+    "SOLID_OOB variant 5": 165,
+    "WALL variant 1": 263,
+    "WALL variant 3": 157,
+    "EFFECT_TRIGGER variant 0": 4,
+    "STICKY_ROAD variant 1": 26
+   }
+  }
+ },
+ "shopping_course": {
+  "course.kcl": {
+   "triangles": 9158,
+   "types": {
+    "SOUND_TRIGGER variant 2": 6,
+    "SOUND_TRIGGER variant 0": 10,
+    "SOUND_TRIGGER variant 4": 4,
+    "SOUND_TRIGGER variant 1": 6,
+    "SOUND_TRIGGER variant 3": 4,
+    "SOUND_TRIGGER variant 5": 4,
+    "ROAD variant 2": 132,
+    "ROAD variant 3": 903,
+    "HEAVY_OFF_ROAD variant 4": 112,
+    "ROAD variant 0": 506,
+    "WALL_2 variant 0": 2930,
+    "WALL_2 variant 2": 437,
+    "INVISIBLE_WALL variant 0": 908,
+    "ITEM_WALL variant 0": 609,
+    "ROAD variant 7": 1157,
+    "ITEM_ROAD variant 0": 591,
+    "WALL variant 0": 189,
+    "BOOST_PAD variant 0": 21,
+    "ROAD variant 4": 116,
+    "SPECIAL_WALL variant 3": 238,
+    "WEAK_OFF_ROAD variant 5": 22,
+    "BOOST_RAMP variant 1": 2,
+    "ITEM_WALL variant 3": 88,
+    "WEAK_OFF_ROAD variant 2": 20,
+    "WALL_2 variant 7": 2,
+    "STICKY_ROAD variant 1": 11,
+    "ROAD2 variant 0": 36,
+    "ROAD2 variant 5": 31,
+    "WALL_2 variant 3": 2,
+    "FALL_BOUNDARY variant 0": 8,
+    "BOOST_RAMP variant 0": 2,
+    "WALL_2 variant 4": 1,
+    "FORCE_RECALCULATE_ROUTE variant 0": 44,
+    "OFF_ROAD variant 7": 6
+   }
+  },
+  "escalator.kcl": {
+   "triangles": 76,
+   "types": {
+    "MOVING_ROAD variant 0": 76
+   }
+  }
+ },
+ "boardcross_course": {
+  "course.kcl": {
+   "triangles": 4357,
+   "types": {
+    "ROAD variant 5": 2834,
+    "FALL_BOUNDARY variant 0": 14,
+    "WALL variant 3": 224,
+    "WALL variant 4": 179,
+    "ITEM_WALL variant 1": 160,
+    "HALFPIPE_RAMP variant 0": 243,
+    "SOUND_TRIGGER variant 1": 8,
+    "SOUND_TRIGGER variant 0": 8,
+    "SOUND_TRIGGER variant 2": 8,
+    "SOUND_TRIGGER variant 3": 4,
+    "SOUND_TRIGGER variant 4": 4,
+    "STICKY_ROAD variant 4": 82,
+    "BOOST_RAMP variant 0": 4,
+    "EFFECT_TRIGGER variant 4": 21,
+    "INVISIBLE_WALL variant 0": 403,
+    "BOOST_RAMP variant 1": 32,
+    "HEAVY_OFF_ROAD variant 5": 95,
+    "BOOST_PAD variant 0": 12,
+    "ROAD variant 4": 18,
+    "CANNON_TRIGGER variant 0": 4
+   }
+  }
+ },
+ "truck_course": {
+  "course.kcl": {
+   "triangles": 8509,
+   "types": {
+    "STICKY_ROAD variant 0": 1265,
+    "ROAD variant 1": 382,
+    "ROAD variant 7": 510,
+    "INVISIBLE_WALL variant 0": 644,
+    "WALL variant 3": 950,
+    "WALL variant 6": 132,
+    "WALL_2 variant 2": 1464,
+    "WALL variant 1": 1511,
+    "SOUND_TRIGGER variant 1": 8,
+    "SOUND_TRIGGER variant 2": 10,
+    "SOUND_TRIGGER variant 3": 6,
+    "SOUND_TRIGGER variant 0": 4,
+    "FALL_BOUNDARY variant 0": 31,
+    "SOLID_OOB variant 6": 90,
+    "BOOST_RAMP variant 1": 2,
+    "BOOST_PAD variant 0": 6,
+    "BOOST_RAMP variant 0": 2,
+    "PLAYER_WALL variant 7": 686,
+    "WEAK_WALL variant 0": 34,
+    "EFFECT_TRIGGER variant 1": 2,
+    "WALL variant 0": 358,
+    "SOLID_OOB variant 4": 334,
+    "SPECIAL_WALL variant 3": 6,
+    "HALFPIPE_RAMP variant 0": 10,
+    "ITEM_ROAD variant 2": 34,
+    "ROAD variant 4": 28
+   }
+  }
+ },
+ "senior_course": {
+  "course.kcl": {
+   "triangles": 7130,
+   "types": {
+    "SOUND_TRIGGER variant 0": 12,
+    "SOUND_TRIGGER variant 1": 28,
+    "SOUND_TRIGGER variant 2": 16,
+    "ROAD variant 0": 1266,
+    "INVISIBLE_WALL variant 0": 831,
+    "WALL_2 variant 0": 2257,
+    "ITEM_WALL variant 2": 268,
+    "ITEM_ROAD variant 0": 459,
+    "STICKY_ROAD variant 6": 122,
+    "OFF_ROAD variant 6": 204,
+    "BOOST_RAMP variant 1": 12,
+    "BOOST_PAD variant 0": 2,
+    "SOLID_OOB variant 0": 462,
+    "SOLID_OOB variant 6": 74,
+    "ITEM_ROAD variant 5": 22,
+    "FALL_BOUNDARY variant 0": 74,
+    "SOLID_OOB variant 1": 1,
+    "WALL_2 variant 2": 291,
+    "ITEM_WALL variant 0": 145,
+    "PLAYER_WALL variant 7": 34,
+    "SOLID_OOB variant 2": 2,
+    "WALL variant 3": 548
+   }
+  }
+ },
+ "ridgehighway_course": {
+  "course.kcl": {
+   "triangles": 5204,
+   "types": {
+    "EFFECT_TRIGGER variant 2": 144,
+    "ROAD variant 0": 1606,
+    "ROAD variant 7": 53,
+    "ROAD variant 6": 108,
+    "WALL variant 2": 1251,
+    "WEAK_OFF_ROAD variant 3": 372,
+    "FALL_BOUNDARY variant 0": 35,
+    "BOOST_PAD variant 0": 36,
+    "WALL variant 0": 256,
+    "WALL variant 1": 396,
+    "ITEM_ROAD variant 5": 311,
+    "INVISIBLE_WALL variant 0": 593,
+    "BOOST_RAMP variant 0": 4,
+    "STICKY_ROAD variant 6": 3,
+    "SOUND_TRIGGER variant 0": 4,
+    "SOUND_TRIGGER variant 2": 8,
+    "SOUND_TRIGGER variant 3": 4,
+    "SOUND_TRIGGER variant 4": 8,
+    "SOUND_TRIGGER variant 5": 4,
+    "SOUND_TRIGGER variant 1": 8
+   }
+  }
+ },
+ "treehouse_course": {
+  "course.kcl": {
+   "triangles": 10427,
+   "types": {
+    "SOUND_TRIGGER variant 1": 4,
+    "SOUND_TRIGGER variant 0": 8,
+    "SOUND_TRIGGER variant 2": 4,
+    "SOUND_TRIGGER variant 3": 4,
+    "SOUND_TRIGGER variant 4": 4,
+    "ROAD variant 1": 860,
+    "ROAD variant 4": 269,
+    "WALL variant 3": 372,
+    "ROTATING_ROAD variant 0": 4,
+    "FALL_BOUNDARY variant 1": 82,
+    "STICKY_ROAD variant 4": 1244,
+    "EFFECT_TRIGGER variant 2": 38,
+    "WALL_2 variant 3": 4200,
+    "ITEM_WALL variant 3": 53,
+    "ITEM_ROAD variant 3": 169,
+    "WALL_2 variant 1": 1179,
+    "ITEM_ROAD variant 5": 110,
+    "INVISIBLE_WALL variant 0": 452,
+    "SOLID_OOB variant 5": 58,
+    "STICKY_ROAD variant 3": 382,
+    "OFF_ROAD variant 4": 178,
+    "BOOST_RAMP variant 1": 16,
+    "STICKY_ROAD variant 0": 42,
+    "BOOST_PAD variant 0": 39,
+    "BOOST_RAMP variant 0": 2,
+    "ROAD variant 0": 28,
+    "EFFECT_TRIGGER variant 1": 6,
+    "FORCE_RECALCULATE_ROUTE variant 0": 11,
+    "CANNON_TRIGGER variant 0": 2,
+    "WALL variant 1": 358,
+    "ROAD2 variant 4": 84,
+    "WALL variant 5": 79,
+    "HALFPIPE_RAMP variant 0": 26,
+    "FALL_BOUNDARY variant 0": 60
+   }
+  }
+ },
+ "koopa_course": {
+  "FlamePole.kcl": {
+   "triangles": 80,
+   "types": {
+    "ROAD variant 0": 80
+   }
+  },
+  "course.kcl": {
+   "triangles": 9659,
+   "types": {
+    "EFFECT_TRIGGER variant 4": 172,
+    "FALL_BOUNDARY variant 2": 24,
+    "STICKY_ROAD variant 1": 396,
+    "HEAVY_OFF_ROAD variant 2": 68,
+    "ROAD variant 2": 1979,
+    "BOOST_PAD variant 0": 40,
+    "WALL variant 0": 3151,
+    "ROAD variant 0": 491,
+    "PLAYER_WALL variant 3": 22,
+    "ITEM_ROAD variant 0": 421,
+    "STICKY_ROAD variant 0": 36,
+    "INVISIBLE_WALL variant 0": 577,
+    "ITEM_WALL variant 0": 755,
+    "SOLID_OOB variant 4": 16,
+    "WALL variant 3": 408,
+    "BOOST_RAMP variant 1": 50,
+    "BOOST_RAMP variant 0": 4,
+    "ROAD variant 6": 589,
+    "HALFPIPE_RAMP variant 1": 20,
+    "HALFPIPE_INVISIBLE_WALL variant 0": 48,
+    "SOLID_OOB variant 2": 16,
+    "OFF_ROAD variant 4": 177,
+    "ROAD variant 1": 81,
+    "WALL variant 1": 82,
+    "SOUND_TRIGGER variant 6": 4,
+    "SOUND_TRIGGER variant 7": 2,
+    "SOUND_TRIGGER variant 0": 6,
+    "SOUND_TRIGGER variant 2": 4,
+    "SOUND_TRIGGER variant 3": 4,
+    "SOUND_TRIGGER variant 1": 4,
+    "SOUND_TRIGGER variant 4": 6,
+    "SOUND_TRIGGER variant 5": 6
+   }
+  }
+ },
+ "rainbow_course": {
+  "course.kcl": {
+   "triangles": 7979,
+   "types": {
+    "SOUND_TRIGGER variant 1": 20,
+    "SOUND_TRIGGER variant 2": 20,
+    "SOUND_TRIGGER variant 3": 14,
+    "SOUND_TRIGGER variant 4": 14,
+    "SOUND_TRIGGER variant 5": 14,
+    "SOUND_TRIGGER variant 6": 4,
+    "SOUND_TRIGGER variant 0": 26,
+    "STICKY_ROAD variant 5": 3380,
+    "FORCE_RECALCULATE_ROUTE variant 0": 34,
+    "EFFECT_TRIGGER variant 4": 74,
+    "WEAK_WALL variant 0": 1228,
+    "BOOST_RAMP variant 1": 6,
+    "ROAD2 variant 7": 1144,
+    "ROAD variant 6": 90,
+    "BOOST_PAD variant 0": 106,
+    "BOOST_RAMP variant 0": 4,
+    "HALFPIPE_RAMP variant 0": 100,
+    "FALL_BOUNDARY variant 5": 563,
+    "INVISIBLE_WALL variant 0": 306,
+    "CANNON_TRIGGER variant 2": 8,
+    "SPECIAL_WALL variant 4": 806,
+    "INVISIBLE_WALL2 variant 0": 18
+   }
+  }
+ },
+ "volcano_course": {
+  "VolcanoPiece0.kcl": {
+   "triangles": 126,
+   "types": {
+    "WALL variant 1": 68,
+    "ROAD variant 1": 29,
+    "WEAK_OFF_ROAD variant 1": 19,
+    "WALL variant 0": 8,
+    "ROAD variant 3": 2
+   }
+  },
+  "VolcanoPiece0b.kcl": {
+   "triangles": 18,
+   "types": {
+    "ROAD variant 1": 18
+   }
+  },
+  "VolcanoPiece0c.kcl": {
+   "triangles": 18,
+   "types": {
+    "WALL variant 1": 18
+   }
+  },
+  "VolcanoPiece1.kcl": {
+   "triangles": 306,
+   "types": {
+    "ROAD variant 1": 98,
+    "WALL variant 1": 102,
+    "WEAK_OFF_ROAD variant 1": 59,
+    "ROAD variant 2": 4,
+    "WALL variant 0": 39,
+    "ROAD variant 3": 4
+   }
+  },
+  "VolcanoPiece11.kcl": {
+   "triangles": 173,
+   "types": {
+    "ROAD variant 1": 37,
+    "WALL variant 1": 76,
+    "WEAK_OFF_ROAD variant 1": 50,
+    "WALL variant 0": 8,
+    "ROAD variant 3": 2
+   }
+  },
+  "VolcanoPiece11b.kcl": {
+   "triangles": 36,
+   "types": {
+    "ROAD variant 1": 36
+   }
+  },
+  "VolcanoPiece11c.kcl": {
+   "triangles": 36,
+   "types": {
+    "WALL variant 1": 36
+   }
+  },
+  "VolcanoPiece13.kcl": {
+   "triangles": 119,
+   "types": {
+    "WALL variant 1": 54,
+    "ROAD variant 1": 38,
+    "WEAK_OFF_ROAD variant 1": 17,
+    "WALL variant 0": 8,
+    "ROAD variant 3": 2
+   }
+  },
+  "VolcanoPiece13b.kcl": {
+   "triangles": 22,
+   "types": {
+    "ROAD variant 1": 22
+   }
+  },
+  "VolcanoPiece13c.kcl": {
+   "triangles": 22,
+   "types": {
+    "WALL variant 1": 22
+   }
+  },
+  "VolcanoPiece14.kcl": {
+   "triangles": 143,
+   "types": {
+    "WALL variant 1": 91,
+    "ROAD variant 1": 26,
+    "WEAK_OFF_ROAD variant 1": 26
+   }
+  },
+  "VolcanoPiece14b.kcl": {
+   "triangles": 28,
+   "types": {
+    "ROAD variant 1": 28
+   }
+  },
+  "VolcanoPiece14c.kcl": {
+   "triangles": 28,
+   "types": {
+    "WALL variant 1": 28
+   }
+  },
+  "VolcanoPiece16.kcl": {
+   "triangles": 175,
+   "types": {
+    "WALL variant 1": 99,
+    "ROAD variant 1": 30,
+    "WEAK_OFF_ROAD variant 1": 26,
+    "WALL variant 0": 16,
+    "ROAD variant 3": 4
+   }
+  },
+  "VolcanoPiece16b.kcl": {
+   "triangles": 20,
+   "types": {
+    "ROAD variant 1": 20
+   }
+  },
+  "VolcanoPiece16c.kcl": {
+   "triangles": 20,
+   "types": {
+    "WALL variant 1": 20
+   }
+  },
+  "VolcanoPiece18.kcl": {
+   "triangles": 199,
+   "types": {
+    "WEAK_OFF_ROAD variant 1": 30,
+    "WALL variant 1": 123,
+    "ROAD variant 1": 36,
+    "WALL variant 0": 8,
+    "ROAD variant 3": 2
+   }
+  },
+  "VolcanoPiece18b.kcl": {
+   "triangles": 26,
+   "types": {
+    "ROAD variant 1": 26
+   }
+  },
+  "VolcanoPiece18c.kcl": {
+   "triangles": 26,
+   "types": {
+    "WALL variant 1": 26
+   }
+  },
+  "VolcanoPiece1b.kcl": {
+   "triangles": 44,
+   "types": {
+    "ROAD variant 1": 44
+   }
+  },
+  "VolcanoPiece1c.kcl": {
+   "triangles": 44,
+   "types": {
+    "WALL variant 1": 44
+   }
+  },
+  "VolcanoPiece2.kcl": {
+   "triangles": 248,
+   "types": {
+    "WALL variant 1": 109,
+    "ROAD variant 1": 51,
+    "WEAK_OFF_ROAD variant 1": 60,
+    "ROAD variant 3": 2,
+    "WALL variant 0": 26
+   }
+  },
+  "VolcanoPiece2b.kcl": {
+   "triangles": 43,
+   "types": {
+    "ROAD variant 1": 43
+   }
+  },
+  "VolcanoPiece2c.kcl": {
+   "triangles": 43,
+   "types": {
+    "WALL variant 1": 43
+   }
+  },
+  "VolcanoPiece3.kcl": {
+   "triangles": 218,
+   "types": {
+    "ROAD variant 1": 43,
+    "WALL variant 0": 8,
+    "ROAD variant 3": 2,
+    "WEAK_OFF_ROAD variant 1": 49,
+    "WALL variant 1": 116
+   }
+  },
+  "VolcanoPiece3b.kcl": {
+   "triangles": 34,
+   "types": {
+    "ROAD variant 1": 34
+   }
+  },
+  "VolcanoPiece3c.kcl": {
+   "triangles": 34,
+   "types": {
+    "WALL variant 1": 34
+   }
+  },
+  "VolcanoPiece4.kcl": {
+   "triangles": 225,
+   "types": {
+    "ROAD variant 1": 87,
+    "WALL variant 1": 83,
+    "WEAK_OFF_ROAD variant 1": 45,
+    "WALL variant 0": 8,
+    "ROAD variant 3": 2
+   }
+  },
+  "VolcanoPiece4b.kcl": {
+   "triangles": 44,
+   "types": {
+    "ROAD variant 1": 44
+   }
+  },
+  "VolcanoPiece4c.kcl": {
+   "triangles": 44,
+   "types": {
+    "WALL variant 1": 44
+   }
+  },
+  "VolcanoPiece5.kcl": {
+   "triangles": 67,
+   "types": {
+    "WALL variant 0": 20,
+    "WEAK_OFF_ROAD variant 7": 36,
+    "ROAD variant 3": 11
+   }
+  },
+  "VolcanoPiece5b.kcl": {
+   "triangles": 38,
+   "types": {
+    "ROAD variant 3": 38
+   }
+  },
+  "VolcanoPiece5c.kcl": {
+   "triangles": 38,
+   "types": {
+    "WALL variant 0": 38
+   }
+  },
+  "VolcanoPiece7.kcl": {
+   "triangles": 35,
+   "types": {
+    "ROAD variant 3": 15,
+    "WALL variant 0": 10,
+    "WEAK_OFF_ROAD variant 7": 10
+   }
+  },
+  "VolcanoPiece7b.kcl": {
+   "triangles": 20,
+   "types": {
+    "ROAD variant 3": 20
+   }
+  },
+  "VolcanoPiece7c.kcl": {
+   "triangles": 20,
+   "types": {
+    "WALL variant 0": 20
+   }
+  },
+  "VolcanoPiece8.kcl": {
+   "triangles": 31,
+   "types": {
+    "WALL variant 0": 16,
+    "WEAK_OFF_ROAD variant 7": 15
+   }
+  },
+  "VolcanoPiece8b.kcl": {
+   "triangles": 18,
+   "types": {
+    "ROAD variant 3": 18
+   }
+  },
+  "VolcanoPiece8c.kcl": {
+   "triangles": 18,
+   "types": {
+    "WALL variant 0": 18
+   }
+  },
+  "VolcanoPiece9.kcl": {
+   "triangles": 267,
+   "types": {
+    "WALL variant 1": 187,
+    "ROAD variant 1": 52,
+    "WALL variant 0": 8,
+    "ROAD variant 3": 2,
+    "WEAK_OFF_ROAD variant 1": 18
+   }
+  },
+  "VolcanoPiece9b.kcl": {
+   "triangles": 19,
+   "types": {
+    "ROAD variant 1": 19
+   }
+  },
+  "VolcanoPiece9c.kcl": {
+   "triangles": 19,
+   "types": {
+    "WALL variant 1": 19
+   }
+  },
+  "VolcanoRock1.kcl": {
+   "triangles": 46,
+   "types": {
+    "ROAD variant 3": 6,
+    "WALL variant 0": 40
+   }
+  },
+  "VolcanoRock2.kcl": {
+   "triangles": 46,
+   "types": {
+    "ROAD variant 3": 6,
+    "WALL variant 0": 40
+   }
+  },
+  "course.kcl": {
+   "triangles": 5613,
+   "types": {
+    "ROAD variant 1": 1128,
+    "WALL variant 0": 1076,
+    "INVISIBLE_WALL variant 0": 150,
+    "ITEM_ROAD variant 0": 56,
+    "WEAK_OFF_ROAD variant 7": 318,
+    "ROAD variant 3": 597,
+    "SOUND_TRIGGER variant 1": 4,
+    "SOUND_TRIGGER variant 0": 4,
+    "SOUND_TRIGGER variant 2": 4,
+    "SOUND_TRIGGER variant 3": 4,
+    "FORCE_RECALCULATE_ROUTE variant 0": 49,
+    "WALL variant 1": 936,
+    "WEAK_OFF_ROAD variant 1": 829,
+    "FALL_BOUNDARY variant 4": 22,
+    "ROAD variant 2": 40,
+    "SPECIAL_WALL variant 1": 22,
+    "EFFECT_TRIGGER variant 1": 10,
+    "WALL variant 3": 350,
+    "BOOST_RAMP variant 1": 12,
+    "FALL_BOUNDARY variant 2": 2
+   }
+  }
+ },
+ "desert_course": {
+  "course.kcl": {
+   "triangles": 6368,
+   "types": {
+    "SOUND_TRIGGER variant 0": 4,
+    "SOUND_TRIGGER variant 1": 4,
+    "SOUND_TRIGGER variant 2": 8,
+    "SOUND_TRIGGER variant 3": 4,
+    "EFFECT_TRIGGER variant 1": 8,
+    "FALL_BOUNDARY variant 0": 4,
+    "WALL_2 variant 0": 1538,
+    "ROAD variant 2": 750,
+    "WALL variant 1": 167,
+    "OFF_ROAD variant 5": 1756,
+    "HEAVY_OFF_ROAD variant 6": 314,
+    "HALFPIPE_RAMP variant 0": 83,
+    "SLIPPERY_ROAD variant 5": 1068,
+    "FALL_BOUNDARY variant 1": 2,
+    "FALL_BOUNDARY variant 7": 32,
+    "SPECIAL_WALL variant 0": 308,
+    "WALL variant 3": 80,
+    "SOLID_OOB variant 1": 8,
+    "ROAD variant 0": 4,
+    "INVISIBLE_WALL variant 0": 220,
+    "BOOST_RAMP variant 1": 4,
+    "BOOST_PAD variant 0": 2
+   }
+  },
+  "dc_pillar.kcl": {
+   "triangles": 24,
+   "types": {
+    "ROAD variant 0": 24
+   }
+  },
+  "dc_pillar_base.kcl": {
+   "triangles": 22,
+   "types": {
+    "ROAD variant 2": 6,
+    "WALL_2 variant 0": 16
+   }
+  },
+  "dc_sandcone.kcl": {
+   "triangles": 118,
+   "types": {
+    "OFF_ROAD variant 0": 118
+   }
+  }
+ },
+ "water_course": {
+  "course.kcl": {
+   "triangles": 10000,
+   "types": {
+    "SOLID_OOB variant 1": 10,
+    "SOUND_TRIGGER variant 0": 13,
+    "SOUND_TRIGGER variant 1": 8,
+    "SOUND_TRIGGER variant 2": 4,
+    "SOUND_TRIGGER variant 3": 10,
+    "SOUND_TRIGGER variant 4": 4,
+    "SOUND_TRIGGER variant 5": 4,
+    "SOUND_TRIGGER variant 6": 3,
+    "FALL_BOUNDARY variant 1": 16,
+    "FALL_BOUNDARY variant 0": 27,
+    "EFFECT_TRIGGER variant 2": 21,
+    "WALL variant 3": 257,
+    "EFFECT_TRIGGER variant 1": 4,
+    "WALL variant 0": 506,
+    "ROAD variant 0": 785,
+    "WALL variant 2": 772,
+    "ROAD variant 7": 401,
+    "ROAD variant 6": 339,
+    "MOVING_WATER variant 0": 908,
+    "WALL variant 1": 1140,
+    "INVISIBLE_WALL variant 0": 472,
+    "INVISIBLE_WALL2 variant 0": 15,
+    "ITEM_ROAD variant 0": 186,
+    "WALL_2 variant 0": 326,
+    "ITEM_WALL variant 2": 6,
+    "OFF_ROAD variant 4": 715,
+    "WEAK_OFF_ROAD variant 6": 621,
+    "MOVING_WATER variant 3": 56,
+    "MOVING_WATER variant 2": 98,
+    "SPECIAL_WALL variant 3": 12,
+    "ROAD variant 1": 410,
+    "PLAYER_WALL variant 7": 30,
+    "BOOST_RAMP variant 0": 4,
+    "ROAD2 variant 5": 1618,
+    "BOOST_PAD variant 0": 6,
+    "SPECIAL_WALL variant 6": 96,
+    "ROAD variant 4": 26,
+    "SOLID_OOB variant 6": 24,
+    "MOVING_WATER variant 1": 20,
+    "EFFECT_TRIGGER variant 4": 9,
+    "HALFPIPE_RAMP variant 0": 16,
+    "BOOST_RAMP variant 1": 2
+   }
+  }
+ },
+ "old_peach_gc": {
+  "course.kcl": {
+   "triangles": 6928,
+   "types": {
+    "OFF_ROAD variant 4": 588,
+    "ROAD variant 2": 721,
+    "SLIPPERY_ROAD variant 0": 3138,
+    "ROAD variant 0": 36,
+    "ITEM_WALL variant 2": 25,
+    "ITEM_ROAD variant 5": 296,
+    "ITEM_ROAD variant 3": 7,
+    "ITEM_ROAD variant 2": 2,
+    "ITEM_ROAD variant 0": 271,
+    "ITEM_WALL variant 0": 269,
+    "SOLID_OOB variant 0": 103,
+    "ROAD variant 7": 12,
+    "WALL variant 3": 65,
+    "WALL variant 2": 76,
+    "INVISIBLE_WALL variant 0": 395,
+    "WALL variant 1": 286,
+    "WALL variant 0": 611,
+    "BOOST_RAMP variant 1": 16,
+    "BOOST_PAD variant 0": 11
+   }
+  }
+ },
+ "old_mario_gc": {
+  "course.kcl": {
+   "triangles": 6304,
+   "types": {
+    "SOUND_TRIGGER variant 0": 4,
+    "SOUND_TRIGGER variant 1": 8,
+    "SOUND_TRIGGER variant 2": 4,
+    "ROAD variant 2": 196,
+    "OFF_ROAD variant 4": 931,
+    "ROAD variant 4": 694,
+    "ROAD variant 1": 829,
+    "ROAD variant 0": 797,
+    "WALL variant 0": 371,
+    "WALL variant 1": 123,
+    "WALL variant 2": 121,
+    "WALL variant 3": 132,
+    "WALL variant 5": 73,
+    "INVISIBLE_WALL variant 0": 579,
+    "ITEM_ROAD variant 0": 120,
+    "ITEM_ROAD variant 5": 530,
+    "ITEM_WALL variant 5": 137,
+    "ITEM_WALL variant 0": 604,
+    "ROAD variant 3": 51
+   }
+  }
+ },
+ "old_waluigi_gc": {
+  "WLdokanGC.kcl": {
+   "triangles": 16,
+   "types": {
+    "WALL variant 0": 12,
+    "ROAD variant 3": 4
+   }
+  },
+  "WLwallGC.kcl": {
+   "triangles": 8,
+   "types": {
+    "WALL variant 0": 6,
+    "ROAD variant 3": 2
+   }
+  },
+  "course.kcl": {
+   "triangles": 6093,
+   "types": {
+    "ROAD variant 1": 3330,
+    "STICKY_ROAD variant 3": 67,
+    "OFF_ROAD variant 1": 278,
+    "WALL variant 0": 6,
+    "ITEM_ROAD variant 1": 148,
+    "ITEM_WALL variant 1": 79,
+    "ITEM_WALL variant 0": 170,
+    "HALFPIPE_RAMP variant 0": 48,
+    "FALL_BOUNDARY variant 0": 6,
+    "WALL variant 2": 873,
+    "WALL variant 1": 4,
+    "INVISIBLE_WALL variant 0": 920,
+    "BOOST_RAMP variant 1": 4,
+    "BOOST_PAD variant 0": 16,
+    "BOOST_RAMP variant 0": 6,
+    "OFF_ROAD variant 2": 136,
+    "ROAD variant 6": 2
+   }
+  }
+ },
+ "old_donkey_gc": {
+  "course.kcl": {
+   "triangles": 6138,
+   "types": {
+    "SOUND_TRIGGER variant 0": 4,
+    "SOUND_TRIGGER variant 1": 8,
+    "SOUND_TRIGGER variant 2": 4,
+    "ROAD variant 1": 562,
+    "ROAD2 variant 2": 1157,
+    "ITEM_ROAD variant 3": 6,
+    "ITEM_ROAD variant 0": 122,
+    "ITEM_WALL variant 3": 12,
+    "ROAD variant 4": 12,
+    "HALFPIPE_RAMP variant 0": 54,
+    "CANNON_TRIGGER variant 0": 26,
+    "FALL_BOUNDARY variant 0": 102,
+    "ITEM_WALL variant 0": 60,
+    "WALL variant 5": 114,
+    "WALL variant 3": 354,
+    "WALL variant 2": 117,
+    "WALL variant 1": 489,
+    "WALL variant 0": 310,
+    "OFF_ROAD variant 1": 39,
+    "ROAD variant 3": 1657,
+    "INVISIBLE_WALL variant 0": 929
+   }
+  }
+ },
+ "old_falls_ds": {
+  "course.kcl": {
+   "triangles": 2840,
+   "types": {
+    "EFFECT_TRIGGER variant 2": 2,
+    "ROAD variant 1": 589,
+    "ROAD variant 4": 156,
+    "BOOST_PAD variant 0": 14,
+    "JUMP_PAD variant 6": 12,
+    "ITEM_WALL variant 3": 439,
+    "ITEM_ROAD variant 3": 125,
+    "ITEM_ROAD variant 5": 181,
+    "ITEM_ROAD variant 1": 7,
+    "MOVING_WATER variant 2": 18,
+    "FALL_BOUNDARY variant 0": 4,
+    "WALL variant 6": 141,
+    "WALL variant 5": 36,
+    "WALL variant 3": 408,
+    "WALL variant 2": 96,
+    "WALL variant 1": 246,
+    "WALL variant 0": 36,
+    "INVISIBLE_WALL variant 0": 299,
+    "STICKY_ROAD variant 4": 28,
+    "STICKY_ROAD variant 3": 3
+   }
+  }
+ },
+ "old_desert_ds": {
+  "course.kcl": {
+   "triangles": 4272,
+   "types": {
+    "SLIPPERY_ROAD variant 5": 1591,
+    "OFF_ROAD variant 5": 1051,
+    "EFFECT_TRIGGER variant 1": 42,
+    "FALL_BOUNDARY variant 1": 42,
+    "FALL_BOUNDARY variant 7": 92,
+    "INVISIBLE_WALL variant 0": 154,
+    "WALL variant 3": 297,
+    "ITEM_ROAD variant 3": 2,
+    "WALL variant 2": 74,
+    "WALL variant 1": 88,
+    "WALL variant 0": 291,
+    "ITEM_ROAD variant 2": 6,
+    "ITEM_WALL variant 2": 10,
+    "ITEM_ROAD variant 0": 10,
+    "SOLID_OOB variant 7": 482,
+    "ROAD variant 3": 40
+   }
+  }
+ },
+ "old_garden_ds": {
+  "course.kcl": {
+   "triangles": 3114,
+   "types": {
+    "OFF_ROAD variant 4": 108,
+    "ROAD variant 2": 76,
+    "WALL variant 0": 170,
+    "WALL variant 2": 250,
+    "INVISIBLE_WALL variant 0": 764,
+    "WALL variant 5": 718,
+    "SOLID_OOB variant 5": 37,
+    "SLIPPERY_ROAD variant 1": 24,
+    "ROAD variant 1": 111,
+    "ITEM_WALL variant 5": 106,
+    "ITEM_WALL variant 2": 159,
+    "ITEM_WALL variant 0": 8,
+    "ITEM_ROAD variant 5": 489,
+    "ITEM_ROAD variant 2": 36,
+    "ITEM_ROAD variant 0": 10,
+    "FALL_BOUNDARY variant 1": 6,
+    "FALL_BOUNDARY variant 7": 19,
+    "HEAVY_OFF_ROAD variant 3": 23
+   }
+  }
+ },
+ "old_town_ds": {
+  "TownBridgeDS.kcl": {
+   "triangles": 48,
+   "types": {
+    "BOOST_RAMP variant 0": 4,
+    "WALL variant 3": 34,
+    "STICKY_ROAD variant 4": 6,
+    "BOOST_PAD variant 0": 4
+   }
+  },
+  "TownBridgeDS2.kcl": {
+   "triangles": 48,
+   "types": {
+    "BOOST_RAMP variant 1": 4,
+    "WALL variant 3": 34,
+    "STICKY_ROAD variant 4": 6,
+    "BOOST_PAD variant 0": 4
+   }
+  },
+  "TownBridgeDS3.kcl": {
+   "triangles": 48,
+   "types": {
+    "BOOST_PAD variant 0": 8,
+    "WALL variant 3": 34,
+    "STICKY_ROAD variant 4": 6
+   }
+  },
+  "course.kcl": {
+   "triangles": 5721,
+   "types": {
+    "SOUND_TRIGGER variant 0": 4,
+    "SOUND_TRIGGER variant 1": 16,
+    "SOUND_TRIGGER variant 2": 12,
+    "SOUND_TRIGGER variant 3": 4,
+    "SOUND_TRIGGER variant 4": 8,
+    "SOUND_TRIGGER variant 5": 8,
+    "SOUND_TRIGGER variant 6": 4,
+    "SOUND_TRIGGER variant 7": 4,
+    "OFF_ROAD variant 1": 19,
+    "HEAVY_OFF_ROAD variant 2": 7,
+    "OFF_ROAD variant 4": 157,
+    "ROAD variant 2": 1165,
+    "FORCE_RECALCULATE_ROUTE variant 0": 6,
+    "WALL variant 5": 42,
+    "WALL variant 2": 49,
+    "WALL variant 0": 1493,
+    "ROAD variant 4": 189,
+    "ITEM_WALL variant 0": 1400,
+    "WALL variant 6": 40,
+    "WALL variant 3": 444,
+    "SOLID_OOB variant 0": 57,
+    "INVISIBLE_WALL variant 0": 309,
+    "ITEM_ROAD variant 3": 4,
+    "ITEM_ROAD variant 0": 275,
+    "FALL_BOUNDARY variant 1": 5
+   }
+  }
+ },
+ "old_mario_sfc": {
+  "course.kcl": {
+   "triangles": 2863,
+   "types": {
+    "INVISIBLE_WALL variant 0": 414,
+    "ROAD variant 3": 383,
+    "ROAD variant 0": 495,
+    "BOOST_PAD variant 0": 4,
+    "ITEM_ROAD variant 0": 410,
+    "OFF_ROAD variant 0": 719,
+    "WALL variant 2": 24,
+    "WALL variant 0": 414
+   }
+  }
+ },
+ "old_obake_sfc": {
+  "course.kcl": {
+   "triangles": 1383,
+   "types": {
+    "FALL_BOUNDARY variant 0": 2,
+    "JUMP_PAD variant 1": 2,
+    "WALL variant 3": 1010,
+    "BOOST_PAD variant 0": 4,
+    "ROAD variant 4": 365
+   }
+  }
+ },
+ "old_mario_64": {
+  "course.kcl": {
+   "triangles": 4681,
+   "types": {
+    "SOUND_TRIGGER variant 0": 8,
+    "SOUND_TRIGGER variant 1": 8,
+    "SOUND_TRIGGER variant 2": 4,
+    "SOUND_TRIGGER variant 3": 4,
+    "OFF_ROAD variant 0": 90,
+    "ROAD variant 0": 1038,
+    "WALL variant 2": 248,
+    "OFF_ROAD variant 4": 1193,
+    "ROAD variant 3": 164,
+    "WALL variant 0": 586,
+    "FALL_BOUNDARY variant 7": 26,
+    "EFFECT_TRIGGER variant 1": 20,
+    "WALL variant 7": 24,
+    "WALL variant 3": 644,
+    "SOLID_OOB variant 5": 219,
+    "INVISIBLE_WALL variant 0": 244,
+    "ITEM_ROAD variant 0": 57,
+    "ITEM_WALL variant 0": 10,
+    "WALL variant 1": 94
+   }
+  }
+ },
+ "old_sherbet_64": {
+  "course.kcl": {
+   "triangles": 3792,
+   "types": {
+    "SOUND_TRIGGER variant 0": 4,
+    "SOUND_TRIGGER variant 1": 8,
+    "SOUND_TRIGGER variant 2": 4,
+    "BOOST_PAD variant 0": 2,
+    "SLIPPERY_ROAD_2 variant 0": 201,
+    "ROAD variant 3": 861,
+    "WALL variant 3": 72,
+    "WALL variant 1": 1342,
+    "BOOST_RAMP variant 1": 4,
+    "WALL variant 2": 30,
+    "WALL variant 0": 261,
+    "FALL_BOUNDARY variant 3": 56,
+    "SOLID_OOB variant 3": 3,
+    "WALL variant 4": 944
+   }
+  }
+ },
+ "old_koopa_64": {
+  "course.kcl": {
+   "triangles": 5344,
+   "types": {
+    "SOUND_TRIGGER variant 0": 4,
+    "SOUND_TRIGGER variant 1": 8,
+    "SOUND_TRIGGER variant 2": 2,
+    "SOUND_TRIGGER variant 3": 12,
+    "SOUND_TRIGGER variant 4": 4,
+    "SOUND_TRIGGER variant 5": 8,
+    "SOUND_TRIGGER variant 6": 4,
+    "OFF_ROAD variant 4": 232,
+    "ROAD2 variant 1": 122,
+    "ROAD variant 2": 387,
+    "ROAD variant 3": 101,
+    "WALL variant 3": 360,
+    "WALL variant 0": 3038,
+    "FALL_BOUNDARY variant 2": 18,
+    "ROAD variant 4": 226,
+    "PLAYER_WALL variant 7": 88,
+    "ITEM_ROAD variant 5": 156,
+    "STICKY_ROAD variant 2": 48,
+    "STICKY_ROAD variant 1": 96,
+    "INVISIBLE_WALL variant 0": 32,
+    "BOOST_RAMP variant 1": 2,
+    "WALL variant 5": 396
+   }
+  }
+ },
+ "old_donkey_64": {
+  "course.kcl": {
+   "triangles": 5203,
+   "types": {
+    "SOUND_TRIGGER variant 0": 12,
+    "SOUND_TRIGGER variant 1": 20,
+    "SOUND_TRIGGER variant 2": 8,
+    "SOUND_TRIGGER variant 3": 4,
+    "SLIPPERY_ROAD variant 1": 1182,
+    "OFF_ROAD variant 4": 824,
+    "ROAD variant 1": 158,
+    "EFFECT_TRIGGER variant 2": 18,
+    "HEAVY_OFF_ROAD variant 2": 80,
+    "WALL variant 1": 1420,
+    "OFF_ROAD variant 1": 128,
+    "WALL_2 variant 6": 40,
+    "ITEM_WALL variant 2": 32,
+    "CANNON_TRIGGER variant 1": 2,
+    "WALL variant 6": 40,
+    "FALL_BOUNDARY variant 1": 21,
+    "INVISIBLE_WALL variant 0": 574,
+    "FALL_BOUNDARY variant 0": 6,
+    "ITEM_ROAD variant 5": 114,
+    "WALL variant 3": 418,
+    "WALL variant 2": 54,
+    "ROAD variant 4": 44,
+    "BOOST_PAD variant 0": 4
+   }
+  }
+ },
+ "old_koopa_gba": {
+  "course.kcl": {
+   "triangles": 1850,
+   "types": {
+    "WALL variant 2": 132,
+    "FALL_BOUNDARY variant 2": 2,
+    "ROAD variant 7": 144,
+    "ROAD variant 6": 51,
+    "BOOST_RAMP variant 1": 2,
+    "JUMP_PAD variant 0": 50,
+    "WALL variant 0": 967,
+    "OFF_ROAD variant 0": 19,
+    "ROAD variant 2": 444,
+    "ROAD variant 3": 39
+   }
+  }
+ },
+ "old_heyho_gba": {
+  "course.kcl": {
+   "triangles": 3985,
+   "types": {
+    "SLIPPERY_ROAD variant 0": 1923,
+    "ROAD variant 2": 6,
+    "OFF_ROAD variant 4": 135,
+    "HEAVY_OFF_ROAD variant 4": 62,
+    "WEAK_OFF_ROAD variant 2": 1343,
+    "FALL_BOUNDARY variant 1": 18,
+    "JUMP_PAD variant 2": 20,
+    "WALL variant 2": 24,
+    "PLAYER_WALL variant 7": 454
+   }
+  }
+ }
+}

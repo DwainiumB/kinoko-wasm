@@ -1,6 +1,7 @@
 #include "Archive.hh"
 
 #include <cstring>
+#include <strings.h>
 
 namespace Kinoko::Abstract {
 
@@ -79,7 +80,7 @@ s32 ArchiveHandle::convertPathToEntryId(const char *path) const {
                 continue;
             }
 
-            if (strncmp(path, entryName, nameLength) == 0) {
+            if (strncasecmp(path, entryName, nameLength) == 0) {
                 found = true;
                 break;
             }

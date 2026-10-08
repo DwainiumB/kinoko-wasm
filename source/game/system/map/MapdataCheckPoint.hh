@@ -85,6 +85,20 @@ public:
         return m_prevCount;
     }
 
+    /// @brief Centre of the checkpoint line across the track, in world x/z.
+    [[nodiscard]] const EGG::Vector2f &midpoint() const {
+        return m_midpoint;
+    }
+
+    /// @brief The two ends of the checkpoint line across the track, in world x/z.
+    [[nodiscard]] const EGG::Vector2f &left() const {
+        return m_left;
+    }
+
+    [[nodiscard]] const EGG::Vector2f &right() const {
+        return m_right;
+    }
+
     [[nodiscard]] const EGG::Vector2f &dir() const {
         return m_dir;
     }

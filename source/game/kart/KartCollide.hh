@@ -88,6 +88,13 @@ public:
             Field::CollisionInfo *colInfo);
     void calcBoundingRadius();
     void calcObjectCollision();
+    /// @brief Kart-to-kart collision. NOT ported from the original game (that function hasn't been decompiled); this
+    /// is an approximation: overlapping bounding spheres push each kart away from the other along the line between
+    /// them (using the same KartMove::applyForce(30.0f, dir, false) the game's own "SmallBump" object reaction uses,
+    /// so at least the push itself matches a real, verified formula) plus a small direct position correction so two
+    /// karts driving side by side at matched speed don't just sit overlapping (the real SmallBump reaction has no such
+    /// correction; it isn't needed for a single bump against a static object).
+    void calcKartCollision();
     void calcPoleTimer();
 
     void processWheel(CollisionData &collisionData, Hitbox &hitbox, Field::CollisionInfo *colInfo,

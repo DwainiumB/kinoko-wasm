@@ -1,0 +1,31 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>VS test</title></head><body>
+<script src="kinoko_web.js"></script><script src="cpu.js"></script>
+<script>
+// Dev harness: runs a headless VS race (window.vsRun) and reports each racer's race completion (laps + fraction) over time.
+//   await vsRun({ folder: 'beginner_course', id: 8, cpus: 3, frames: 4000, every: 300, opts: {}, playerDrives: false })
+window.vsRun = async function (o) {
+  const G = await KinokoModule(), n = o.cpus ?? 3;
+  G.FS.mkdir('/Race'); G.FS.mkdir('/Race/Course');
+  const put = async (u, v) => G.FS.writeFile(v, new Uint8Array(await (await fetch(u)).arrayBuffer()));
+  await put('assets/common/Common.szs', '/Race/Common.szs'); await put(`assets/tracks/${o.folder}/course.szs`, `/Race/Course/${o.folder}.szs`);
+  const ch = G._malloc(4 * n), vh = G._malloc(4 * n);
+  for (let i = 0; i < n; i++) { G.HEAP32[ch / 4 + i] = (i * 3 + 1) % 24; G.HEAP32[vh / 4 + i] = 1; }
+  G._kinoko_init_vs(o.id, 0, 1, n, ch, vh);
+  const route = await (await fetch(`assets/tracks/${o.folder}/enemy.json`)).json();
+  G._kinoko_get_kart_pos(G._malloc(12));
+  const ring = buildEnemyRing(route, o.startXZ);
+  const drivers = []; for (let i = 1; i <= n; i++) drivers.push(new CpuDriver(G, i, ring, o.opts || {}));
+  const tm = G._malloc(64), out = [], mo = G._malloc(20), rs = G._malloc(16), rs32 = G.HEAP32.subarray(rs / 4, rs / 4 + 4); let start = -1;
+  for (let f = 0; f < o.frames; f++) {
+    G._kinoko_set_player_input(0, o.playerDrives ? 1 : 0, 0, 0, 0);
+    G._kinoko_get_race_state(rs); if (rs32[0] >= 2 && start < 0) start = f;
+    drivers.forEach(d => d.drive(start < 0 ? -1 : f - start));
+    G._kinoko_step();
+    if (f % (o.every || 300) === 0 || f === o.frames - 1) {
+      const row = [f];
+      for (let i = 0; i <= n; i++) { G._kinoko_set_focus(i); G._kinoko_get_timing(tm); const fl = G._kinoko_get_kart_state(mo) >>> 0; row.push((G.HEAP32[tm / 4 + 7] / 10000).toFixed(2) + (G.HEAP32[tm / 4 + 2] >= 3 ? 'F' : '') + '[' + fl.toString(16) + ']'); }
+      G._kinoko_set_focus(0); out.push(row.join(' ') + '   ' + drivers.map(d => JSON.stringify(d.dbg)).join(' ')); }
+  }
+  return out;
+};
+</script></body></html>

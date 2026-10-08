@@ -98,6 +98,40 @@ void ObjectKinokoBend::calcOscillation() {
     }
 }
 
+namespace {
+/// Fitted from 3 real, individually memory-captured placements (rotY -> period): (9.7, 182),
+/// (-3.85, 163), (-33.65, 137) -- see ObjectKinokoT1's class comment (ObjectKinoko.hh). Not a
+/// decompiled formula.
+u16 FitKinokoT1Period(f32 rotYDegrees) {
+    f32 period = 166.0f + 1.05f * rotYDegrees;
+    if (period < 60.0f) {
+        period = 60.0f;
+    } else if (period > 400.0f) {
+        period = 400.0f;
+    }
+    return static_cast<u16>(period);
+}
+} // namespace
+
+ObjectKinokoT1::ObjectKinokoT1(const System::MapdataGeoObj &params)
+    : ObjectKCL(params), m_objPos(pos()), m_period(FitKinokoT1Period(rot().y)), m_oscFrame(0) {}
+
+ObjectKinokoT1::~ObjectKinokoT1() = default;
+
+void ObjectKinokoT1::calc() {
+    // Fitted from a real memory capture, not decompiled -- see the class comment (ObjectKinoko.hh).
+    constexpr f32 AMPLITUDE = 500.0f;
+    const f32 angFreq = F_TAU / static_cast<f32>(m_period);
+
+    f32 posY = m_objPos.y +
+            AMPLITUDE * (EGG::Mathf::cos(angFreq * static_cast<f32>(m_oscFrame)) + 1.0f) * 0.5f;
+    setPos(EGG::Vector3f(pos().x, posY, pos().z));
+
+    if (++m_oscFrame >= m_period) {
+        m_oscFrame = 0;
+    }
+}
+
 ObjectKinokoNm::ObjectKinokoNm(const System::MapdataGeoObj &params) : ObjectKCL(params) {
     m_type = static_cast<KinokoType>(params.setting(0));
 }

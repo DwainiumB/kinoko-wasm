@@ -21,6 +21,13 @@ public:
         return 3;
     }
 
+    /// @brief Exposes which of the move/jump/jump_ed clips (see loadAnims()) is currently playing,
+    /// so Kinoko web's renderer can drive the skeletal animation instead of guessing with an idle
+    /// loop. Added for Kinoko web, not part of the original game.
+    [[nodiscard]] s32 animState() const override {
+        return static_cast<s32>(m_currentAnim);
+    }
+
 private:
     enum class Animation {
         Move = 1,

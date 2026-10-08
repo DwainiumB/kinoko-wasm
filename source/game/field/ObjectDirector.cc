@@ -268,6 +268,7 @@ ObjectBase *ObjectDirector::createObject(const System::MapdataGeoObj &params) {
     case ObjectId::PenguinS:
         return EGG::egg_new<ObjectPenguinS>(params);
     case ObjectId::PenguinM:
+    case ObjectId::PenguinL:
         return EGG::egg_new<ObjectPenguin>(params);
     case ObjectId::Dossunc:
         return EGG::egg_new<ObjectDossunc>(params);
@@ -333,6 +334,10 @@ ObjectBase *ObjectDirector::createObject(const System::MapdataGeoObj &params) {
         return EGG::egg_new<ObjectKinokoUd>(params);
     case ObjectId::KinokoBend:
         return EGG::egg_new<ObjectKinokoBend>(params);
+    case ObjectId::KinokoT1:
+        // Not decompiled -- see ObjectKinokoT1's comment (ObjectKinoko.hh) for its real (memory-
+        // capture-fitted) vertical bob, instead of being a stock no-op ObjectCollidable.
+        return EGG::egg_new<ObjectKinokoT1>(params);
     case ObjectId::VolcanoRock:
         return EGG::egg_new<ObjectVolcanoRock>(params);
     case ObjectId::BulldozerL:
@@ -383,7 +388,6 @@ ObjectBase *ObjectDirector::createObject(const System::MapdataGeoObj &params) {
     case ObjectId::MarioTreeGCc:
     case ObjectId::PeachTreeGCc:
     case ObjectId::MarioGo64c:
-    case ObjectId::KinokoT1:
     case ObjectId::PalmTree:
     case ObjectId::Parasol:
     case ObjectId::HeyhoTreeGBAc:

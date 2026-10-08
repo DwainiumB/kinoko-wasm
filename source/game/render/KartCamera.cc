@@ -18,6 +18,9 @@ void KartCamera::calc() {
     targetPos.y -= m_hopPosY;
 
     calcForward(FORWARD_INTERP_RATE, kartObj);
+    m_pitchDeg = 90.0f -
+            RAD2DEG * EGG::Mathf::acos(std::clamp(m_forward.dot(EGG::Vector3f::ey), -1.0f, 1.0f));
+    calcFov(kartObj);
     calcDriftOffset(kartObj);
 
     calcCamera(HORIZ_POS_INTERP_RATE, VERT_POS_INTERP_RATE, FAST_VERT_POS_INTERP_RATE,
@@ -43,7 +46,23 @@ void KartCamera::DestroyInstance() {
 }
 
 /// @addr{0x805A1D10}
-KartCamera::KartCamera() : m_hopPosY(0), m_forward(EGG::Vector3f::zero), m_camParams(nullptr) {}
+KartCamera::KartCamera()
+    : m_hopPosY(0), m_fov(0), m_pitchDeg(0), m_forward(EGG::Vector3f::zero), m_camParams(nullptr) {}
+
+/// The field of view widens by 6 degrees while boosting (10% of the gap per frame) and eases back at 3% per frame.
+void KartCamera::calcFov(const Kart::KartObjectProxy *proxy) {
+    constexpr f32 BOOST_FOV_ADD = 6.0f;
+    constexpr f32 RISE_RATE = 0.1f;
+    constexpr f32 FALL_RATE = 0.97f;
+
+    const f32 base = m_camParams->fov;
+    const auto &status = proxy->status();
+    if (status.onBit(Kart::eStatus::Boost, Kart::eStatus::MushroomBoost)) {
+        m_fov += RISE_RATE * (base + BOOST_FOV_ADD - m_fov);
+    } else {
+        m_fov = base + FALL_RATE * (m_fov - base);
+    }
+}
 
 /// @addr{0x805A8F7C}
 KartCamera::~KartCamera() = default;
@@ -172,6 +191,7 @@ void KartCamera::initPos() {
     constexpr f32 FAST_VERT_POS_INTERP_RATE = 1.0f;
 
     m_driftYaw = 0.0f;
+    m_fov = m_camParams->fov;
     m_forwardCamera.init();
     m_backwardCamera.init();
     m_backwardCamera.m_dist = m_camParams->dist;

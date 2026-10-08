@@ -24,10 +24,11 @@
 
 namespace Kinoko::Host {
 
-Context::Context() {
-    m_contextMemory = malloc(MEMORY_SPACE_SIZE);
+Context::Context(size_t bytes) : m_size(bytes) {
+    ASSERT(bytes > 0 && bytes <= MEMORY_SPACE_SIZE);
+    m_contextMemory = malloc(m_size);
     ASSERT(m_contextMemory && EGG::SceneManager::s_rootHeap);
-    memcpy(m_contextMemory, static_cast<void *>(EGG::SceneManager::s_rootHeap), MEMORY_SPACE_SIZE);
+    memcpy(m_contextMemory, static_cast<void *>(EGG::SceneManager::s_rootHeap), m_size);
 
     m_statics.m_rootList = Abstract::Memory::MEMiHeapHead::s_rootList;
     m_statics.m_archiveList = EGG::Archive::s_archiveList;
@@ -35,6 +36,8 @@ Context::Context() {
     m_statics.m_currentHeap = EGG::Heap::s_currentHeap;
     m_statics.m_allocatableHeap = EGG::Heap::s_allocatableHeap;
     m_statics.m_heapForCreateScene = EGG::SceneManager::s_heapForCreateScene;
+    m_statics.m_heapOptionFlg = EGG::SceneManager::s_heapOptionFlg;
+    m_statics.m_rootHeap = EGG::SceneManager::s_rootHeap;
     m_statics.m_boxColMgr = Field::BoxColManager::s_instance;
     m_statics.m_colDir = Field::CollisionDirector::s_instance;
     m_statics.m_courseColMgr = Field::CourseColMgr::s_instance;
@@ -64,16 +67,17 @@ Context::Context() {
     m_statics.m_flamePoleCount = Field::ObjectFlamePoleFoot::s_flamePoleCount;
 }
 
-Context::Context(const Context &c) {
-    m_contextMemory = malloc(MEMORY_SPACE_SIZE);
+Context::Context(const Context &c) : m_size(c.m_size) {
+    m_contextMemory = malloc(m_size);
     ASSERT(m_contextMemory && c.m_contextMemory);
-    memcpy(m_contextMemory, c.m_contextMemory, MEMORY_SPACE_SIZE);
+    memcpy(m_contextMemory, c.m_contextMemory, m_size);
     m_statics = c.m_statics;
 }
 
 /// @brief Move constructs Context by stealing the memory block and ptrs from the provided context.
 Context::Context(Context &&c) {
     m_contextMemory = c.m_contextMemory;
+    m_size = c.m_size;
     c.m_contextMemory = nullptr;
     m_statics = c.m_statics;
     c.m_statics = {};
@@ -89,7 +93,14 @@ Context &Context::operator=(const Context &rhs) {
     }
 
     ASSERT(m_contextMemory && rhs.m_contextMemory && m_contextMemory != rhs.m_contextMemory);
-    memcpy(m_contextMemory, rhs.m_contextMemory, MEMORY_SPACE_SIZE);
+    if (m_size != rhs.m_size) {
+        free(m_contextMemory);
+        m_size = rhs.m_size;
+        m_contextMemory = malloc(m_size);
+        ASSERT(m_contextMemory);
+    }
+
+    memcpy(m_contextMemory, rhs.m_contextMemory, m_size);
     m_statics = rhs.m_statics;
 
     return *this;
@@ -98,6 +109,7 @@ Context &Context::operator=(const Context &rhs) {
 Context &Context::operator=(Context &&rhs) {
     free(m_contextMemory);
     m_contextMemory = rhs.m_contextMemory;
+    m_size = rhs.m_size;
     rhs.m_contextMemory = nullptr;
     m_statics = rhs.m_statics;
     rhs.m_statics = {};
@@ -145,10 +157,38 @@ bool Context::operator==(const Context &rhs) const {
     return ret;
 }
 
+size_t Context::CountDifferingPages(size_t *pagesPerMiB, size_t *bytesDiffering, size_t *lastOffset) const {
+    constexpr size_t PAGE = 4096;
+    const u8 *live = reinterpret_cast<const u8 *>(EGG::SceneManager::s_rootHeap);
+    const u8 *snap = static_cast<const u8 *>(m_contextMemory);
+    size_t pages = 0;
+    *bytesDiffering = 0;
+    *lastOffset = 0;
+    for (size_t i = 0; i < MEMORY_SPACE_SIZE / (1 << 20); ++i) {
+        pagesPerMiB[i] = 0;
+    }
+
+    for (size_t off = 0; off + PAGE <= m_size; off += PAGE) {
+        if (memcmp(live + off, snap + off, PAGE) == 0) {
+            continue;
+        }
+
+        ++pages;
+        ++pagesPerMiB[off >> 20];
+        for (size_t b = 0; b < PAGE; ++b) {
+            if (live[off + b] != snap[off + b]) {
+                ++*bytesDiffering;
+                *lastOffset = off + b;
+            }
+        }
+    }
+
+    return pages;
+}
+
 void Context::SetActiveContext(const Context &rhs) {
     ASSERT(EGG::SceneManager::s_rootHeap && rhs.m_contextMemory);
-    memcpy(reinterpret_cast<void *>(EGG::SceneManager::s_rootHeap), rhs.m_contextMemory,
-            MEMORY_SPACE_SIZE);
+    memcpy(reinterpret_cast<void *>(EGG::SceneManager::s_rootHeap), rhs.m_contextMemory, rhs.m_size);
 
     Abstract::Memory::MEMiHeapHead::s_rootList = rhs.m_statics.m_rootList;
     EGG::Archive::s_archiveList = rhs.m_statics.m_archiveList;

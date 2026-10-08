@@ -4,6 +4,8 @@
 
 #include "game/render/DrawMdl.hh"
 
+#include <algorithm>
+
 namespace Kinoko::Field {
 
 class ObjectKoopaBall final : public ObjectCollidable {
@@ -17,6 +19,12 @@ public:
     /// @addr{0x80771F68}
     [[nodiscard]] u32 loadFlags() const override {
         return 1;
+    }
+
+    /// Added for Kinoko web's renderer: state * 1000 + frames until the next launch (clamped to 0..999),
+    /// so the page can play the statue's spit animation ahead of the launch and the explosion on cue.
+    [[nodiscard]] s32 animState() const override {
+        return static_cast<s32>(m_state) * 1000 + std::clamp<s32>(m_cooldownTimer, 0, 999);
     }
 
     Kart::Reaction onCollision(Kart::KartObject *kartObj, Kart::Reaction reactionOnKart,

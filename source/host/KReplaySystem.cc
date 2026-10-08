@@ -1,14 +1,21 @@
 #include "KReplaySystem.hh"
 
+#include "host/FrameState.hh"
 #include "host/Option.hh"
 #include "host/SceneCreatorDynamic.hh"
 
 #include <abstract/File.hh>
 #include <egg/core/Heap.hh>
 
+#include <game/item/ItemDirector.hh>
+#include <game/kart/KartMove.hh>
+#include <game/kart/KartObjectManager.hh>
+#include <game/system/KPadDirector.hh>
 #include <game/system/RaceManager.hh>
 
+#include <cstdio>
 #include <iomanip>
+#include <sstream>
 
 namespace Kinoko {
 
@@ -25,11 +32,38 @@ void KReplaySystem::init() {
     Abstract::File::Remove("results.txt");
 
     m_sceneMgr->changeScene(0);
+
+    openDump();
 }
 
 /// @brief Executes a frame.
 void KReplaySystem::calc() {
     m_sceneMgr->calc();
+    dumpFrame();
+}
+
+/// @brief Opens the dump file and writes the CSV header.
+void KReplaySystem::openDump() {
+    if (!m_dumpPath) {
+        return;
+    }
+
+    m_dumpFile = fopen(m_dumpPath, "wb");
+    if (!m_dumpFile) {
+        PANIC("Failed to open dump file: %s", m_dumpPath);
+    }
+
+    Host::WriteStateHeader(m_dumpFile);
+}
+
+/// @brief Appends the state of the player after the frame that just ran.
+/// @details One row per frame, starting at the intro. See Host::WriteStateRow for the columns. The
+/// inputs are the ones the ghost applied on this frame and every other column is the resulting
+/// state, so a training pair is (state of row t-1, input of row t).
+void KReplaySystem::dumpFrame() {
+    if (m_dumpFile) {
+        Host::WriteStateRow(m_dumpFile, m_dumpFrame++);
+    }
 }
 
 /// @brief Executes a run.
@@ -78,6 +112,10 @@ void KReplaySystem::parseOptions(int argc, char **argv) {
             m_currentGhost = EGG::egg_new<System::GhostFile>(file);
             ASSERT(m_currentGhost);
         } break;
+        case Host::EOption::Dump:
+            ASSERT(i + 1 < argc);
+            m_dumpPath = argv[++i];
+            break;
         case Host::EOption::Invalid:
         default:
             PANIC("Invalid flag!");
@@ -101,12 +139,16 @@ void KReplaySystem::DestroyInstance() {
 
 KReplaySystem::KReplaySystem()
     : m_currentGhostFileName(nullptr), m_currentGhost(nullptr), m_currentRawGhost(nullptr),
-      m_currentRawGhostSize(0) {}
+      m_currentRawGhostSize(0), m_dumpPath(nullptr), m_dumpFile(nullptr), m_dumpFrame(0) {}
 
 KReplaySystem::~KReplaySystem() {
     if (s_instance) {
         s_instance = nullptr;
         WARN("KReplaySystem instance not explicitly handled!");
+    }
+
+    if (m_dumpFile) {
+        fclose(m_dumpFile);
     }
 
     EGG::egg_delete(m_sceneMgr);

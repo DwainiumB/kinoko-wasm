@@ -31,6 +31,7 @@ public:
     }
 
     void calcPos();
+    void calcOrientation();
 
     const f32 m_yAmplitude; ///< How much the ship bobs up and down
     u32 m_frame;

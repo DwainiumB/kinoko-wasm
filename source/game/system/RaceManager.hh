@@ -29,11 +29,13 @@ class RaceManager : EGG::Disposer {
 
 public:
     class Player {
+        friend class RaceManager;
+
     public:
         Player();
         virtual ~Player() {}
 
-        void init();
+        void init(u8 idx);
         void calc();
 
         [[nodiscard]] Timer getLapSplit(size_t idx) const;
@@ -49,6 +51,12 @@ public:
 
         [[nodiscard]] s8 jugemId() const {
             return m_jugemId;
+        }
+
+        /// @brief Highest lap reached so far (1-based). Unlike the current lap, it doesn't drop
+        /// when driving backwards across the finish line.
+        [[nodiscard]] s8 maxLap() const {
+            return m_maxLap;
         }
 
         [[nodiscard]] bool drivingWrongWay() const {
@@ -70,6 +78,14 @@ public:
 
         [[nodiscard]] const KPad *inputs() const {
             return m_inputs;
+        }
+
+        [[nodiscard]] u8 idx() const {
+            return m_idx;
+        }
+
+        [[nodiscard]] bool finished() const {
+            return m_finished;
         }
         /// @endGetters
 
@@ -95,6 +111,8 @@ public:
         std::array<Timer, 3> m_lapTimers;
         Timer m_raceTimer;
         const KPad *m_inputs;
+        u8 m_idx;
+        bool m_finished;
     };
 
     enum class Stage {
@@ -107,7 +125,10 @@ public:
 
     void init();
 
-    void findKartStartPoint(EGG::Vector3f &pos, EGG::Vector3f &angles);
+    static constexpr size_t MAX_PLAYERS = 12;
+
+    /// @brief Start position of player idx. The grid slot is the player's index.
+    void findKartStartPoint(u8 idx, EGG::Vector3f &pos, EGG::Vector3f &angles);
     void endPlayerRace(u32 idx);
 
     void calc();
@@ -118,7 +139,7 @@ public:
                 static_cast<std::underlying_type_t<Stage>>(stage);
     }
 
-    [[nodiscard]] MapdataJugemPoint *jugemPoint() const;
+    [[nodiscard]] MapdataJugemPoint *jugemPoint(u8 idx = 0) const;
 
     /// @beginGetters
     /// @addr{0x80533090}
@@ -130,8 +151,13 @@ public:
         return m_random;
     }
 
-    [[nodiscard]] const Player &player() const {
-        return m_player;
+    /// @brief The race state of player idx (0 is the local player).
+    [[nodiscard]] const Player &player(size_t idx = 0) const {
+        return m_players[idx];
+    }
+
+    [[nodiscard]] size_t playerCount() const {
+        return m_playerCount;
     }
 
     [[nodiscard]] const TimerManager &timerManager() const {
@@ -161,7 +187,8 @@ private:
     ~RaceManager() override;
 
     Random m_random;
-    Player m_player;
+    std::array<Player, MAX_PLAYERS> m_players;
+    size_t m_playerCount;
     TimerManager m_timerManager;
     Stage m_stage;
     u16 m_introTimer;

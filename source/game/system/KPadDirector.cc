@@ -1,41 +1,55 @@
 #include "KPadDirector.hh"
 
+#include "game/system/RaceConfig.hh"
+
 namespace Kinoko::System {
+
+/// @brief The number of players in the race, or 1 before the race is configured.
+size_t KPadDirector::playerCount() const {
+    const auto *config = RaceConfig::Instance();
+    return config ? std::max<size_t>(1, config->raceScenario().playerCount) : 1;
+}
 
 /// @addr{0x805238F0}
 void KPadDirector::calc() {
     calcPads();
-    m_playerInput.calc();
+    for (size_t i = 0; i < playerCount(); ++i) {
+        m_playerInputs[i].calc();
+    }
 }
 
 /// @addr{0x805237E8}
 void KPadDirector::calcPads() {
     m_ghostController->calc();
-    m_hostController->calc();
+    for (size_t i = 0; i < playerCount(); ++i) {
+        m_hostControllers[i]->calc();
+    }
 }
 
 /// @addr{0x80523690}
 void KPadDirector::reset() {
-    m_playerInput.reset();
+    for (size_t i = 0; i < playerCount(); ++i) {
+        m_playerInputs[i].reset();
+    }
 }
 
 /// @addr{0x80524580}
 void KPadDirector::startGhostProxies() {
-    m_playerInput.startGhostProxy();
+    m_playerInputs[0].startGhostProxy();
 }
 
 /// @addr{0x805245DC}
 void KPadDirector::endGhostProxies() {
-    m_playerInput.endGhostProxy();
+    m_playerInputs[0].endGhostProxy();
 }
 
 /// @addr{0x8052453C}
 void KPadDirector::setGhostPad(const u8 *inputs, bool driftIsAuto) {
-    m_playerInput.setGhostController(m_ghostController, inputs, driftIsAuto);
+    m_playerInputs[0].setGhostController(m_ghostController, inputs, driftIsAuto);
 }
 
-void KPadDirector::setHostPad(bool driftIsAuto) {
-    m_playerInput.setHostController(m_hostController, driftIsAuto);
+void KPadDirector::setHostPad(bool driftIsAuto, size_t idx) {
+    m_playerInputs[idx].setHostController(m_hostControllers[idx], driftIsAuto);
 }
 
 /// @addr{0x8052313C}
@@ -55,7 +69,9 @@ void KPadDirector::DestroyInstance() {
 /// @addr{0x805232F0}
 KPadDirector::KPadDirector() {
     m_ghostController = EGG::egg_new<KPadGhostController>();
-    m_hostController = EGG::egg_new<KPadHostController>();
+    for (auto &controller : m_hostControllers) {
+        controller = EGG::egg_new<KPadHostController>();
+    }
 }
 
 /// @addr{0x805231DC}

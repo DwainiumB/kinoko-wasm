@@ -41,7 +41,8 @@ void MapdataCheckPoint::initCheckpointLinks(MapdataCheckPointAccessor &accessor,
         if (checkpath) {
             m_prevCount = 0;
 
-            for (auto [i, prevID] : std::views::enumerate(checkpath->prev())) {
+            for (size_t i = 0; i < checkpath->prev().size(); ++i) {
+                u8 prevID = checkpath->prev()[i];
                 if (prevID == 0xFF) {
                     continue;
                 }
@@ -63,7 +64,8 @@ void MapdataCheckPoint::initCheckpointLinks(MapdataCheckPointAccessor &accessor,
         if (checkpath) {
             m_nextCount = 0;
 
-            for (auto [i, nextID] : std::views::enumerate(checkpath->next())) {
+            for (size_t i = 0; i < checkpath->next().size(); ++i) {
+                u8 nextID = checkpath->next()[i];
                 if (nextID == 0xFF) {
                     continue;
                 }
@@ -78,7 +80,8 @@ void MapdataCheckPoint::initCheckpointLinks(MapdataCheckPointAccessor &accessor,
     }
 
     // Form the checkpoint's quadrilateral(s)
-    for (auto [i, next] : std::views::enumerate(m_nextPoints)) {
+    size_t i = 0;
+	for (auto &next : m_nextPoints) {
         if (i < m_nextCount) {
             auto &nextLinked = m_nextPoints[i];
             auto *nextPoint = nextLinked.checkpoint;
@@ -91,6 +94,7 @@ void MapdataCheckPoint::initCheckpointLinks(MapdataCheckPointAccessor &accessor,
             next.p0diff = EGG::Vector2f::zero;
             next.p1diff = EGG::Vector2f::zero;
         }
+		++i;
     }
 }
 

@@ -29,6 +29,14 @@ public:
         m_railInterpolator->setPerPointVelocities(true);
     }
 
+    /// Added for Kinoko web's renderer: every box in the spawner's pool shares the same placement
+    /// params, so while m_state is 0 (not yet enabled by the spawner, or reset back to 0 after a
+    /// rail direction change -- see calcPosition()) this box has never been positioned by its own
+    /// rail and sits frozen on top of every other still-inactive box in the pool.
+    [[nodiscard]] bool isVisible() const override {
+        return m_state != 0;
+    }
+
 private:
     void calcPosition();
 };

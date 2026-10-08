@@ -7,3 +7,17 @@ out
 *.szs
 statusTestCases.json
 .env
+# Everything under web/assets is derived from the game's own files (models, textures, sounds, music, Common.szs, course .szs,
+# UI art, effects, ...) and must never be committed or hosted. Each user generates it locally with tools/export_*.py and points
+# the page at it (web/assetgate.js).
+web/assets/
+web/*.bak
+web/replay_data.json
+
+# GPU spike build products
+tools/gpu_spike/xsrc/
+tools/gpu_spike/out/
+tools/gpu_spike/*.log
+build-gpu-spike/
+build-cov/
+build-*/

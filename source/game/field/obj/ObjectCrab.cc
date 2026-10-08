@@ -58,6 +58,11 @@ void ObjectCrab::calc() {
 
     if (m_statePhase == StatePhase::Middle) {
         setPos(m_railInterpolator->curPos());
+        // Not in the original game as a per-frame call -- calcTransMat() was only ever invoked when
+        // (re)entering Walking, so the crab's sideways-facing direction (baked into m_curRot via
+        // INIT_ROT's 90-degree offset from the rail tangent) stayed frozen for the rest of the walk
+        // even as the rail curved underneath it.
+        calcTransMat(m_curRot);
 
         if (m_still) {
             m_statePhase = StatePhase::End;

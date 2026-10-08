@@ -10,6 +10,7 @@
 #include <array>
 #include <limits>
 #include <utility>
+#include <bit>
 
 namespace Kinoko {
 
@@ -418,7 +419,7 @@ static inline constexpr u32 f2u(f32 val) {
 }
 
 // The size of memory blocks that are allocated for game heap space.
-static constexpr size_t MEMORY_SPACE_SIZE = 0x1000000;
+static constexpr size_t MEMORY_SPACE_SIZE = 0x4000000; // 64 MB: up to 12 karts
 
 #ifdef BUILD_DEBUG
 static constexpr auto DEFAULT_OPT = Abstract::Memory::MEMiHeapHead::OptFlag().setBit(

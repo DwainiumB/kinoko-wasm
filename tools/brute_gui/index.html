@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Kinoko Brute Forcer</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #14161b;
+    --panel: #1d2027;
+    --border: #2c303a;
+    --text: #e6e8ee;
+    --muted: #8a8f9c;
+    --accent: #4fd1c5;
+    --accent-dim: #2c7a72;
+    --danger: #e0616b;
+    --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 32px 16px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+    display: flex;
+    justify-content: center;
+  }
+  main { width: 100%; max-width: 640px; }
+  h1 { font-size: 1.3rem; margin: 0 0 4px; }
+  p.sub { color: var(--muted); margin: 0 0 24px; font-size: 0.9rem; }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+  }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 16px; }
+  label { display: block; font-size: 0.78rem; color: var(--muted); margin-bottom: 4px; }
+  input, select {
+    width: 100%;
+    background: #11131a;
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 6px;
+    padding: 7px 9px;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+  }
+  input:focus { outline: 1px solid var(--accent); }
+  .actions { display: flex; gap: 10px; margin-top: 18px; }
+  button {
+    border: none;
+    border-radius: 6px;
+    padding: 9px 16px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  #startBtn { background: var(--accent); color: #06201d; }
+  #startBtn:disabled { background: var(--accent-dim); color: #0a2b27; cursor: not-allowed; }
+  #stopBtn { background: #2a2e37; color: var(--text); }
+  #stopBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+  #downloadBtn { background: #2a2e37; color: var(--text); }
+  #downloadBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .status-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
+  .status-row:last-child { margin-bottom: 0; }
+  .status-label { color: var(--muted); font-size: 0.82rem; }
+  .status-value { font-family: var(--mono); font-size: 0.95rem; }
+  .progress-track { height: 6px; border-radius: 3px; background: #11131a; overflow: hidden; margin: 12px 0 16px; }
+  .progress-fill { height: 100%; background: var(--accent); width: 0%; transition: width 0.3s ease; }
+  .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+  .dot.idle { background: var(--muted); }
+  .dot.running { background: var(--accent); animation: pulse 1.2s infinite ease-in-out; }
+  .dot.error { background: var(--danger); }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+  .error-box { color: var(--danger); font-size: 0.85rem; margin-top: 10px; }
+  .hint { color: var(--muted); font-size: 0.78rem; margin-top: 14px; line-height: 1.4; }
+  .field-note { color: var(--muted); font-size: 0.72rem; line-height: 1.35; margin-top: 4px; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Kinoko Brute Forcer</h1>
+  <p class="sub">Search for faster TAS input sequences using the headless kinoko_host engine, then export the best one as a .rkg ghost.</p>
+
+  <div class="panel">
+    <div class="grid">
+      <div>
+        <label for="binary">kinoko_host path</label>
+        <input id="binary" placeholder="(server default)">
+      </div>
+      <div>
+        <label for="course">Course</label>
+        <select id="course"></select>
+      </div>
+      <div>
+        <label for="character">Character</label>
+        <select id="character"></select>
+      </div>
+      <div>
+        <label for="vehicle">Vehicle</label>
+        <select id="vehicle"></select>
+      </div>
+      <div>
+        <label for="iterations">Iterations</label>
+        <input id="iterations" type="number" value="500">
+      </div>
+      <div>
+        <label for="n_points">Steering control points</label>
+        <input id="n_points" type="number" value="412">
+      </div>
+      <div>
+        <label for="engine">Engine</label>
+        <select id="engine" onchange="syncEngine()">
+          <option value="cpu">CPU (kinoko_host processes)</option>
+          <option value="gpu">GPU (tools/gpu_brute.py)</option>
+        </select>
+        <div class="field-note">GPU evaluates a whole generation of candidates at once on the GPU build of the engine -- same genome, prefix chaining and fitness, bit-identical results. Any track, character and vehicle. One iteration = one generation.</div>
+      </div>
+      <div class="gpu-only">
+        <label for="gpu_batch">GPU candidates per generation</label>
+        <input id="gpu_batch" type="number" value="2048" min="1">
+        <div class="field-note">Each is a GPU race slot (~0.57 MiB). 2048 uses ~1.2 GB of GPU memory.</div>
+      </div>
+      <div class="gpu-only">
+        <label for="gpu_parents">GPU parents kept</label>
+        <input id="gpu_parents" type="number" value="1" min="1">
+        <div class="field-note">1 = the CPU's hill climb (mutate the best; replace it only if a child is strictly better). k &gt; 1 keeps the best k distinct genomes and spreads children over them.</div>
+      </div>
+      <div class="gpu-only">
+        <label for="gpu_verify_every">CPU cross-check every N generations</label>
+        <input id="gpu_verify_every" type="number" value="20" min="0">
+        <div class="field-note">Re-runs the current best through kinoko_host and stops with an error on any difference. 0 = off.</div>
+      </div>
+      <div class="gpu-only">
+        <label for="gpu_seed">GPU random seed (optional)</label>
+        <input id="gpu_seed" type="number" placeholder="blank = random">
+      </div>
+      <div class="gpu-only">
+        <label for="edit_base_rkg">Edit mode: base .rkg (optional)</label>
+        <input id="edit_base_rkg" type="text" placeholder="blank = control-point genome">
+        <div class="field-note">Searches this ghost's real input stream (after the locked prefix) instead of the control-point genome: each child is the parent with a few local edits -- stick X/Y runs, moving a button/trick change by 1-2 frames, shifting a block by a frame, setting a trick direction 1-4, hop/brake/drift on or off. Reaches everything the genome can't (drift, trick direction, stickY). The genome settings below are ignored in this mode.</div>
+      </div>
+      <div class="gpu-only">
+        <label for="edit_base_shifts">Edit mode: base shifts</label>
+        <input id="edit_base_shifts" type="text" value="0" placeholder="e.g. -1,0,1">
+        <div class="field-note">Start from the base shifted by these frame offsets (base[i + s] at frame i). Use several with "GPU parents kept" set to at least as many.</div>
+      </div>
+      <div class="gpu-only">
+        <label for="edits_per_child">Edit mode: edits per child</label>
+        <input id="edits_per_child" type="number" value="2" min="1" step="0.5">
+      </div>
+      <div class="gpu-only">
+        <label for="edit_window_from">Edit mode: only edit frames from / to (optional)</label>
+        <div style="display:flex; gap:8px;">
+          <input id="edit_window_from" type="number" placeholder="from (default: prefix end)">
+          <input id="edit_window_to" type="number" placeholder="to (default: frame cap)">
+        </div>
+      </div>
+      <div class="cpu-only">
+        <label for="parallel_workers">Parallel workers</label>
+        <input id="parallel_workers" type="number" value="1" min="1">
+        <div class="field-note">Evaluate this many mutations at once per iteration and keep the best of the batch -- each is a separate kinoko_host process, so this roughly multiplies throughput by however many CPU cores you give it. 1 = old behavior. Try your core count (or one less).</div>
+      </div>
+      <div>
+        <label for="stagnation_stop_after">Stop after N stagnant iterations (optional)</label>
+        <input id="stagnation_stop_after" type="number" min="1" placeholder="e.g. 500 (blank = never)">
+        <div class="field-note">If this many generations pass with no accepted improvement, the search stops itself early instead of running out the full iteration count for nothing. This is a heuristic "probably converged" signal, not a proof -- a stochastic search can't rule out further improvement, it just becomes increasingly unlikely the longer nothing changes. Leave blank to always run the full iteration count.</div>
+      </div>
+    </div>
+
+    <details open style="margin-top:16px;">
+      <summary style="cursor:pointer; color:var(--muted); font-size:0.85rem;">Advanced / start-slide tuning</summary>
+      <div class="grid" style="margin-top:14px;">
+        <div>
+          <label for="step">Frames per control point</label>
+          <input id="step" type="number" value="1">
+          <div class="field-note">How far apart the tunable steering/accelerate/trick decisions are, in frames. 1 = every single frame can differ (most precise, biggest search space). 15 = one decision covers 15 frames, interpolated in between (coarser, faster to search). Use small values (1-3) for a start slide, since timing is frame-critical there.</div>
+        </div>
+        <div>
+          <label for="max_frames">Frame cap</label>
+          <input id="max_frames" type="number" value="412">
+          <div class="field-note">How many frames of the attempt get simulated and scored. The countdown itself ends at frame 411 ("GO!"), but the engine only applies the start-boost calculation the moment that frame executes -- since the simulation loop stops BEFORE reaching a cap equal to max_frames, a cap of 411 would mean frame 411 never actually runs and no boost ever gets applied or scored. 412 is the minimum that captures it. Extend further (e.g. 450-500) to also score more frames of real turning after the start, not just the pre-turn straight.</div>
+        </div>
+        <div>
+          <label for="boost_bonus_weight">Boost quality bonus</label>
+          <input id="boost_bonus_weight" type="number" step="0.5" value="3.0">
+          <div class="field-note">Extra reward for a genuinely good start-boost charge, on top of whichever "Score by" metric is picked -- reaching the top tier (70 boost frames) adds up to 70x this value to the score. Needed because a short frame cap can't see the boosted speed that follows GO!, so without this the search has zero reason to find a real full boost and can produce a run that looks great here but never actually boosts in Dolphin. 0 = off (old behavior).</div>
+        </div>
+        <div>
+          <label for="min_boost_charge">Minimum boost charge (optional)</label>
+          <input id="min_boost_charge" type="number" step="0.001" placeholder="e.g. 0.94">
+          <div class="field-note">Hard requirement: reject any candidate whose boostCharge falls below this value, no matter how good it scores otherwise. The charge-to-duration mapping has a cliff at 0.94 (0.925-0.94 = only 45 boost frames, 0.94-0.95 = 70) -- the "Boost quality bonus" above only makes staying above the cliff PREFERRED, it doesn't forbid the search from drifting back below it for a small gain elsewhere. Set to 0.94 to forbid ever losing the 70-frame tier. Empty = no gate (old behavior).</div>
+        </div>
+        <div>
+          <label for="speed_bonus_weight">Final-speed bonus</label>
+          <input id="speed_bonus_weight" type="number" step="1" value="0">
+          <div class="field-note">Extra reward for the kart's raw forward speed at the final scored frame. Without this, a candidate can score well on cumulative position/completion while actually ending mid-spin or stalled -- erratic steering that never commits to one turn direction can look just as good as a clean, fully-committed turn that leaves the kart accelerating forward. Matters even more for segment-chained search, since the next segment inherits whatever state this one ends in. 0 = off (old behavior).</div>
+        </div>
+        <div>
+          <label for="max_boost_charge">Maximum boost charge (optional)</label>
+          <input id="max_boost_charge" type="number" step="0.001" placeholder="e.g. 0.95">
+          <div class="field-note">Mirror of "Minimum boost charge": reject any candidate whose boostCharge EXCEEDS this. Above 0.95 is a full burnout (0 boost frames) -- pair this with "Accelerate hold bonus" below so the search can freely push up how long accelerate is held without accidentally crossing into burnout. Empty = no gate (old behavior).</div>
+        </div>
+        <div>
+          <label for="accel_hold_bonus_weight">Accelerate hold bonus</label>
+          <input id="accel_hold_bonus_weight" type="number" step="0.1" value="0">
+          <div class="field-note">Extra reward for the total number of Countdown-phase frames spent holding accelerate, independent of the resulting charge tier -- based on community TAS knowledge that holding accelerate longer affects kart rotation/slide distance during airtime, a real effect separate from the charge-to-boost-duration formula. Set "Maximum boost charge" to 0.95 alongside this so pushing hold-time up can't accidentally burn out the charge. 0 = off (old behavior).</div>
+        </div>
+        <div>
+          <label for="completion_bonus_weight">Track-position bonus</label>
+          <input id="completion_bonus_weight" type="number" step="1" value="10">
+          <div class="field-note">Only used when "Score by" is "Progress". Continuous reward for exceeding the reference ghost's own raceCompletion (the game's real, curve-aware track position), on top of the always-on floor that just stops a result from falling behind at the final scored frame. Without this, the search has no reason to pull further ahead on the track's actual curve -- it can settle for merely tying the reference there while gaining ground only on the straight-line distance metric, which can look tied or even slightly behind mid-run despite a higher overall score. 0 = floor only (old behavior).</div>
+        </div>
+        <div>
+          <label for="z_bonus_weight">Z-axis bonus</label>
+          <input id="z_bonus_weight" type="number" step="0.1" value="0">
+          <div class="field-note">Only used when "Score by" is "Progress". Extra reward for progress specifically along the Z axis (whichever direction the reference itself moves in Z), ON TOP OF the normal progress score -- doesn't replace credit for X/rightward movement, just lets you dial up how much a candidate is pushed to match the reference's Z progress (e.g. how far around a turn it's come) beyond what following the curve already provides. 0 = off (old behavior).</div>
+        </div>
+        <div>
+          <label for="completion_tolerance">Completion gate tolerance</label>
+          <input id="completion_tolerance" type="number" step="1" value="1">
+          <div class="field-note">Only used when "Score by" is "Progress". raceCompletion is coarsely quantized, so when Seed and Reference are the same (or very similar) already-good file, most small mutations produce a trajectory that's essentially as good as the reference but happens to round its completion down by a unit or two purely from quantization noise -- with 0 tolerance those get rejected outright by the gate even though they're not really behind. Confirmed in practice: with 0, over half of all mutations from a good seed were rejected this way, starving the search of real candidates. 1 (default) allows a small rounding margin; raise it further if you're still seeing very few improvements from a strong seed.</div>
+        </div>
+        <div>
+          <label for="eval_log_path">Eval log path (optional)</label>
+          <input id="eval_log_path" placeholder="e.g. samples/data/eval_log.jsonl (blank = off)">
+          <div class="field-note">Appends a record (genome, progress, completion, boost charge) for every real evaluation this run makes, across runs if you reuse the same path. Feeds tools/train_surrogate.py to build a surrogate model -- see "Surrogate model path" below. No effect on search behavior itself, just data collection. Blank = off (old behavior).</div>
+        </div>
+        <div>
+          <label for="surrogate_path">Surrogate model path (optional)</label>
+          <input id="surrogate_path" placeholder="e.g. tools/surrogate_lc.npz (blank = off)">
+          <div class="field-note">Only used when "Score by" is "Progress" and Parallel workers &gt; 1. A model trained by tools/train_surrogate.py on a previous eval log. When set, each generation proposes a larger pool of candidates (see "Surrogate oversample" below), cheaply ranks them all by predicted progress, and only spends real engine time on the most promising subset -- the real score/gate still makes the actual accept/reject call, the surrogate just decides what's worth checking. Blank = off (old behavior, every proposed candidate is real-evaluated).</div>
+        </div>
+        <div>
+          <label for="surrogate_oversample">Surrogate oversample</label>
+          <input id="surrogate_oversample" type="number" step="1" value="4">
+          <div class="field-note">Only used when a Surrogate model path is set. How many candidates to propose per real-evaluation slot -- e.g. 8 workers x oversample 4 = 32 candidates generated and surrogate-ranked each generation, but only the top 8 get a real engine evaluation. Higher = more filtering (cheaper on average per real evaluation spent, but more surrogate-inference overhead and more reliant on the model being accurate).</div>
+        </div>
+        <div>
+          <label for="fitness_metric">Score by</label>
+          <select id="fitness_metric" onchange="syncFitnessFields()">
+            <option value="completion">Race completion (full lap/race)</option>
+            <option value="speed">Kart speed (short window / start slide)</option>
+            <option value="progress" selected>Progress along a reference ghost's line</option>
+          </select>
+          <div class="field-note">"Race completion" only moves once you cross the next checkpoint -- useless for a short window, it reads identically for wildly different attempts until ~550 frames in. "Kart speed" rewards raw speed at the frame cap, in any direction. "Progress" rewards distance travelled specifically along a reference ghost's own line (needs "Reference .rkg" below) -- the right choice when you're trying to beat a specific existing attempt rather than just go fast.</div>
+        </div>
+        <div>
+          <label for="mutation_sigma">Mutation size</label>
+          <input id="mutation_sigma" type="number" step="0.01" value="0.3">
+          <div class="field-note">How big each random tweak is when a gene gets mutated. Bigger = more exploration (can jump further from the seed, more likely to break a working attempt). Smaller = finer refinement of an already-good attempt. Try a bigger value first to explore, then re-run seeded from the result with a smaller value to polish it.</div>
+        </div>
+        <div>
+          <label for="mutation_rate">Mutation rate (fraction of genes touched per step)</label>
+          <input id="mutation_rate" type="number" step="0.01" value="0.05">
+          <div class="field-note">What fraction of ALL genes get a random tweak on each attempt. With 3 channels at step=1 there can be 1000+ genes, so keep this low (0.03-0.1) -- at the default 0.3 nearly a third of everything would change at once, which is too disruptive to reliably improve on a good seed.</div>
+        </div>
+        <div>
+          <label for="seed_rkg">Seed from .rkg (path)</label>
+          <input id="seed_rkg" value="C:\Users\dwain\Kinoko\samples\tracks\luigi-circuit\ghosts\LC_41.105s_41b3f3e.rkg">
+          <div class="field-note">Start the search from this ghost's actual recorded inputs instead of random noise. Strongly recommended whenever you're trying to refine or beat a specific existing attempt.</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; padding-top:18px;">
+          <input id="search_start_boost" type="checkbox" style="width:auto;">
+          <label for="search_start_boost" style="margin:0; cursor:pointer;">Search start boost timing</label>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; padding-top:18px;">
+          <input id="search_accelerate" type="checkbox" style="width:auto;" checked>
+          <label for="search_accelerate" style="margin:0; cursor:pointer;">Search accelerate on/off channel</label>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; padding-top:18px;">
+          <input id="search_trick" type="checkbox" style="width:auto;" checked>
+          <label for="search_trick" style="margin:0; cursor:pointer;">Search wheelie (Trick::Up) channel</label>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px; padding-top:18px;">
+          <input id="ternary_steering" type="checkbox" style="width:auto;">
+          <label for="ternary_steering" style="margin:0; cursor:pointer;">Ternary steering (full-left/neutral/full-right only)</label>
+        </div>
+        <div>
+          <label for="heading_checkpoint_frame">Heading checkpoint frame (optional)</label>
+          <input id="heading_checkpoint_frame" type="number" placeholder="e.g. 234">
+          <div class="field-note">Score how far the kart has turned toward the reference ghost's own turn direction by this specific frame, not just at the end of the window. Motivated by watching a real reference already ~10 degrees rotated by frame 234, well before the window ends -- this adds a separate engine evaluation per candidate (cut at this frame), so it costs roughly double the per-iteration time. Requires "Reference .rkg" below. Empty = off (old behavior).</div>
+        </div>
+        <div>
+          <label for="heading_bonus_weight">Heading checkpoint bonus</label>
+          <input id="heading_bonus_weight" type="number" step="1" value="0">
+          <div class="field-note">Extra reward for turning toward the reference's own direction by "Heading checkpoint frame" above. 0 = off.</div>
+        </div>
+        <div id="referenceRkgRow">
+          <label for="reference_rkg">Reference .rkg (path)</label>
+          <input id="reference_rkg" value="C:\Users\dwain\Kinoko\samples\tracks\luigi-circuit\ghosts\LC_41.105s_41b3f3e.rkg">
+          <div class="field-note">Only used when "Score by" is "Progress". The ghost whose line you're trying to beat -- it's simulated once at the start to measure how far IT travelled, and candidates are scored by how far they travel in that same direction.</div>
+        </div>
+        <div id="progressStartFrameRow">
+          <label for="progress_start_frame">Progress measured from frame</label>
+          <input id="progress_start_frame" type="number" value="172">
+          <div class="field-note">Where the reference ghost's own displacement is measured FROM (the frame cap above is the "to"). 172 = Countdown start, the earliest the kart can move under its own power anyway, so this rarely needs changing. For segment-chaining (see "Locked prefix .rkg" below), set this to the same frame as "Locked prefix length" so progress is scored only over the new segment.</div>
+        </div>
+        <div>
+          <label for="prefix_rkg">Locked prefix .rkg (path, optional)</label>
+          <input id="prefix_rkg" placeholder="e.g. a previous segment's winning .rkg">
+          <div class="field-note">Segment-chaining a long race (e.g. a full 3-lap run) piece by piece: point this at a PREVIOUS segment's winning result. Those frames are replayed verbatim every evaluation and never mutated -- this run's genome only searches the NEW frames from where that file ends (or "Locked prefix length" below, if set) through the Frame cap. Leave empty for a normal single-segment search (old behavior).</div>
+        </div>
+        <div>
+          <label for="prefix_frame_count">Locked prefix length (optional)</label>
+          <input id="prefix_frame_count" type="number" placeholder="blank = whole file">
+          <div class="field-note">How many frames of "Locked prefix .rkg" to lock. Leave blank to lock its entire recorded sequence (the common case -- the whole previous segment).</div>
+        </div>
+      </div>
+      <div class="hint">
+        <b>Search start boost timing</b> picks a single frame to start holding accelerate continuously through the rest of the attempt -- without it (or the two options below), accelerate is held the whole countdown, which always overshoots the boost charge (&gt;0.95 = burnout) and guarantees no boost. This models a single clean hold; it can't represent tapping accelerate on and off, but converges fast since it's only one extra gene.<br><br>
+        <b>Search accelerate on/off channel</b> and <b>search wheelie (Trick::Up) channel</b> each replace that single gene with a full channel (one on/off decision per control point, same spacing as steering), so real multi-tap patterns are reachable -- e.g. a technique that times a drift/hop or a wheelie into the corner, which the single-gene model can't reproduce at all. Confirmed necessary for at least one real reference ghost: its countdown movement couldn't be reproduced by steering + accelerate alone, but matched the real engine exactly once its actual wheelie taps were carried over. These cost a bigger search space (one more full channel each), so they take longer to converge and benefit even more from seeding. The accelerate channel takes priority over "search start boost timing" if both are checked.
+      </div>
+    </details>
+
+    <div class="actions">
+      <button id="startBtn" onclick="startSearch()">Start search</button>
+      <button id="stopBtn" onclick="stopSearch()" disabled>Stop</button>
+      <button id="downloadBtn" onclick="downloadRkg()" disabled>Download best .rkg</button>
+    </div>
+    <div class="hint">v1 searches steering only (accelerate held, no drift/tricks/items) — see tools/brute_force.py to extend the genome.</div>
+  </div>
+
+  <div class="panel">
+    <div class="status-row">
+      <span class="status-label"><span id="statusDot" class="dot idle"></span>Status</span>
+      <span id="statusText" class="status-value">idle</span>
+    </div>
+    <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+    <div class="status-row">
+      <span class="status-label">Iteration</span>
+      <span id="iterText" class="status-value">0 / 0</span>
+    </div>
+    <div class="status-row">
+      <span class="status-label">Pace</span>
+      <span id="paceText" class="status-value">—</span>
+    </div>
+    <div class="status-row">
+      <span class="status-label">Best result</span>
+      <span id="bestText" class="status-value">—</span>
+    </div>
+    <div class="status-row">
+      <span class="status-label">Race completion</span>
+      <span id="completionText" class="status-value">—</span>
+    </div>
+    <div class="status-row">
+      <span class="status-label">Vs reference</span>
+      <span id="vsReferenceText" class="status-value">—</span>
+    </div>
+    <div class="status-row">
+      <span class="status-label">Best boost charge</span>
+      <span id="boostText" class="status-value">—</span>
+    </div>
+    <div class="status-row">
+      <span class="status-label">Since last improvement</span>
+      <span id="stagnationText" class="status-value">—</span>
+    </div>
+    <div id="errorBox" class="error-box" style="display:none;"></div>
+  </div>
+</main>
+
+<script>
+const $ = id => document.getElementById(id);
+
+// Same IDs/order as web/index.html's TRACKS/CHARACTERS/VEHICLES (Kinoko's Course/Character/Vehicle
+// enums, include/Common.hh) -- kept in sync by hand since this is a separate static page.
+const TRACKS = [
+  { id: 8,  name: "Luigi Circuit" }, { id: 1,  name: "Moo Moo Meadows" },
+  { id: 2,  name: "Mushroom Gorge" }, { id: 4,  name: "Toad's Factory" },
+  { id: 0,  name: "Mario Circuit" }, { id: 5,  name: "Coconut Mall" },
+  { id: 6,  name: "DK Summit" }, { id: 7,  name: "Wario's Gold Mine" },
+  { id: 9,  name: "Daisy Circuit" }, { id: 15, name: "Koopa Cape" },
+  { id: 11, name: "Maple Treeway" }, { id: 3,  name: "Grumble Volcano" },
+  { id: 14, name: "Dry Dry Ruins" }, { id: 10, name: "Moonview Highway" },
+  { id: 12, name: "Bowser's Castle" }, { id: 13, name: "Rainbow Road" },
+  { id: 16, name: "GCN Peach Beach" }, { id: 20, name: "DS Yoshi Falls" },
+  { id: 25, name: "SNES Ghost Valley 2" }, { id: 26, name: "N64 Mario Raceway" },
+  { id: 27, name: "N64 Sherbet Land" }, { id: 31, name: "GBA Shy Guy Beach" },
+  { id: 23, name: "DS Delfino Square" }, { id: 18, name: "GCN Waluigi Stadium" },
+  { id: 21, name: "DS Desert Hills" }, { id: 30, name: "GBA Bowser Castle 3" },
+  { id: 29, name: "N64 DK's Jungle Parkway" }, { id: 17, name: "GCN Mario Circuit" },
+  { id: 24, name: "SNES Mario Circuit 3" }, { id: 22, name: "DS Peach Gardens" },
+  { id: 19, name: "GCN DK Mountain" }, { id: 28, name: "N64 Bowser's Castle" },
+];
+
+const CHARACTERS = [
+  { id: 0, name: "Mario" }, { id: 1, name: "Baby Peach" }, { id: 2, name: "Waluigi" },
+  { id: 3, name: "Bowser" }, { id: 4, name: "Baby Daisy" }, { id: 5, name: "Dry Bones" },
+  { id: 6, name: "Baby Mario" }, { id: 7, name: "Luigi" }, { id: 8, name: "Toad" },
+  { id: 9, name: "Donkey Kong" }, { id: 10, name: "Yoshi" }, { id: 11, name: "Wario" },
+  { id: 12, name: "Baby Luigi" }, { id: 13, name: "Toadette" }, { id: 14, name: "Koopa Troopa" },
+  { id: 15, name: "Daisy" }, { id: 16, name: "Peach" }, { id: 17, name: "Birdo" },
+  { id: 18, name: "Diddy Kong" }, { id: 19, name: "King Boo" }, { id: 20, name: "Bowser Jr." },
+  { id: 21, name: "Dry Bowser" }, { id: 22, name: "Funky Kong" }, { id: 23, name: "Rosalina" },
+];
+// A character can only drive vehicles of its own weight class (0 small, 1 medium, 2 large) --
+// mismatching them panics the engine (KartParam validates this), so the vehicle list below is
+// filtered to match whichever character is selected, same as the web player does.
+const CHARACTER_CLASS = [1, 0, 2, 2, 0, 0, 0, 1, 0, 2, 1, 2, 0, 0, 0, 1, 1, 1, 1, 2, 1, 2, 2, 2];
+
+const VEHICLES = [
+  { id: 0, name: "Standard Kart S" }, { id: 1, name: "Standard Kart M" },
+  { id: 2, name: "Standard Kart L" }, { id: 3, name: "Baby Booster" },
+  { id: 4, name: "Classic Dragster" }, { id: 5, name: "Offroader" },
+  { id: 6, name: "Mini Beast" }, { id: 7, name: "Wild Wing" },
+  { id: 8, name: "Flame Flyer" }, { id: 9, name: "Cheep Charger" },
+  { id: 10, name: "Super Blooper" }, { id: 11, name: "Prowler" },
+  { id: 12, name: "Tiny Titan" }, { id: 13, name: "Daytripper" },
+  { id: 14, name: "Jetsetter" }, { id: 15, name: "Blue Falcon" },
+  { id: 16, name: "Sprinter" }, { id: 17, name: "Honeycoupe" },
+  { id: 18, name: "Standard Bike S" }, { id: 19, name: "Standard Bike M" },
+  { id: 20, name: "Standard Bike L" }, { id: 21, name: "Bullet Bike" },
+  { id: 22, name: "Mach Bike" }, { id: 23, name: "Flame Runner" },
+  { id: 24, name: "Bit Bike" }, { id: 25, name: "Sugarscoot" },
+  { id: 26, name: "Wario Bike" }, { id: 27, name: "Quacker" },
+  { id: 28, name: "Zip Zip" }, { id: 29, name: "Shooting Star" },
+  { id: 30, name: "Magikruiser" }, { id: 31, name: "Sneakster" },
+  { id: 32, name: "Spear" }, { id: 33, name: "Jet Bubble" },
+  { id: 34, name: "Dolphin Dasher" }, { id: 35, name: "Phantom" },
+];
+
+function fillVehicles(preferredId) {
+  const vehSelect = $('vehicle');
+  const weightClass = CHARACTER_CLASS[Number($('character').value)];
+  const allowed = VEHICLES.filter(v => v.id % 3 === weightClass);
+  const keep = allowed.find(v => v.id === preferredId) || allowed[0];
+  vehSelect.innerHTML = '';
+  allowed.forEach(v => vehSelect.add(new Option(v.name, v.id, false, v.id === keep.id)));
+}
+
+function initSelectors() {
+  TRACKS.forEach(t => $('course').add(new Option(t.name, t.id)));
+  CHARACTERS.forEach(c => $('character').add(new Option(c.name, c.id)));
+  $('character').value = 22; // Funky Kong, matches the earlier medium-bike example default
+  fillVehicles(32); // Spear
+  // Keep the same vehicle "slot" (e.g. Standard Kart M -> L) when the character's weight class changes.
+  $('character').onchange = () => {
+    const id = Number($('vehicle').value);
+    fillVehicles(id - (id % 3) + CHARACTER_CLASS[Number($('character').value)]);
+  };
+}
+initSelectors();
+
+function syncFitnessFields() {
+  const isProgress = $('fitness_metric').value === 'progress';
+  $('referenceRkgRow').style.display = isProgress ? '' : 'none';
+  $('progressStartFrameRow').style.display = isProgress ? '' : 'none';
+}
+syncFitnessFields();
+
+async function api(path, opts) {
+  const res = await fetch(path, opts);
+  const body = await res.json();
+  if (!res.ok) throw new Error(body.error || res.statusText);
+  return body;
+}
+
+function fieldsPayload() {
+  return {
+    binary: $('binary').value.trim() || undefined,
+    course: Number($('course').value),
+    character: Number($('character').value),
+    vehicle: Number($('vehicle').value),
+    iterations: Number($('iterations').value),
+    n_points: Number($('n_points').value),
+    parallel_workers: Number($('parallel_workers').value),
+    engine: $('engine').value,
+    gpu_batch: Number($('gpu_batch').value),
+    gpu_parents: Number($('gpu_parents').value),
+    gpu_verify_every: Number($('gpu_verify_every').value),
+    gpu_seed: $('gpu_seed').value === '' ? null : Number($('gpu_seed').value),
+    edit_base_rkg: $('edit_base_rkg').value.trim() || undefined,
+    edit_base_shifts: $('edit_base_shifts').value.trim() || '0',
+    edits_per_child: Number($('edits_per_child').value),
+    edit_window_from: $('edit_window_from').value === '' ? null : Number($('edit_window_from').value),
+    edit_window_to: $('edit_window_to').value === '' ? null : Number($('edit_window_to').value),
+    stagnation_stop_after: $('stagnation_stop_after').value ? Number($('stagnation_stop_after').value) : null,
+    step: Number($('step').value),
+    max_frames: Number($('max_frames').value),
+    boost_bonus_weight: Number($('boost_bonus_weight').value),
+    min_boost_charge: $('min_boost_charge').value === '' ? null : Number($('min_boost_charge').value),
+    speed_bonus_weight: Number($('speed_bonus_weight').value),
+    max_boost_charge: $('max_boost_charge').value === '' ? null : Number($('max_boost_charge').value),
+    accel_hold_bonus_weight: Number($('accel_hold_bonus_weight').value),
+    completion_bonus_weight: Number($('completion_bonus_weight').value),
+    z_bonus_weight: Number($('z_bonus_weight').value),
+    completion_tolerance: Number($('completion_tolerance').value),
+    eval_log_path: $('eval_log_path').value.trim() || undefined,
+    surrogate_path: $('surrogate_path').value.trim() || undefined,
+    surrogate_oversample: Number($('surrogate_oversample').value),
+    fitness_metric: $('fitness_metric').value,
+    mutation_sigma: Number($('mutation_sigma').value),
+    mutation_rate: Number($('mutation_rate').value),
+    seed_rkg: $('seed_rkg').value.trim() || undefined,
+    prefix_rkg: $('prefix_rkg').value.trim() || undefined,
+    prefix_frame_count: $('prefix_frame_count').value === '' ? undefined : Number($('prefix_frame_count').value),
+    search_start_boost: $('search_start_boost').checked,
+    search_accelerate: $('search_accelerate').checked,
+    search_trick: $('search_trick').checked,
+    ternary_steering: $('ternary_steering').checked,
+    heading_checkpoint_frame: $('heading_checkpoint_frame').value === '' ? undefined : Number($('heading_checkpoint_frame').value),
+    heading_bonus_weight: Number($('heading_bonus_weight').value),
+    reference_rkg: $('reference_rkg').value.trim() || undefined,
+    progress_start_frame: Number($('progress_start_frame').value),
+  };
+}
+
+async function startSearch() {
+  $('errorBox').style.display = 'none';
+  try {
+    await api('/api/start', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(fieldsPayload()),
+    });
+  } catch (e) {
+    showError(e.message);
+  }
+  refresh();
+}
+
+async function stopSearch() {
+  await api('/api/stop', { method: 'POST' });
+  refresh();
+}
+
+function downloadRkg() {
+  window.location = '/api/download';
+}
+
+function showError(msg) {
+  const box = $('errorBox');
+  box.textContent = msg;
+  box.style.display = 'block';
+}
+
+function formatEta(seconds) {
+  if (seconds < 60) return `${Math.round(seconds)}s`;
+  if (seconds < 3600) return `${Math.round(seconds / 60)}m`;
+  return `${(seconds / 3600).toFixed(1)}h`;
+}
+
+function formatPace(status) {
+  if (status.msPerIteration === null || status.msPerIteration === undefined) return '—';
+  const remaining = status.running ? ` (~${formatEta(status.etaSeconds)} left)` : '';
+  if (status.engine === 'gpu') {
+    const rate = status.raceFramesPerSecond ? `, ${(status.raceFramesPerSecond / 1e6).toFixed(2)}M race-frames/s` : '';
+    const checks = status.cpuChecks ? `, ${status.cpuChecks} CPU checks OK` : '';
+    const mode = status.mode === 'edits' ? 'edit mode, ' : '';
+    return `${mode}${status.msPerIteration.toFixed(0)} ms/generation, ${status.evaluations.toLocaleString()} evaluations${rate}${checks}${remaining}`;
+  }
+  return `${status.msPerIteration.toFixed(0)} ms/iteration${remaining}`;
+}
+
+function formatBest(status) {
+  if (status.bestFitness === null || status.bestFitness === undefined) return '—';
+  if (status.bestFinished) return `${status.bestTimeMs} ms (finished)`;
+  if ($('fitness_metric').value === 'speed' && status.bestSpeed !== null && status.bestSpeed !== undefined) {
+    return `${status.bestSpeed.toFixed(3)} speed (not yet finished)`;
+  }
+  if ($('fitness_metric').value === 'progress' && status.bestProgress !== null && status.bestProgress !== undefined) {
+    return `${status.bestProgress.toFixed(1)} units of progress (not yet finished)`;
+  }
+  return `${(status.bestCompletion / 100).toFixed(1)}% of a lap, cumulative (not yet finished)`;
+}
+
+function formatCompletion(status) {
+  if (status.bestCompletion === null || status.bestCompletion === undefined) return '—';
+  return `${(status.bestCompletion / 100).toFixed(2)}% of a lap`;
+}
+
+function formatVsReference(status) {
+  if (status.referenceProgress === null || status.referenceProgress === undefined) return '—';
+  const sign = v => (v >= 0 ? '+' : '') + v.toFixed(2);
+  const progressPart = status.progressDelta !== null && status.progressDelta !== undefined
+      ? `progress ${sign(status.progressDelta)} (us ${status.bestProgress.toFixed(2)} vs ref ${status.referenceProgress.toFixed(2)})`
+      : '';
+  const completionPart = status.completionDelta !== null && status.completionDelta !== undefined
+      ? `completion ${sign(status.completionDelta)} (us ${status.bestCompletion} vs ref ${status.referenceCompletion})`
+      : '';
+  return [progressPart, completionPart].filter(Boolean).join(' | ');
+}
+
+function formatBoost(status) {
+  if (status.bestBoostCharge === null || status.bestBoostCharge === undefined) return '—';
+  const charge = status.bestBoostCharge;
+  const frames = status.bestBoostFrames;
+  if (charge > 0.95) return `${charge.toFixed(4)} -- burned out, no boost`;
+  if (frames === 0 || frames === null || frames === undefined) return `${charge.toFixed(4)} -- no boost (needs > 0.85)`;
+  const isTop = frames >= 70;
+  return `${charge.toFixed(4)} -- ${frames} boost frames${isTop ? ' (top tier!)' : ''}`;
+}
+
+function formatStagnation(status) {
+  const n = status.iterationsSinceImprovement;
+  if (n === null || n === undefined) return '—';
+  const suffix = status.stagnant ? ' -- stopped, likely converged' : '';
+  return `${n} iterations${suffix}`;
+}
+
+async function refresh() {
+  let status;
+  try {
+    status = await api('/api/status');
+  } catch (e) {
+    return;
+  }
+
+  const dot = $('statusDot');
+  if (status.error) {
+    dot.className = 'dot error';
+    $('statusText').textContent = 'error';
+    showError(status.error);
+  } else if (status.running) {
+    dot.className = 'dot running';
+    $('statusText').textContent = 'running';
+  } else {
+    dot.className = 'dot idle';
+    $('statusText').textContent = 'idle';
+  }
+
+  $('iterText').textContent = `${status.iteration} / ${status.totalIterations}`;
+  $('paceText').textContent = formatPace(status);
+  $('bestText').textContent = formatBest(status);
+  $('completionText').textContent = formatCompletion(status);
+  $('vsReferenceText').textContent = formatVsReference(status);
+  $('boostText').textContent = formatBoost(status);
+  $('stagnationText').textContent = formatStagnation(status);
+  const pct = status.totalIterations ? (100 * status.iteration / status.totalIterations) : 0;
+  $('progressFill').style.width = `${pct}%`;
+
+  $('startBtn').disabled = status.running;
+  $('stopBtn').disabled = !status.running;
+  $('downloadBtn').disabled = !status.hasResult;
+}
+
+function syncEngine() {
+  const gpu = $('engine').value === 'gpu';
+  document.querySelectorAll('.gpu-only').forEach(el => { el.style.display = gpu ? '' : 'none'; });
+  document.querySelectorAll('.cpu-only').forEach(el => { el.style.display = gpu ? 'none' : ''; });
+}
+
+syncEngine();
+setInterval(refresh, 1000);
+refresh();
+</script>
+</body>
+</html>

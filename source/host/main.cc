@@ -1,4 +1,7 @@
+#include "host/KBruteSystem.hh"
+#include "host/KDriveSystem.hh"
 #include "host/KReplaySystem.hh"
+#include "host/KSearchSystem.hh"
 #include "host/KTestSystem.hh"
 #include "host/Option.hh"
 
@@ -33,7 +36,9 @@ static void InitMemory() {
 }
 
 int main(int argc, char **argv) {
-    FlushDenormalsToZero();
+    #ifndef __EMSCRIPTEN__
+	FlushDenormalsToZero();
+	#endif
     InitMemory();
 
     // The hashmap cannot be constexpr, as it heap-allocates
@@ -42,6 +47,9 @@ int main(int argc, char **argv) {
     const std::unordered_map<std::string, std::function<KSystem *()>> modeMap = {
             {"test", []() -> KSystem * { return KTestSystem::CreateInstance(); }},
             {"replay", []() -> KSystem * { return KReplaySystem::CreateInstance(); }},
+            {"brute", []() -> KSystem * { return KBruteSystem::CreateInstance(); }},
+            {"drive", []() -> KSystem * { return KDriveSystem::CreateInstance(); }},
+            {"search", []() -> KSystem * { return KSearchSystem::CreateInstance(); }},
     };
 
     if (argc < 2) {

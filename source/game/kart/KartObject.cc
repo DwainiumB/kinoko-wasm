@@ -107,7 +107,7 @@ void KartObject::initImpl() {
 void KartObject::prepare() {
     EGG::Vector3f euler_angles_deg, position;
 
-    System::RaceManager::Instance()->findKartStartPoint(position, euler_angles_deg);
+    System::RaceManager::Instance()->findKartStartPoint(param()->playerIdx(), position, euler_angles_deg);
     move()->setInitialPhysicsValues(position, euler_angles_deg);
 }
 

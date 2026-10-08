@@ -80,7 +80,7 @@ void KColData::narrowPolygon_EachBlock(const u16 *prismArray) {
         /// so do not parse out the prism index and directly store it in the cache.
         *(m_prismCacheTop++) = *m_prismIter;
 
-        if (m_prismCacheTop == m_prismCache.end()) {
+        if (m_prismCacheTop == m_prismCache.data() + m_prismCache.size()) {
             --m_prismCacheTop;
             return;
         }
@@ -157,15 +157,15 @@ bool KColData::checkSphereSingle(f32 *distOut, EGG::Vector3f *fnrmOut, u16 *flag
     }
 
     while (*++m_prismIter != 0) {
-        if (m_prismCacheTop != m_prismCache.begin()) {
+        if (m_prismCacheTop != m_prismCache.data()) {
             u16 *puVar10 = m_prismCacheTop - 1;
             while (*m_prismIter != *puVar10) {
-                if (puVar10-- < m_prismCache.begin()) {
+                if (puVar10-- < m_prismCache.data()) {
                     break;
                 }
             }
 
-            if (puVar10 >= m_prismCache.begin()) {
+            if (puVar10 >= m_prismCache.data()) {
                 continue;
             }
         }

@@ -28,16 +28,18 @@ public:
     void startGhostProxies();
     void endGhostProxies();
 
-    [[nodiscard]] const KPadPlayer &playerInput() const {
-        return m_playerInput;
+    /// @brief The input state of player idx. Players are numbered as in RaceConfig; player 0 is the local one.
+    [[nodiscard]] const KPadPlayer &playerInput(size_t idx = 0) const {
+        return m_playerInputs[idx];
     }
 
-    [[nodiscard]] KPadHostController *hostController() {
-        return m_hostController;
+    /// @brief The externally driven controller of player idx (the local player, or a CPU driven by the host).
+    [[nodiscard]] KPadHostController *hostController(size_t idx = 0) {
+        return m_hostControllers[idx];
     }
 
     void setGhostPad(const u8 *inputs, bool driftIsAuto);
-    void setHostPad(bool driftIsAuto);
+    void setHostPad(bool driftIsAuto, size_t idx = 0);
 
     static KPadDirector *CreateInstance();
     static void DestroyInstance();
@@ -52,9 +54,13 @@ private:
     KPadDirector();
     ~KPadDirector() override;
 
-    KPadPlayer m_playerInput;
-    KPadGhostController *m_ghostController;
-    KPadHostController *m_hostController;
+    static constexpr size_t MAX_PLAYERS = 12;
+
+    [[nodiscard]] size_t playerCount() const;
+
+    std::array<KPadPlayer, MAX_PLAYERS> m_playerInputs;
+    KPadGhostController *m_ghostController; ///< Drives player 0 when it is a ghost.
+    std::array<KPadHostController *, MAX_PLAYERS> m_hostControllers;
 
     static KPadDirector *s_instance; ///< @addr{0x809BD70C}
 };

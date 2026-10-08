@@ -51,6 +51,12 @@ void ObjectSanbo::calcMove() {
     m_yVel -= GRAVITY;
     setPos(EGG::Vector3f(railPos.x, m_yVel + pos().y, railPos.z));
 
+    // Not in the original game as a separate assignment -- m_tangent was only ever set once in
+    // init() from the static spawn rotation, so checkSphere()'s setMatrixTangentTo() kept facing
+    // the pokey the same way forever even as it walked around a curving rail.
+    m_tangent = m_railInterpolator->curTangentDir();
+    m_tangent.normalise();
+
     checkSphere();
 }
 
