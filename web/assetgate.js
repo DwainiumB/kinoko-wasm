@@ -181,6 +181,16 @@
       try { local = (await fetch('assets/' + MARKER, { method: 'HEAD', cache: 'no-store' })).ok; } catch (e) {}
     }
     if (local) { startApp(); return; }
+    // A folder picked earlier: if the browser still lets this page read it, go straight in without showing the picker. This is what
+    // makes a page reload (an online race starts by reloading every player's page) seamless; Chromium keeps the permission for the
+    // tab, or for good if "Allow on every visit" was chosen in its prompt. Otherwise fall through to the picker's Reconnect button.
+    try {
+      const stored = await idbGet('dir');
+      if (stored && stored.queryPermission && (await stored.queryPermission({ mode: 'read' })) === 'granted') {
+        const root = await findRoot(stored);
+        if (root && !(await connect(handleProvider(root, stored.name)))) { startApp(); return; }
+      }
+    } catch (e) { provider = null; }
     await pickFlow(startApp);
   })();
 })();
