@@ -29,7 +29,13 @@ yourself from your own copy of the game, on your own computer, and the page read
    ```
    It should print `ok`. If you get "No module named ...", the packages went into a different Python than the one you run: use the
    same command (`python`, `py` or `python3`) for the install and for `export_all.py`.
-5. On Linux, if pip says "externally-managed-environment", make a virtual environment first:
+5. **Windows notes:**
+   - If typing `python` opens the Microsoft Store instead of printing a version, Python is not installed yet (or not on PATH): install it
+     from python.org as in step 1, then open a *new* terminal window.
+   - Put paths that contain spaces in quotes, e.g. `python tools/export_all.py "C:\Games\Mario Kart Wii\files"`.
+   - Windows can refuse very long file paths. Extract the game close to the drive root (for example `C:\mkw`) rather than deep inside
+     other folders.
+6. On Linux, if pip says "externally-managed-environment", make a virtual environment first:
    `python3 -m venv .venv && source .venv/bin/activate`, then run the install again.
 
 ## 2. Extract the game files
