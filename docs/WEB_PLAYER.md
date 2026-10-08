@@ -5,9 +5,32 @@ yourself from your own copy of the game, on your own computer, and the page read
 
 ## 1. What you need
 - Your own Mario Kart Wii disc image (tested with a **PAL** dump; other regions are untested).
-- Python 3.10+ with `numpy` and `pillow`: `pip install numpy pillow`
+- Python 3.10 or newer, plus two add-on packages, `numpy` and `pillow` (see below).
 - This repository (`git clone https://github.com/DwainiumB/kinoko-wasm` or "Download ZIP").
 - A Chromium browser (Chrome or Edge) is recommended: it can remember the folder you pick. Firefox and Safari work but ask again every visit.
+
+### Installing Python, numpy and pillow
+1. **Python:** download it from https://www.python.org/downloads/ and run the installer. On Windows, tick **"Add python.exe to PATH"**
+   on the first screen. (On macOS or Linux Python 3 is often already installed.)
+2. **Check it works:** open a terminal (Windows: Start menu > "Command Prompt" or "PowerShell"; macOS: Terminal) and run:
+   ```
+   python --version
+   ```
+   It should print 3.10 or higher. On macOS/Linux the command may be `python3` instead of `python`; use that name for everything below.
+3. **Install the two packages:**
+   ```
+   python -m pip install numpy pillow
+   ```
+   (`pillow` is the package that provides the `PIL` module the tools import.) If you see "pip is not recognized", use
+   `py -m pip install numpy pillow` on Windows, or `python3 -m pip install numpy pillow` on macOS/Linux.
+4. **Check it worked:**
+   ```
+   python -c "import numpy, PIL; print('ok')"
+   ```
+   It should print `ok`. If you get "No module named ...", the packages went into a different Python than the one you run: use the
+   same command (`python`, `py` or `python3`) for the install and for `export_all.py`.
+5. On Linux, if pip says "externally-managed-environment", make a virtual environment first:
+   `python3 -m venv .venv && source .venv/bin/activate`, then run the install again.
 
 ## 2. Extract the game files
 In Dolphin: right-click the game > Properties > Filesystem tab > right-click **Partition 1: DATA** (the data partition) >
