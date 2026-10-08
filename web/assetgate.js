@@ -86,9 +86,13 @@
       <p>This page contains the physics engine only &mdash; no Mario Kart Wii assets are hosted here.
          It runs on the game files from <b>your own copy of the game</b>, read locally by your browser; nothing is uploaded.</p>
       <ol style="padding-left:20px">
-        <li>On your machine, run Kinoko's export tools on your own game dump (<code>tools/export_tracks.py</code>, <code>export_objects.py</code>, <code>export_effects.py</code>, &hellip;).
-            They write a <code>web/assets</code> folder. Tested with a <b>PAL</b> game dump only; other regions are untested.</li>
-        <li>Pick that folder below.</li>
+        <li>Get the exporter scripts: <a href="https://github.com/DwainiumB/kinoko-wasm/tree/main/tools" style="color:#9fd8ff" target="_blank" rel="noopener">the <code>tools</code> folder</a>
+            (download the repo as a ZIP, or clone it). You need Python 3 with <code>numpy</code> and <code>pillow</code>.</li>
+        <li>Extract your own Mario Kart Wii disc to a folder, then run
+            <code>python tools/export_all.py &lt;that folder&gt;</code> (about 6 minutes). It writes a <code>web/assets</code> folder.
+            Tested with a <b>PAL</b> game dump only; other regions are untested.
+            <a href="https://github.com/DwainiumB/kinoko-wasm/blob/main/docs/WEB_PLAYER.md" style="color:#9fd8ff" target="_blank" rel="noopener">Step-by-step guide</a>.</li>
+        <li>Pick that <code>assets</code> folder below.</li>
       </ol>
       <div id="gateBtns" style="margin:14px 0"></div>
       <div id="gateMsg" style="color:#9fd8ff;white-space:pre-wrap"></div>
