@@ -19,4 +19,4 @@ new_sqlite_classes = ["Room", "Lobby"]
 
 [vars]
 # Comma-separated list of page origins allowed to use the relay, e.g. "https://dwainiumb.github.io". "*" allows any page.
-ALLOWED_ORIGINS = "*"
+ALLOWED_ORIGINS = "https://dwainiumb.github.io,http://localhost:8081"
