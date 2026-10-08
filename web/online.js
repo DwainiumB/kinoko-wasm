@@ -1,6 +1,6 @@
 // Online play transport for Kinoko web: rooms, WebRTC peer connections and the pose packet format.
 //
-// The page talks to a small signalling relay (server/signal.js) only to set up WebRTC; every race message then goes
+// The page talks to a small signalling relay (server/worker, a Cloudflare Worker) only to set up WebRTC; every race message then goes
 // peer to peer over two data channels per pair: 'ctrl' (reliable, JSON) and 'fast' (unordered, no retransmits, binary
 // pose packets, so a lost packet is never waited for).
 //
@@ -36,21 +36,41 @@
     constructor({ relay, room, id, cb }) {
       this.relay = relay.replace(/\/$/, ''); this.room = room; this.id = id || randId(); this.cb = cb || {};
       this.peers = new Map();     // id -> {pc, ctrl, fast, open, rtt, pendingIce, remoteSet}
-      this.es = null; this.closed = false;
+      this.ws = null; this.closed = false; this.welcomed = false; this.retry = 0;
     }
 
     async connect() {
-      const r = await fetch(this.relay + '/join', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ room: this.room, id: this.id }) });
-      if (!r.ok) throw new Error('relay refused the room: ' + (await r.text()));
-      const { peers } = await r.json();
-      await new Promise((ok, no) => {
-        const es = this.es = new EventSource(`${this.relay}/events?room=${encodeURIComponent(this.room)}&id=${encodeURIComponent(this.id)}`);
-        es.onopen = () => ok();
-        es.onerror = () => { if (!this.closed && es.readyState === 2) this.cb.onStatus && this.cb.onStatus('Lost the relay'); no(new Error('could not reach the relay at ' + this.relay)); };
-        es.onmessage = ev => { try { this.onRelay(JSON.parse(ev.data)); } catch (e) { console.warn('relay message', e); } };
-      });
-      peers.forEach(p => this.meet(p));
+      await this.open();
       this.pinger = setInterval(() => this.broadcast({ t: 'ping', ts: performance.now() }), 1000);
+    }
+
+    // One WebSocket to the relay's room. Resolves once the relay has welcomed us (and we have started to meet the members
+    // already inside); after that a dropped socket is re-opened by itself, because only a (re)join needs the relay.
+    open() {
+      return new Promise((ok, no) => {
+        const url = `${this.relay.replace(/^http/, 'ws')}/room/${encodeURIComponent(this.room)}?id=${encodeURIComponent(this.id)}`;
+        let ws; try { ws = this.ws = new WebSocket(url); } catch (e) { return no(new Error('bad relay address: ' + this.relay)); }
+        let first = !this.welcomed;
+        ws.onmessage = ev => {
+          if (ev.data === 'pong') return;
+          let m; try { m = JSON.parse(ev.data); } catch (e) { return; }
+          if (m.t === 'welcome') {
+            this.welcomed = true; this.retry = 0;
+            // after a reconnect the players we are already connected to must not be torn down and re-offered
+            m.peers.forEach(p => { const P = this.peers.get(p); if (!(P && P.open)) this.meet(p); });
+            if (first) { first = false; ok(); } else this.cb.onStatus && this.cb.onStatus('Reconnected to the relay');
+          } else this.onRelay(m).catch(e => console.warn('relay message', e));
+        };
+        ws.onopen = () => { clearInterval(this.keep); this.keep = setInterval(() => { try { ws.send('ping'); } catch (e) {} }, 25000); };
+        ws.onclose = ev => {
+          clearInterval(this.keep);
+          if (this.closed || ws !== this.ws) return;
+          if (ev.code === 4001) { this.closed = true; this.cb.onStatus && this.cb.onStatus('This room was joined from another tab'); return; }
+          if (first) return no(new Error(ev.reason || `could not reach the relay at ${this.relay} (or the room is full)`));
+          this.cb.onStatus && this.cb.onStatus('Lost the relay, reconnecting...');
+          setTimeout(() => { if (!this.closed) this.open().catch(() => {}); }, Math.min(10000, 500 * 2 ** this.retry++));
+        };
+      });
     }
 
     // The peer with the greater id makes the offer, so two peers that find each other at once never collide.
@@ -106,7 +126,7 @@
     }
 
     signal(to, data) {
-      fetch(this.relay + '/send', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ room: this.room, from: this.id, to, data }) }).catch(() => {});
+      if (this.ws && this.ws.readyState === 1) this.ws.send(JSON.stringify({ t: 'send', to, data }));
     }
 
     drop(id) {
@@ -124,10 +144,25 @@
 
     close() {
       this.closed = true; clearInterval(this.pinger);
-      if (this.es) this.es.close();
+      clearInterval(this.keep);
+      if (this.ws) { try { this.ws.close(1000); } catch (e) {} }
       [...this.peers.keys()].forEach(id => this.drop(id));
     }
   }
 
-  window.OnlineRoom = OnlineRoom; window.packPose = packPose; window.unpackPose = unpackPose; window.POSE_WORDS = POSE_WORDS;
+  // The public lobby list on the relay (see server/worker). Every call rejects with an Error whose message is the relay's reason.
+  const lobbyCall = async (relay, path, body) => {
+    const r = await fetch(relay.replace(/\/$/, '') + path, body === undefined ? {} : { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body), keepalive: true });
+    let j = {}; try { j = await r.json(); } catch (e) {}
+    if (!r.ok) throw new Error(j.error || `relay answered ${r.status}`);
+    return j;
+  };
+  const OnlineLobby = {
+    list: relay => lobbyCall(relay, '/rooms').then(j => j.rooms || []),
+    register: (relay, info) => lobbyCall(relay, '/rooms', info),            // { room, name, host, track, players, hostToken? } -> { hostToken }
+    update: (relay, info) => lobbyCall(relay, '/rooms/update', info),       // { room, hostToken, players?, track?, started? }
+    close: (relay, info) => lobbyCall(relay, '/rooms/close', info),
+  };
+
+  window.OnlineRoom = OnlineRoom; window.OnlineLobby = OnlineLobby; window.packPose = packPose; window.unpackPose = unpackPose; window.POSE_WORDS = POSE_WORDS;
 })();

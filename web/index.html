@@ -53,7 +53,8 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/utils/SkeletonUtils.js"></script>
   <script src="nw4r_ef.js?v=6"></script>
   <script src="kartfx.js?v=16"></script>
-  <script src="online.js?v=1"></script>
+  <script src="config.js?v=1"></script>
+  <script src="online.js?v=2"></script>
   <script src="hud.js?v=3"></script>
   <script src="cpu.js?v=4"></script>
   <script src="kinoko_web.js?v=16"></script>
@@ -3942,7 +3943,7 @@
       const save = o => { try { if (o) sessionStorage.setItem('mkw_online', JSON.stringify(o)); else sessionStorage.removeItem('mkw_online'); } catch (e) {} };
       const sess = load();
       const defaultRelay = () => { try { return localStorage.getItem('mkw_relay') || ''; } catch (e) { return ''; } };
-      const relayGuess = () => defaultRelay() || `http://${location.hostname || 'localhost'}:8787`;
+      const relayGuess = () => defaultRelay() || window.KINOKO_RELAY || 'http://localhost:8787';   // config.js sets KINOKO_RELAY; localhost is `npx wrangler dev`
       const MAXF = 60 * 60 * 10;
 
       class NetRec {
@@ -3989,9 +3990,16 @@
         let h = `<div><strong>Online</strong> <small>${esc(N.log || '')}</small></div>`;
         if (!inRoom) {
           h += `<div class="row">Name <input id="netName" size="12" maxlength="16" value="${esc(N.name || (localStorage.getItem('mkw_name') || 'Player'))}"></div>
-                <div class="row">Relay <input id="netRelay" size="26" value="${esc(relayGuess())}"></div>
-                <div class="row"><button id="netHost">Host a room</button> or code <input id="netCode" size="5" maxlength="8" style="text-transform:uppercase"><button id="netJoin">Join</button></div>
-                <small>Start the relay with <code>node server/signal.js</code>. Everyone must reach the same relay address.</small>`;
+                <div class="row" style="margin-top:10px"><strong>Public lobbies</strong> <button id="netRefresh">Refresh</button></div>
+                <div id="netLobby">${lobbyHtml()}</div>
+                <div class="row" style="margin-top:10px"><strong>Join private room</strong></div>
+                <div class="row"><input id="netCode" size="10" maxlength="8" placeholder="Room code" style="text-transform:uppercase"><button id="netJoin">Join</button></div>
+                <div class="row" style="margin-top:10px"><strong>Host room</strong></div>
+                <div class="row"><button id="netHost">Create room</button> <label><input type="checkbox" id="netPublic" checked> Public</label></div>
+                <div class="row"><input id="netLobbyName" size="28" maxlength="32" placeholder="Lobby name (optional)"></div>
+                <details style="margin-top:8px"><summary><small>Relay server</small></summary>
+                  <div class="row"><input id="netRelay" size="30" value="${esc(relayGuess())}"></div>
+                  <small>The relay only introduces players to each other (see docs/ONLINE.md). Everyone must use the same one.</small></details>`;
         } else {
           h += `<div class="row">Room <strong style="font-size:18px;letter-spacing:2px">${esc(N.room)}</strong> <small>${N.host ? 'you are the host' : ''}</small></div>`;
           h += `<div class="pl">${esc(N.name)} (you) <small>${esc(charName(selectedCharObj.id))} / ${esc(vehName(selectedVehObj.id))}</small></div>`;
@@ -4007,20 +4015,73 @@
         panel.innerHTML = h;
         const $ = id => panel.querySelector('#' + id);
         if (!inRoom) {
-          const go = host => {
-            const name = ($('netName').value || 'Player').trim().slice(0, 16), relay = $('netRelay').value.trim();
-            let room = host ? Array.from(crypto.getRandomValues(new Uint8Array(4)), x => 'ABCDEFGHJKLMNPQRSTUVWXYZ'[x % 24]).join('') : $('netCode').value.trim().toUpperCase();
-            if (!room) { N.log = 'Enter a room code'; return draw(); }
-            try { localStorage.setItem('mkw_name', name); localStorage.setItem('mkw_relay', relay); } catch (e) {}
-            const s = { relay, room, id: (sess && sess.id) || crypto.getRandomValues(new Uint32Array(2)).join('').slice(0, 14).padStart(8, '0'), name, host, start: false, expected: [] };
-            save(s); connect(s);
-          };
-          $('netHost').onclick = () => go(true); $('netJoin').onclick = () => go(false);
+          $('netHost').onclick = () => startSession(true); $('netJoin').onclick = () => startSession(false);
+          $('netRefresh').onclick = () => refreshLobby(true);
+          $('netCode').onkeydown = e => { if (e.key === 'Enter') startSession(false); };
+          refreshLobby();
         } else {
           if ($('netStart')) $('netStart').onclick = () => startRace();
-          $('netLeave').onclick = () => { save(null); if (N.conn) N.conn.close(); location.reload(); };
+          $('netLeave').onclick = () => { lobbyClose(); save(null); if (N.conn) N.conn.close(); location.reload(); };
         }
       }
+
+      // ---- lobby ----
+      const trackName = id => (TRACKS.find(t => t.id === id) || { name: 'any track' }).name;
+      const lobbyHtml = () => {
+        if (N.lobbyErr) return `<small>${esc(N.lobbyErr)}</small>`;
+        if (!N.lobby) return '<small>Loading...</small>';
+        if (!N.lobby.length) return '<small>No public rooms right now. Create one below.</small>';
+        return N.lobby.map(r => `<div class="pl"><strong>${esc(r.name)}</strong> <small>${esc(r.host)} &middot; ${esc(trackName(r.track))} &middot; ${r.players}/${r.max}</small> <button data-join="${esc(r.room)}">Join</button></div>`).join('');
+      };
+      let lobbyBusy = false, lobbyAt = 0;
+      async function refreshLobby(force) {
+        if (lobbyBusy || N.room || !open || (!force && Date.now() - lobbyAt < 3000)) return;
+        lobbyBusy = true; lobbyAt = Date.now();
+        const inp = panel.querySelector('#netRelay'), relay = (inp && inp.value.trim()) || relayGuess();
+        try { N.lobby = await OnlineLobby.list(relay); N.lobbyErr = ''; }
+        catch (e) { N.lobby = null; N.lobbyErr = `Can't reach the relay at ${relay}. Online play needs a relay server (docs/ONLINE.md).`; }
+        lobbyBusy = false;
+        const el = panel.querySelector('#netLobby');
+        if (el) {
+          el.innerHTML = lobbyHtml();
+          el.querySelectorAll('[data-join]').forEach(b => { b.onclick = () => startSession(false, b.dataset.join); });
+        }
+      }
+      setInterval(() => { if (open && !N.room) refreshLobby(); }, 8000);
+
+      const randCode = () => Array.from(crypto.getRandomValues(new Uint8Array(4)), x => 'ABCDEFGHJKLMNPQRSTUVWXYZ'[x % 24]).join('');
+      async function startSession(host, joinCode) {
+        const q = id => panel.querySelector('#' + id);
+        const name = ((q('netName') && q('netName').value) || localStorage.getItem('mkw_name') || 'Player').trim().slice(0, 16) || 'Player';
+        const relay = (q('netRelay') && q('netRelay').value.trim()) || relayGuess();
+        const pub = host && !!(q('netPublic') && q('netPublic').checked);
+        const lobbyName = ((q('netLobbyName') && q('netLobbyName').value) || '').trim().slice(0, 32) || `${name}'s room`;
+        let room = host ? randCode() : String(joinCode || (q('netCode') && q('netCode').value) || '').trim().toUpperCase();
+        if (!room) { N.log = 'Enter a room code'; return draw(); }
+        try { localStorage.setItem('mkw_name', name); localStorage.setItem('mkw_relay', relay); } catch (e) {}
+        let hostToken = null;
+        if (pub) {
+          N.log = 'creating the room...'; draw();
+          for (let tries = 0; ; tries++) {
+            try { hostToken = (await OnlineLobby.register(relay, { room, name: lobbyName, host: name, track: selectedTrackObj.id, players: 1 })).hostToken; break; }
+            catch (e) {
+              if (/taken/.test(e.message) && tries < 3) { room = randCode(); continue; }
+              N.log = 'could not create the room: ' + e.message; return draw();
+            }
+          }
+        }
+        const s = { relay, room, id: (sess && sess.id) || crypto.getRandomValues(new Uint32Array(2)).join('').slice(0, 14).padStart(8, '0'), name, host, start: false, expected: [], hostToken, pub, lobbyName };
+        save(s); connect(s);
+      }
+      // The host of a public room keeps its lobby entry alive (it expires 75 s after the last update) and up to date.
+      let lobbyTimer = 0;
+      const lobbyInfo = () => { const s = load(); return s && s.host && s.pub && s.hostToken ? s : null; };
+      function lobbyPing() {
+        const s = lobbyInfo(); if (!s || s.start) return;
+        OnlineLobby.update(s.relay, { room: s.room, hostToken: s.hostToken, players: N.players.size + 1, track: selectedTrackObj.id })
+          .catch(() => OnlineLobby.register(s.relay, { room: s.room, name: s.lobbyName, host: s.name, track: selectedTrackObj.id, players: N.players.size + 1, hostToken: s.hostToken }).catch(() => {}));
+      }
+      function lobbyClose() { const s = lobbyInfo(); if (s) OnlineLobby.close(s.relay, { room: s.room, hostToken: s.hostToken }).catch(() => {}); }
 
       // ---- connection ----
       let hostSince = 0;
@@ -4028,11 +4089,12 @@
         N.room = s.room; N.id = s.id; N.name = s.name; N.host = s.host; N.race = !!s.start; N.expected = s.expected || [];
         if (s.host) N.hostId = s.id;
         N.log = 'connecting...'; open = true; draw();
+        clearInterval(lobbyTimer); if (lobbyInfo() && !s.start) lobbyTimer = setInterval(lobbyPing, 20000);
         if (N.race) { N.released = false; N.holdUntil = 0; N.raceLoadedAt = performance.now(); }
         N.conn = new OnlineRoom({ relay: s.relay, room: s.room, id: s.id, cb: {
           onStatus: t => { N.log = t; draw(); },
-          onPeerOpen: id => { N.players.set(id, N.players.get(id) || { id }); hello(id); draw(); },
-          onPeerGone: id => { const p = N.players.get(id); if (p && p.rig) { scene.remove(p.rig.group); } N.players.delete(id); draw(); },
+          onPeerOpen: id => { N.players.set(id, N.players.get(id) || { id }); hello(id); draw(); lobbyPing(); },
+          onPeerGone: id => { const p = N.players.get(id); if (p && p.rig) { scene.remove(p.rig.group); } N.players.delete(id); draw(); lobbyPing(); },
           onMsg: onMsg, onPose: (id, pose) => { const p = N.players.get(id); if (p && p.rec) p.rec.put(pose); } } });
         try { await N.conn.connect(); N.log = N.race ? 'racing online' : 'connected'; } catch (e) { N.log = String(e.message || e); }
         draw();
@@ -4074,6 +4136,7 @@
         const ids = [...N.players.keys()];
         try { localStorage.setItem('mkw_track', String(selectedTrackObj.id)); localStorage.setItem('mkw_char', charSelect.value); localStorage.setItem('mkw_veh', vehSelect.value); } catch (e) {}
         N.conn.broadcast({ t: 'go', track: parseInt(trackSelect.value), expected: [...ids, N.id] });
+        { const ls = lobbyInfo(); if (ls) OnlineLobby.update(ls.relay, { room: ls.room, hostToken: ls.hostToken, started: true }).catch(() => {}); clearInterval(lobbyTimer); }
         const s = load(); s.start = true; s.expected = ids; save(s);
         setTimeout(() => location.reload(), 250);
       }

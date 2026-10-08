@@ -1,0 +1,14 @@
+{
+  "name": "kinoko-relay",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Signalling relay and public lobby list for Kinoko web online play (Cloudflare Worker)",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "node test.mjs"
+  },
+  "devDependencies": {
+    "wrangler": "^4"
+  }
+}

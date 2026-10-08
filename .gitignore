@@ -45,3 +45,6 @@ tools/scratch_k.py
 tools/discord/
 tools/*.bak*
 tools/*.npz
+
+# The old Node/SSE relay; replaced by server/worker (Cloudflare Worker) and no longer compatible with web/online.js
+server/signal.js
