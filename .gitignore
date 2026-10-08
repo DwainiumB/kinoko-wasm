@@ -21,3 +21,27 @@ tools/gpu_spike/*.log
 build-gpu-spike/
 build-cov/
 build-*/
+
+# Local TAS-search tooling (kept on disk, not part of the web player repo)
+source/host/KBruteSystem.*
+source/host/KDriveSystem.*
+source/host/KSearchSystem.*
+tools/beam_search*.py
+tools/brute_force.py
+tools/brute_gui*
+tools/dagger.py
+tools/drive_policy.py
+tools/evolve.py
+tools/fast_features.py
+tools/gpu_*.py
+tools/gpu_spike/
+tools/kinoko_search.py
+tools/policy_net.py
+tools/state_extent.py
+tools/surrogate*.py
+tools/sweep_monitor.py
+tools/train_*.py
+tools/scratch_k.py
+tools/discord/
+tools/*.bak*
+tools/*.npz

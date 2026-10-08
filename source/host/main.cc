@@ -1,7 +1,4 @@
-#include "host/KBruteSystem.hh"
-#include "host/KDriveSystem.hh"
 #include "host/KReplaySystem.hh"
-#include "host/KSearchSystem.hh"
 #include "host/KTestSystem.hh"
 #include "host/Option.hh"
 
@@ -47,9 +44,6 @@ int main(int argc, char **argv) {
     const std::unordered_map<std::string, std::function<KSystem *()>> modeMap = {
             {"test", []() -> KSystem * { return KTestSystem::CreateInstance(); }},
             {"replay", []() -> KSystem * { return KReplaySystem::CreateInstance(); }},
-            {"brute", []() -> KSystem * { return KBruteSystem::CreateInstance(); }},
-            {"drive", []() -> KSystem * { return KDriveSystem::CreateInstance(); }},
-            {"search", []() -> KSystem * { return KSearchSystem::CreateInstance(); }},
     };
 
     if (argc < 2) {
