@@ -17,7 +17,12 @@ namespace Kinoko {
 
 namespace {
 
+#ifdef _WIN32
 extern "C" char __ImageBase;
+#else
+// Only Windows (PE) exposes the module base address; elsewhere this debug-only value is a constant.
+char __ImageBase = 0;
+#endif
 
 /// Debug: the ExpHeap used block containing heap offset `off`, as "block=<offset> size=<n> vt=<rva
 /// of first word>".

@@ -7,7 +7,8 @@
 #include <game/system/KPadDirector.hh>
 #include <game/system/RaceManager.hh>
 
-// fprintf() takes the f32 state values as doubles; the promotion is intended, so the project-wide -Werror is relaxed here.
+// fprintf() takes the f32 state values as doubles; the promotion is intended, so the project-wide
+// -Werror is relaxed here.
 #pragma GCC diagnostic ignored "-Wdouble-promotion"
 
 namespace Kinoko::Host {
