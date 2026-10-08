@@ -24,6 +24,20 @@ def py(script, *args):
     return [sys.executable, os.path.join(HERE, script), *args]
 
 
+def copy_common(mk):
+    """The page loads the game's shared archive (physics parameters, object flow table) as assets/common/Common.szs, and the asset
+    picker uses it to recognise a valid assets folder. No exporter makes it: it is a plain copy of Race/Common.szs."""
+    def run():
+        import shutil
+        out = os.path.join(ASSETS, 'common')
+        os.makedirs(out, exist_ok=True)
+        shutil.copyfile(os.path.join(mk, 'Race', 'Common.szs'), os.path.join(out, 'Common.szs'))
+        print('copied Race/Common.szs -> %s' % os.path.join(out, 'Common.szs'))
+        return 0
+    run.label = 'copy Common.szs'
+    return run
+
+
 def ui_language(mk):
     """The race HUD art comes in per-language archives (Scene/UI/Race_<letter>.szs); use English if present, else any."""
     ui = os.path.join(mk, 'Scene', 'UI')
@@ -37,6 +51,7 @@ def ui_language(mk):
 def build_steps(mk):
     import export_tracks
     steps = [
+        ('common', 'copy Race/Common.szs (the page and the asset picker need it)', [copy_common(mk)]),
         ('tracks', 'track + sky models, course data, objects (every course)', [py('export_tracks.py', mk)]),
         ('enemy', 'CPU routes', [py('export_enemy_paths.py')]),
         ('minimap', 'minimaps', [py('export_minimap.py')]),
@@ -110,8 +125,13 @@ def main():
         for j, cmd in enumerate(cmds):
             if len(cmds) > 1 and (j % 8 == 0 or j == len(cmds) - 1):
                 print('   (%d/%d)' % (j + 1, len(cmds)), flush=True)
-            if subprocess.call(cmd, cwd=HERE) != 0:
-                failed.append(' '.join(os.path.basename(c) for c in cmd[1:3]))
+            try:
+                bad = cmd() != 0 if callable(cmd) else subprocess.call(cmd, cwd=HERE) != 0
+            except Exception as e:
+                print('  ! %s' % e)
+                bad = True
+            if bad:
+                failed.append(cmd.label if callable(cmd) else ' '.join(os.path.basename(c) for c in cmd[1:3]))
         results.append((name, time.time() - t0, failed))
 
     print('\n==== summary (%.0f s total) ====' % (time.time() - t_all))

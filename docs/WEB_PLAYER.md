@@ -53,6 +53,11 @@ It takes about 6 minutes and writes `web/assets` (roughly 700 MB). `python tools
 Open https://dwainiumb.github.io/kinoko-wasm/ , press **Choose assets folder**, and select the `web/assets` folder you just
 made (the repository folder or `web` also works). Everything is read from your disk by your browser.
 
+## If the page says "That folder has no common/Common.szs"
+Your `assets` folder was made by an older version of `export_all.py`, which forgot one file. Update the repository and run
+`python tools/export_all.py "C:\path\to\extracted\files" --only common` (takes a second), or copy `Race/Common.szs` from your game files into
+`web/assets/common/` by hand. Then pick the `assets` folder again.
+
 ## Notes
 - `web/assets` is derived from Nintendo's files. It is git-ignored; do not upload or share it.
 - Running the page from a local server that already has `web/assets` (for example `python -m http.server` inside `web/`) skips the picker.

@@ -105,7 +105,9 @@
 
   // Checks the folder looks right; returns an error message or null.
   async function validate(p) {
-    if (!(await p.get(MARKER))) return `That folder has no ${MARKER} -- pick the assets folder your export tools wrote (web/assets).`;
+    if (!(await p.get(MARKER))) return `That folder has no ${MARKER}. Pick the assets folder your export tools wrote (web/assets).\n`
+      + 'If it was made by an older tools/export_all.py, copy Race/Common.szs from your game files into assets/common/ (or update the repo and run: '
+      + 'python tools/export_all.py <your game folder> --only common), then try again.';
     return null;
   }
 
@@ -143,7 +145,9 @@
         try {
           const h = await window.showDirectoryPicker({ id: 'kinoko-assets', mode: 'read' });
           const root = await findRoot(h);
-          if (!root) { u.msg(`No ${MARKER} found in "${h.name}" -- pick the assets folder your export tools wrote (web/assets).`); return; }
+          if (!root) { u.msg(`No ${MARKER} found in "${h.name}". Pick the assets folder your export tools wrote (web/assets).\n`
+            + 'If it was made by an older tools/export_all.py, copy Race/Common.szs from your game files into assets/common/ (or update the repo and run: '
+            + 'python tools/export_all.py <your game folder> --only common), then try again.'); return; }
           await idbPut('dir', h);
           await finish(handleProvider(root, h.name));
         } catch (e) { if (e.name !== 'AbortError') u.msg('Could not open it: ' + e.message); }
