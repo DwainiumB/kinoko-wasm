@@ -19,6 +19,13 @@ public:
 
     [[nodiscard]] const EGG::Matrix34f &getUpdatedMatrix(u32 timeOffset) override;
 
+    /// Added for Kinoko web's renderer: the plant is an ObjectDrivable, which never loads a model,
+    /// so the base check would hide it from the object export and the page would draw it frozen at
+    /// its hidden start position. It is drawn with the WLwallGC model from the course archive.
+    [[nodiscard]] bool hasModel() const override {
+        return true;
+    }
+
     /// @addr{0x8086C648}
     [[nodiscard]] f32 colRadiusAdditionalLength() const override {
         return (m_initialPos - m_targetPos).length();

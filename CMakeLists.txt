@@ -29,6 +29,8 @@ set(RK_INCLUDE_DIRS
 
 # Source files
 file(GLOB_RECURSE SOURCE_FILES CONFIGURE_DEPENDS ${CMAKE_SOURCE_DIR}/**/*.cc)
+# server/worker holds a Node project (npm packages ship C++ sources of their own); it is not part of the engine
+list(FILTER SOURCE_FILES EXCLUDE REGEX ".*/node_modules/.*")
 list(FILTER SOURCE_FILES EXCLUDE REGEX ".*/host/main\\.cc$")
 list(FILTER SOURCE_FILES EXCLUDE REGEX ".*/host/web_bridge\\.cc$")
 

@@ -185,7 +185,7 @@ public:
     /// sub-objects carry the real models) -- the base game would never issue a draw call for one of
     /// these, so Kinoko web's renderer skips them too instead of treating the bare id/pos/rot as a
     /// real visible object. Added for Kinoko web's renderer, not part of the original game.
-    [[nodiscard]] bool hasModel() const {
+    [[nodiscard]] virtual bool hasModel() const {
         return m_drawMdl != nullptr;
     }
 
