@@ -43,9 +43,18 @@ In Dolphin: right-click the game > Properties > Filesystem tab > right-click **P
 **Extract Entire Partition**, and choose a folder. Use the `files` folder inside the result: it contains `Race/`, `Scene/` and `sound/`.
 
 ## 3. Run the exporter
+Open a terminal **inside the repository folder** (the one that contains `tools`, `web` and `docs`; if you downloaded the ZIP, unzip it
+first). On Windows you can open the folder in File Explorer, click the address bar, type `cmd` and press Enter. Or `cd` there:
+```
+cd "C:\path\to\kinoko-wasm"
+```
+Then run:
 ```
 python tools/export_all.py "C:\path\to\extracted\files"
 ```
+If you see `can't open file '...\tools\export_all.py': No such file or directory`, the terminal is in the wrong folder (often
+`C:\Windows\System32`): run the `cd` command above first, or give the full path to `export_all.py`.
+
 It takes about 6 minutes and writes `web/assets` (roughly 700 MB). `python tools/export_all.py --list` shows the steps, and
 `--only` / `--skip` re-run or skip some. If a step fails, the end of the log prints the command to re-run just that step.
 
