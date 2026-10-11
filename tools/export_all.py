@@ -71,6 +71,35 @@ def build_steps(mk):
     return steps
 
 
+def find_game_root(start, max_depth=4):
+    """Dolphin's extractions nest the game files (<chosen folder>/DATA/files/Race/Common.szs, or .../files/...). If `start` itself is not the
+    folder that holds Race/Common.szs, look a few levels below it, shallowest first, and return the first folder that does."""
+    def has(d):
+        try:
+            names = {n.lower(): n for n in os.listdir(d)}
+        except OSError:
+            return False
+        race = names.get('race')
+        return bool(race) and os.path.isfile(os.path.join(d, race, 'Common.szs'))
+
+    if has(start):
+        return start
+    level = [start]
+    for _ in range(max_depth):
+        nxt = []
+        for d in level:
+            try:
+                subs = sorted(e.path for e in os.scandir(d) if e.is_dir(follow_symlinks=False))
+            except OSError:
+                continue
+            for sub in subs:
+                if has(sub):
+                    return sub
+            nxt += subs
+        level = nxt
+    return None
+
+
 def check_game_folder(mk):
     """Returns a list of problems; the first few are fatal, the rest only cost a step."""
     need = [('Race/Common.szs', True), ('Race/Course', True), ('Race/Kart', True),
@@ -78,7 +107,7 @@ def check_game_folder(mk):
     low = {n.lower(): n for n in os.listdir(mk)} if os.path.isdir(mk) else {}
     bad = []
     if not low:
-        return [('%s is not a folder' % mk, True)]
+        return [('%s is not a folder, or it is empty' % mk, True)]
     for rel, fatal in need:
         if not os.path.exists(os.path.join(mk, *rel.split('/'))):
             bad.append(('missing %s' % rel, fatal))
@@ -100,12 +129,18 @@ def main():
     if not args.mkwii:
         ap.error('give the path to your extracted game files')
     mk = os.path.abspath(args.mkwii)
+    found = find_game_root(mk)
+    if found and os.path.normcase(found) != os.path.normcase(mk):
+        print('Using the game files in %s' % found)
+        mk = found
 
     problems = check_game_folder(mk)
     for msg, fatal in problems:
         print(('ERROR: ' if fatal else 'warning: ') + msg)
     if any(f for _, f in problems):
         print('That does not look like the extracted game data (expected Race/Common.szs, Race/Course, Race/Kart).')
+        print('I also looked up to %d folders below it. Find the folder that contains "Race" and pass that one, e.g. on Windows:' % 4)
+        print('  Get-ChildItem -Path "%s" -Recurse -Directory -Filter Race | Select-Object FullName' % mk)
         return 2
 
     steps = build_steps(mk)
