@@ -55,6 +55,10 @@ python tools/export_all.py "C:\path\to\extracted\files"
 If you see `can't open file '...\tools\export_all.py': No such file or directory`, the terminal is in the wrong folder (often
 `C:\Windows\System32`): run the `cd` command above first, or give the full path to `export_all.py`.
 
+If the folder you are in only contains another folder with the same name (common when unzipping with "Extract All"), go into it
+(`cd kinoko-wasm-main`). Run `dir` (or `ls`): you should see `tools`, `web`, `docs` and `source`. If `dir tools` does not list
+`export_all.py`, download the ZIP again from the repository's green **Code** button.
+
 It takes about 6 minutes and writes `web/assets` (roughly 700 MB). `python tools/export_all.py --list` shows the steps, and
 `--only` / `--skip` re-run or skip some. If a step fails, the end of the log prints the command to re-run just that step.
 
