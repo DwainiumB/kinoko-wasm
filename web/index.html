@@ -84,6 +84,7 @@
       </span>
       <button id="nameTagsBtn" style="margin-left: 6px;" title="Floating name tag above each loaded ghost, like the game's in-race nameplate -- click to toggle between fully opaque and a dimmer, more translucent look">Tags: on</button>
       <label style="margin-left: 8px;"><strong>Camera:</strong> </label><select id="camSelect"></select>
+      <button id="rearBtn" style="margin-left: 6px;" title="Rear camera: look behind the kart you are watching or driving, and stay there (the game's Look Back, but latched). Holding Look Back while it is on flips back to the front. Key: B (rebindable in Controls)">Rear cam: off</button>
       <label style="margin-left: 8px;"><strong>Mode:</strong> </label><select id="modeSelect"><option value="0">Time Trial</option><option value="1">VS</option></select>
       <select id="cpuSelect" title="CPU racers"></select>
       <label style="margin-left: 8px;"><strong>Ghost:</strong> </label><select id="ghostSelect" style="max-width: 260px;"><option value="">No ghost</option></select>
@@ -307,7 +308,8 @@
       "Trick Left": "KeyQ",
       "Trick Right": "KeyE",
       "Trick Down": "KeyV",
-      "Look Back": "ShiftLeft"
+      "Look Back": "ShiftLeft",
+      "Toggle Rear Camera": "KeyB"
     };
 
     // Merge over the defaults (not replace) so a key added here later still shows up for players with saved binds.
@@ -1540,7 +1542,16 @@
       { name: 'Watch the ghost',   ghost: true },   // the chase camera on the ghost; your own kart sits still and is hidden
     ];
     const chaseLike = () => camState.view === 0 || !!CAMERA_VIEWS[camState.view].ghost;
-    const camState = { view: 0, orbitAz: 0, orbitEl: 0, zoom: 1 };
+    const camState = { view: 0, orbitAz: 0, orbitEl: 0, zoom: 1, rear: false };
+    // Latched look-back. It follows the kart being driven, or the ghost being watched (a ghost-vs-ghost race), because the look-back
+    // reflection in the render loop is taken around whichever node the camera follows. Not remembered between page loads.
+    const rearBtn = document.getElementById('rearBtn');
+    function setRearCamera(on) {
+      camState.rear = !!on;
+      rearBtn.textContent = 'Rear cam: ' + (camState.rear ? 'on' : 'off');
+      rearBtn.classList.toggle('btn-blue', camState.rear);
+    }
+    rearBtn.onclick = () => { setRearCamera(!camState.rear); rearBtn.blur(); };
     try { camState.view = Math.min(parseInt(localStorage.getItem('mkw_cam')) || 0, CAMERA_VIEWS.length - 1); } catch (e) {}
     const camSelect = document.getElementById('camSelect');
     CAMERA_VIEWS.forEach((v, i) => {
@@ -1562,6 +1573,7 @@
       const n = parseInt(e.key);
       if (e.target.tagName !== 'INPUT' && n >= 1 && n <= CAMERA_VIEWS.length) setCameraView(n - 1);
       else if (e.target.tagName !== 'INPUT' && e.key === '0') setCameraView(CAMERA_VIEWS.length - 1);
+      else if (e.target.tagName !== 'INPUT' && !e.repeat && !listeningAction && userBinds['Toggle Rear Camera'] === e.code) setRearCamera(!camState.rear);
     });
 
     // Place the camera for a test view: relative to the kart's position and full rotation
@@ -4618,7 +4630,7 @@
           else { const a = gameCam.prev, b = gameCam.curr; L = i => a[i] + (b[i] - a[i]) * alpha; }
           camera.up.set(0, 1, 0);
           let ex = L(0), ey = L(1), ez = L(2), tx = L(3), ty = L(4), tz = L(5);
-          if (isDown('Look Back')) {
+          if (isDown('Look Back') !== camState.rear) {   // the toggle and the held key cancel each other out
             // The game's look-back: the camera swings to the opposite side of the kart, same height and distance,
             // so you can see what's behind you while still driving normally. Reflecting the eye and look-at point
             // through the kart's position in the horizontal plane reproduces that (their heights are unchanged).
