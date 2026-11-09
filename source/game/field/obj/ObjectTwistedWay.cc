@@ -9,7 +9,10 @@
 namespace Kinoko::Field {
 
 /// @addr{0x80813BD4}
-ObjectTwistedWay::ObjectTwistedWay(const System::MapdataGeoObj &params) : ObjectDrivable(params) {}
+/// @details +0xAC (the intro timer) is only set by init; objects initialised before the road (the
+/// floor item boxes listed before it) read it as 0.
+ObjectTwistedWay::ObjectTwistedWay(const System::MapdataGeoObj &params)
+    : ObjectDrivable(params), m_introTimer(0) {}
 
 /// @addr{0x80814918}
 ObjectTwistedWay::~ObjectTwistedWay() = default;
@@ -324,6 +327,43 @@ bool ObjectTwistedWay::checkPoleCollision(f32 radius, f32 angle, const EGG::Vect
     dist = diff;
 
     return true;
+}
+
+/// @brief The frame the wave is at: the race frame in the race, the intro timer before it.
+u32 ObjectTwistedWay::waveTime() const {
+    auto *raceMgr = System::RaceManager::Instance();
+    u32 frameCount = raceMgr->isStageReached(System::RaceManager::Stage::Race) ? raceMgr->timer() :
+                                                                                 m_introTimer;
+    return (frameCount % PERIOD_LENGTH) * 2;
+}
+
+/// @addr{0x80814428}
+/// @brief Vtable +0x110: keeps a point that came to rest on the road in the road's coordinates.
+/// Unlike the collision checks, the twist is taken from the wave even before the race.
+void ObjectTwistedWay::attachPoint(CarriedPoint &point, const EGG::Vector3f &pos) {
+    EGG::Vector3f rel = pos - this->pos();
+    f32 angle = calcWave(-rel.z / HALF_DEPTH, waveTime());
+    auto [sin, cos] = EGG::Mathf::SinCosFIdx(RAD2FIDX * angle);
+    f32 halfWidth = 0.5f * WIDTH;
+
+    point.angle = angle;
+    point.localX = rel.x / cos + sin * (halfWidth - rel.y);
+    point.localZ = rel.z;
+}
+
+/// @addr{0x808145D8}
+/// @brief Vtable +0x118: where a carried point is now, and the road's up vector there.
+void ObjectTwistedWay::followPoint(const CarriedPoint &point, EGG::Vector3f &pos,
+        EGG::Vector3f &up) {
+    f32 angle = calcWave(-point.localZ / HALF_DEPTH, waveTime());
+    auto [sin, cos] = EGG::Mathf::SinCosFIdx(RAD2FIDX * angle);
+    f32 halfWidth = 0.5f * WIDTH;
+    const EGG::Vector3f &base = this->pos();
+
+    pos.z = point.localZ + base.z;
+    pos.y = ((halfWidth + base.y) - halfWidth * cos) - point.localX * sin;
+    pos.x = point.localX * cos + (base.x - halfWidth * sin);
+    up = EGG::Vector3f(sin, cos, 0.0f);
 }
 
 f32 ObjectTwistedWay::calcWave(f32 zPercent, u32 t) {

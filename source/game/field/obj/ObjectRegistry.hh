@@ -34,6 +34,7 @@
 #include "game/field/obj/ObjectHighwayManager.hh"
 #include "game/field/obj/ObjectHwanwan.hh"
 #include "game/field/obj/ObjectItembox.hh"
+#include "game/field/obj/ObjectItemboxFloor.hh"
 #include "game/field/obj/ObjectItemboxLine.hh"
 #include "game/field/obj/ObjectKCL.hh"
 #include "game/field/obj/ObjectKarehayama.hh"

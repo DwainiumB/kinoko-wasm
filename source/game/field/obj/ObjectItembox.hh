@@ -6,10 +6,11 @@ namespace Kinoko::Field {
 
 /// @brief An item box (`itembox`, the game's `ObjItemBox`, 200 bytes). Driving through it starts
 /// the racer's item roulette; it vanishes and comes back after a while.
-/// @details The flying (`f_itembox`) and falling (`s_itembox`) boxes and the ones other objects
-/// carry derive from it in the game; they are not ported. The respawn animation (the box grows
+/// @details The floor boxes (`s_itembox`, ObjectItemboxFloor) derive from it. The flying
+/// (`f_itembox`) boxes and the ones other objects carry derive from it in the game; they are not
+/// ported. The respawn animation (the box grows
 /// back from the floor), its spin and the effects and sounds only move the model.
-class ObjectItembox final : public ObjectCollidable {
+class ObjectItembox : public ObjectCollidable {
 public:
     ObjectItembox(const System::MapdataGeoObj &params);
     ~ObjectItembox() override;

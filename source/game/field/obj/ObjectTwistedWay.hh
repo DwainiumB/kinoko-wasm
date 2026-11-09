@@ -76,7 +76,20 @@ public:
             const EGG::Vector3f &v1, KCLTypeMask flags, CollisionInfo *pInfo,
             KCLTypeMask *pFlagsOut, u32 timeOffset) override;
 
+    /// @brief A point carried by the road, kept in the road's own coordinates (the game's floor
+    /// attachment record, +0x08..+0x10).
+    struct CarriedPoint {
+        f32 angle;  ///< The road's twist at the point when it was attached.
+        f32 localX; ///< Across the road, along its twisted surface.
+        f32 localZ; ///< Along the road.
+    };
+
+    void attachPoint(CarriedPoint &point, const EGG::Vector3f &pos);
+    void followPoint(const CarriedPoint &point, EGG::Vector3f &pos, EGG::Vector3f &up);
+
 private:
+    [[nodiscard]] u32 waveTime() const;
+
     [[nodiscard]] bool checkSpherePartialImpl(f32 radius, const EGG::Vector3f &v0,
             const EGG::Vector3f &v1, KCLTypeMask flags, CollisionInfoPartial *pInfo,
             KCLTypeMask *pFlagsOut, u32 timeOffset);

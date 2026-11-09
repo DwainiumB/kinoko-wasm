@@ -10,6 +10,7 @@ enum class ObjectId {
     Itembox = 0x65,
     DummyPole = 0x066,
     Woodbox = 0x70,
+    ItemboxFloor = 0x76, ///< s_itembox
     SunDS = 0x72,
     WLWallGC = 0xcb,
     CarA1 = 0xcc,

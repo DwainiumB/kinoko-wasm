@@ -1210,3 +1210,45 @@ the items-off race instead).
 Ported. `test13` is then identical for all 38,906 kart-frames (P1 is blasted by a cannonball it touched at race
 frame 2893). Left: the crabs (not ported) and the ship's heading (the game turns it gradually, 0x806D1DD4; karts
 cannot reach the ship). `test1`-`test12` and the 56 ghosts unchanged.
+
+## Item boxes on the floor and the wavy road (twentieth pass, 2026-11-09)
+
+Found by `test6` (Bowser's Castle): at race frame 1042 P1 drove through one of the twelve `s_itembox` boxes
+(object 0x76) on the wavy road and the game started its roulette; Kinoko created 0x76 as `ObjectNoImpl`.
+
+```
+// ObjectItemboxFloor (s_itembox), vtable 0x808D79E0 = the item box's (0x808D7BC0) with init, calc and the destructor
+// replaced. Constructor 0x80829208: item box constructor 0x808285B0 (raises the box 180 + setting 6), +0xEC = 0,
+// +0xF0.. a CollisionInfo, 0x807C2660 allocates its attachment record (+0xF0 +0x58 = +0x148, kept at +0x14C):
+//   record { +0x00 flags (0x100 attached, 0x200, 0x20 / 0x40 follow modes), +0x04 floor object, +0x08..+0x10 floats }.
+// init 0x80829280:
+//   +0xE0 = pos;  reset the record (0x807BD7B4);
+//   while (pos.y > 0) {                                              // 0x808AC6E0
+//     if (CourseModel::checkSphereFullPush(flow radius (+0x6C), pos, inf, 0x6CEBDFFF, &info +0xF0, &mask +0xEC)) {
+//       pos -= info.tangentOff;                                      // a moving floor's check fills record +0x04
+//       switch (record->floor vt +0x104) {                           // 0x807BD850; TwistedWay 0x80814850 -> 1
+//         case 0: flags = flags & ~0x200 | 0x100; floor vt +0x10C (record);        // static (0x807BD864)
+//         case 1: flags = flags & ~0x200 | 0x100; floor vt +0x110 (record, pos);   // moving (0x807BD88C)
+//       }
+//       break;
+//     }
+//     pos -= ey * 50;                                                // 0x808AC710
+//   }
+// calc 0x8082945C: item box calc 0x80828860; if (flags & 0x100) {
+//     if (flags & 0x20) floor vt +0x114 (record, &+0xC8);
+//     if (flags & 0x40) floor vt +0x118 (record, &+0xC8 pos, &+0xD4 up);
+//     pos = +0xC8 + (0, 180, 0) (0x809C4324) + ey * setting 6;  }   // the 180 matched against the game's positions
+// TwistedWay (vtable 0x808D62F8):
+//   +0x110 attach 0x80814428: rel = pos - roadPos; angle = wave(-rel.z / 7500 (+0xBC), t);
+//     record +0x08 = angle; +0x0C = rel.x / cos + sin * (0.5 * 2000 (+0xB8) - rel.y); +0x10 = rel.z; flags |= 0x40.
+//   +0x118 follow 0x808145D8: angle = wave(-z / 7500, t); out = (x' cos + (road.x - 1000 sin),
+//     ((1000 + road.y) - 1000 cos) - x' sin, z + road.z); up = (sin, cos, 0).
+//   wave = 0.2 * (h * (h * (l * (l * sin((pi * t / 120 + 4 * zPct) in FIdx))))), h = zPct + 1, l = zPct - 1,
+//     t = (frame % 120) * 2, frame = race frame from the race stage on, else +0xAC (1000 from init 0x80813C40;
+//     boxes initialised before the road read it as 0). Unlike the collision checks, no zero twist before the race.
+```
+
+Ported as `ObjectItemboxFloor` with `ObjectTwistedWay::attachPoint` / `followPoint` (only the wavy road carries points
+in Kinoko; a box on static ground stays where it landed). `test6` is then identical for every kart frame, item
+object and course object (994,944 object-frames, including the boxes riding the road), and a banana is broken by
+Bowser's fireball at race frame 4279 exactly as in the game.
