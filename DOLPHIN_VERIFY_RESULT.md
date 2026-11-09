@@ -11,9 +11,17 @@ two-player split-screen races of the PAL game (RMCP01) recorded in Dolphin.
 | `test1` | Luigi Circuit, 150cc, items off. P1 Mario + Standard Kart M (grid place 2), P2 Luigi + Standard Kart M (place 1). 6 kart-kart bumps (race frames 932, 942, 1125, 1324, 1805, 2085), side and rear contacts, one kart nearly stopped when hit. No slipstream. | 0 to 7908, both karts (15,818 kart-frames; the movie ends near frame 2341, after that both pads are neutral) | **Identical** after the fix below: position, full rotation, speed, extVel, angVel0.z, bump timer and slipstream state equal as single floats on every frame. Before the fix: first difference at race frame 932 (first bump). |
 | `test2` | Luigi Circuit, 150cc, items off. P1 Bowser + Flame Flyer (grid place 2), P2 Baby Peach + Bit Bike, manual (place 1); seeds 0xDB5B4DBB:0x9BB4. 20 bumps, one slipstream (below). | 0 to 14919, both karts (29,838 kart-frames; frame 5605 missing from the dump, see below; the movie ends near frame 14812) | **Identical** after fixes 2 to 4. Before: first difference at race frame 6590 (boost bump), then 11915 and 11918 (wheelie bump). |
 | `test3` | Luigi Circuit, 150cc, **items on (Basic)**. P1 Mario + Standard Kart M (place 2), P2 Luigi + Standard Kart M (place 1). The replay desynced from the race as driven (Dolphin movie), so the race is whatever the replay produced; the comparison is still valid (the logger records the inputs the game used). | 0 to 6713 stepped cleanly (single-frame gaps at 6129, 6146, 6157); 6713 to 8431 Dolphin ran free (unusable); stepped again after 8431 with 16 one-frame gaps | **Identical over the whole stepped range** (13,422 kart-frames, 2026-11-02) after the fixes below: items handed out, roulettes, a fake item box and two bananas dropped, a banana bouncing off a banana, a kart spinning on a banana, both karts' positions, rotations, speeds and timers. Item objects: 10,638 of 11,435 object-frames bit-exact (after the held-item and trail fixes below). |
-
-| `test4` | Luigi Circuit, 150cc, items on (**Strategic**, item mode 2). P1 Mario + Standard Kart M (place 2), P2 Luigi + Standard Kart M (place 1); seeds 0xA5852924:0x01005252. Items used: green shells (one triple), mushrooms (one triple), bananas thrown forward and dragged; 16 karts hit by shells / bananas (actions on P1 at 2470, 3059, 3869, 4395, 5170, 6387, 17779; P2 at 749, 2055, 6574, 7566, 8141, 8521, 9890, 12205, 18424). | 0 to 18554 stepped (single-frame gaps at 1474, 7594, 11014, 15334); 18555 to 20470 Dolphin ran free (unusable); stepped again to 22403 | **Identical over 0 to 18554** (36,850 kart-frames, 2026-11-03) after the fix below. Before: first difference at race frame 17779 (P1 hit one frame late by a dragged banana). Item objects: **15,400 of 15,400** object-frames bit-exact (2026-11-04, after the throw-frame fix below; 15,387 before it). |
-| `test5` | **DS Delfino Square**, 150cc, VS, items on (Basic, item mode 0), wooden boxes. P1 Mario + Standard Kart M (place 2), P2 Luigi + Standard Kart M (place 1); seeds 0x71F4992B:0x01003249 (the value at RaceConfig +0xB94 in this dump, 0x37E4E46C, is not the race's seed; the Opus commit session recovered the right one). Seven wooden boxes broken by karts, items dropped by boxes (mushrooms, a banana), a mushroom that fell off the course, P2 falling off the course and respawning at 9200. | 0 to 11085 stepped (single-frame gaps at 577, 3277, 3997, 10117); the movie ends near 11085 | **Identical over the whole recording** (22,164 kart-frames, 2026-11-03) after the six fixes below; item objects 10,777 of 10,777 object-frames bit-exact. Before: first differences at 7001 (box-dropped mushroom), 8341, 9199 (item fixes by the commit session), then 9200 (respawn position). |
+| `test4` | Luigi Circuit, 150cc, items on (**Basic**, item mode 2). P1 Mario + Standard Kart M (place 2), P2 Luigi + Standard Kart M (place 1); seeds 0xA5852924:0x01005252. Items used: green shells (one triple), mushrooms (one triple), bananas thrown forward and dragged; 16 karts hit by shells / bananas (actions on P1 at 2470, 3059, 3869, 4395, 5170, 6387, 17779; P2 at 749, 2055, 6574, 7566, 8141, 8521, 9890, 12205, 18424). | 0 to 18554 stepped (single-frame gaps at 1474, 7594, 11014, 15334); 18555 to 20470 Dolphin ran free (unusable); stepped again to 22403 | **Identical over 0 to 18554** (36,850 kart-frames, 2026-11-03) after the fix below. Before: first difference at race frame 17779 (P1 hit one frame late by a dragged banana). Item objects: **15,400 of 15,400** object-frames bit-exact (2026-11-04, after the throw-frame fix below; 15,387 before it). |
+| `test5` | **DS Delfino Square**, 150cc, VS, items on (Recommended, item mode 0), wooden boxes. P1 Mario + Standard Kart M (place 2), P2 Luigi + Standard Kart M (place 1); seeds 0x71F4992B:0x01003249 (the value at RaceConfig +0xB94 in this dump, 0x37E4E46C, is not the race's seed; the Opus commit session recovered the right one). Seven wooden boxes broken by karts, items dropped by boxes (mushrooms, a banana), a mushroom that fell off the course, P2 falling off the course and respawning at 9200. | 0 to 11085 stepped (single-frame gaps at 577, 3277, 3997, 10117); the movie ends near 11085 | **Identical over the whole recording** (22,164 kart-frames, 2026-11-03) after the six fixes below; item objects 10,777 of 10,777 object-frames bit-exact. Before: first differences at 7001 (box-dropped mushroom), 8341, 9199 (item fixes by the commit session), then 9200 (respawn position). |
+| `test6` | **Bowser's Castle** (course 12), 150cc, VS, items Basic (item mode 2), no codes. P1 Mario + Standard Kart M (place 2), P2 Luigi + Standard Kart M (place 1) (the same karts and grid for `test6` to `test14`); seeds 0xF9DE11AF:0x010023E1. Bowser's fireballs, Thwomps, the wavy road with its item boxes, a banana broken by an exploding fireball at 4279. | 15,548 kart-frames (2 player-frames filled from the DTM) | **Identical**; item objects 8,644 of 8,644; course objects **994,944 of 994,944** (all 128 paired) after the fireball, Thwomp and floor item box fixes below. |
+| `test7` | **Moo Moo Meadows** (course 1), items Basic, no codes; seeds 0xCE071228:0x00002471. Cows hit by shells at 964, 5149, 5833 and 10922, a banana into a cow at 4070. | 21,880 kart-frames (Dolphin ran free 8164 to 8344: 372 player-frames filled from the DTM) | **Identical**; items 23,268 of 23,268; course objects 678,218 of 678,218. |
+| `test8` | **Maple Treeway** (course 11), items Basic, no codes; seeds 0xE52DC447:0x000088DC. Shells into the Wiggler's body at 3005, 5335 and 8481, leaf piles. | 19,460 kart-frames | **Identical**; items 33,368 of 33,368; course objects 1,079,919 of 1,099,377: the rest is the Wiggler's main object's matrix (0xE2, its translation column is 0 in the game), which collision does not read. Leaf piles were ported for this recording. |
+| `test9` | **Mushroom Gorge** (course 2), items Frantic (item mode 1), code "Kinoko test: P1 always Star"; seeds 0xF67643BF:0x00008764. A star from 1254 to 1703 through Goombas; a Goomba's mushroom dropped at 1321. | 5,948 kart-frames | **Identical**; items 2,996 of 2,996; course objects 65,406 of 65,406 (22 of 45 game objects paired; Kinoko does not create 0xEE, 0x1F5, 0x1F6 or 0x1FA). |
+| `test10` | **Bowser's Castle**, items Basic, code "P1 always Star"; seeds 0x72BBD547:0x0100AABD. A star through the slamming Thwomps (the recording has none of the sliding ones). | 9,856 kart-frames | **Identical**; course objects **630,656 of 630,656**, all 128 paired (116 before the floor item boxes). |
+| `test11` | **Coconut Mall** (course 5), items Basic, code "P1 always Mega Mushroom"; seeds 0x4A250863:0x00001050. A mega kart into the parking-lot cars. | 4,868 kart-frames | **Identical** after the mega and car fixes below; course objects 240,867 of 245,733: the rest is the escalator group's matrix (0x260), which does not move anything. |
+| `test12` | **Dry Dry Ruins** (course 14), items Basic, code "P1 always Triple Red Shells"; seeds 0x649CC856:0x010090CC. Red shells fired at the other kart and into the bats. | 15,372 kart-frames | **Identical to race frame 7126** after the red shell fix below; P2's speed and extVelY differ from 7127. At race frame 2979 the game draws 24 more numbers from the race generator than Kinoko; the caller is not found (not the bats, Pokeys, pillars or the fireworks), and the objects that draw from it differ from about 2984. Course objects 437,742 of 599,430 (bat tumble and Pokey rotation are only visual). |
+| `test13full` | **GBA Shy Guy Beach** (course 31). The replay desynced in the menus and chose **items None** (item mode 3), so there are no bananas; seeds 0xAF19A18F:0x0000439A. The pirate ship's cannonballs hitting the karts. | 38,906 kart-frames (14 player-frames filled from the DTM) | **Identical** after the item box, presence and cannonball fixes below; course objects 1,049,490 of 1,069,860: the rest is matrices only (the ship's heading 0x806D1DD4 and decoration). Crabs are not ported. |
+| `test14full` | **DS Delfino Square** (course 23), items Basic, no codes; seeds 0x9CB6EAA6:0x0100D56E. Wooden boxes broken by shells at 2860 and 3750. | 16,168 kart-frames (4 player-frames filled from the DTM) | **Identical**; items 7,517 of 7,517; course objects 315,356 of 412,233: the rest is the seagulls' matrices (visual); 0x156, 0x163 and 0x189 are not created by Kinoko. |
 
 ### What `test2` contains (from the dump)
 
@@ -392,6 +400,60 @@ were credited to player 0, as the stand-in item's owner is 0 in the game. A conf
 banana dropped next to Bowser's fireball as it explodes on Bowser's Castle, or near a cannonball landing on GBA Shy
 Guy Beach (the item should break).
 
+## Course-object recordings `test6` to `test14` (2026-11-09, committed)
+
+Nine recordings aimed at the object-hit and blast code that no earlier recording reached (rows in the table above).
+Stars, megas and triple red shells came from Gecko codes, because no 2-player item mode hands out a star (Dolphin
+movies keep no codes, so the replay runner switches each test's code on and off again, see "How to reproduce"). All
+nine now have identical karts; what is left is listed under "Still to compare". Details of every fix are in
+`docs/kart_collision_decomp.md`, passes sixteen to twenty.
+
+### Maple Treeway's leaf piles (`test8`, commit 97593eb)
+
+`Karehayama` (object 0x176) was missing. A kart or item breaks it and it drops what it hides: `breakObject`
+0x807672A4 turns the drop direction by a random ±5° about Y; `breakByKart` 0x8076734C only scatters the pile when
+the kart's speed ratio is at most 0.4; the timed and untimed kart and item variants are 0x80767448, 0x8076757C and
+0x80767648; the pile comes back after 138 frames.
+
+### Stars, megas, Thwomps, cars, Bowser's fireball and red shells (`test6`, `test9` to `test12`, commit 8b4c9cf)
+
+- **A mega's turning** (`KartMove::calcRotation`): the speed range of the turn blend is scaled by 1.25 in a mega
+  (the slow end 20 and the fast end 70 both scaled, the "fast" test itself against an unscaled 70), and after the
+  reverse flip the turn is ×1.1 in a star, mega or thunder cloud when manual drift is off.
+- **Thwomp rotation** (`ObjectDossunNormal`): the wrap is `if (rot >= π) rot -= 2π`; Kinoko had `<=`.
+- **Coconut Mall cars** (`ObjectCarA`): the launch pitch is a rotation about Z (`makeRT(0, 0, pitch)`), and on the
+  landing frame the height is set to 0 (f31 at 0x806B8AC0).
+- **Bowser's fireball** (`ObjectKoopaBall`): it keeps its transform after init and spins from it
+  (`makeR(angle, 0, 0) * base`); the cooldown is 210 frames in Time Trials, 270 otherwise.
+- **Moving floors** (`KartSub::calcMovingObj`): the bullet bill's moving-floor velocity decays; on a floor flagged
+  as a moving road (surface flag 15, set by `processFloor` for `COL_TYPE_MOVING_ROAD`) a star, mega, bullet or
+  thunder-cloud kart keeps only the floor velocity along its last direction, and none if it points backwards.
+- **Red shells' target search** (`ItemObjRed::searchTarget`): the game spreads the search over four frames; from
+  race frame 1 a shell only looks at racer *i* when `i & 3` equals the race frame mod 4. The race frame counters are
+  `ItemRaceFlags::CalcRaceFrame` (0x807BD340), run at the start of the item director's calc.
+
+### Item boxes with items off, presence and the cannonballs (`test13full`, commit f14c1ac)
+
+- **Object creation** (`ObjectDirector::createObjects`): an object's KMP presence mask is tested against 1, 2 or
+  4 for one, two, or three or more local players; with items None the item boxes (`itembox`, `f_itembox`,
+  `s_itembox`, `sin_itembox`, `w_itembox`) are not created.
+- **Shy Guy ship cannonball** (`ObjectHeyhoBall::onCollision` 0x806D0880): outside Time Trials the kart gets the
+  hit table's reaction, the weaker part of the blast turns an explosion into a spin without a push, and a kart
+  touching the ball (object reaction 3 or 5) makes it explode on the next frame. On frame 100 of its intangible
+  state the ball moves back to the ship.
+- **The ship** (`ObjectHeyhoShip::calcPos`): the frame counter is read before it is increased.
+
+### Item boxes on the wavy road (`test6`, `test10`, commit fc76bac)
+
+The twelve item boxes on Bowser's Castle's wavy road are `s_itembox` (object 0x76), which Kinoko did not create.
+Init (0x80829280) drops the box from its point in steps of 50 until its sphere meets the floor, pushes it out, and
+attaches it to the road if the road answered the check (`ObjectTwistedWay::attachPoint` 0x80814428); every frame
+(0x8082945C) it runs the item box's calc and then follows the road (`followPoint` 0x808145D8), raised by
+(0, 180, 0) (0x809C4324) and KMP setting 6.
+
+**Verified after each fix**: `test1` to `test5` identical, items 10,638 / 15,400 / 10,777, 13/13 suite, 56/56
+ghosts, and the earlier course-object recordings unchanged.
+
 ## Server-controlled random numbers (for lockstep online)
 
 What draws from the race's two generators in Kinoko today: the first (RaceManager +0x04) feeds offline item rolls
@@ -446,6 +508,24 @@ kart code), Frame Advance hotkey F (already set). CPU thread (dual core) off, as
    to `START_FRAME`, then steps and also dumps every racer's raw KartMove (0x2D0 bytes) up to `END_FRAME`, and leaves
    Dolphin paused there. `test2` window 11880 to 11960 took about 6 minutes instead of 35.
 
+7. Course-object recordings (`test6` to `test14`):
+   - Codes: `User\GameSettings\RMCP01.ini` has "Kinoko test: P1 always Star / Mega Mushroom / Red Shell / Triple
+     Red Shells" (a C2 hook at 0x807BA164), unticked. A DTM does not store codes, so a code race only replays with
+     the same code on; `replay.ps1 test9:Star` (in the session scratchpad) switches it on for that replay and
+     restores the ini afterwards. Codes change the emulated timing, so the race's seeds differ from a run without
+     the code.
+   - The logger shows Dolphin with SW_SHOWNOACTIVATE rather than minimised (a minimised Dolphin loses Frame
+     Advance at the race start), and pauses again if the game state never settles.
+   - The title screen's demo race may be logged before the real one; `clean_dump.py` keeps only the recorded race.
+     Frames Dolphin ran free are filled from the DTM's pad polls (`dtm_inputs.py`: 2 polls per VI, poll = 2·VI + 4).
+   - Seeds are recovered by stepping each generator back from race frame 300 to the race's seed.
+   - `kinoko_host versus --course 12 --kart 0:1 --kart 7:1 --frames 8174 --cc 150 --start 2,1 --human 0,1
+     --item-mode 2 --seed 0xF9DE11AF:0x010023E1 --inputs <in>.txt --out <k>.csv --items <k>_items.csv --objects
+     <k>_objects.csv` (`test6`); with a code add `--force-item 0:<item>` (9 star, 11 mega, 17 triple red), so P1's
+     roulette gives the same item. The other tests' courses, item modes and seeds are in the table.
+   - `python tools\kart_collision_diff.py objects <dump>.json <k>_objects.csv` pairs the game's and Kinoko's
+     course objects by id and nearest position on race frame 1 and compares positions and matrices from then on.
+
 ## Tooling fixes made on the way (none of these touch Kinoko's engine)
 
 - `kinoko_host versus` CSV: five new columns `status0..status4`, Kinoko's status bits laid out as the game's five
@@ -471,11 +551,16 @@ kart code), Frame Advance hotkey F (already set). CPU thread (dual core) off, as
 
 ## Still to compare
 
-- Course objects hit by items or by star / mega karts, and course objects' blasts against items and objects:
-  ported, but no recording exercises them.
-- Items: item-vs-course-object collision is ported but no recording exercises it; the stretches where Dolphin ran free (`test3` 6713 to 8431, `test4` 18555 to 20470) would need a
-  re-record; nothing past frame 6713 of `test3` or 18554 of `test4` has been compared. `test5` is compared to
-  its end.
+- `test12` from race frame 2979: 24 extra draws from the race generator in the game, caller not found (not the bats,
+  Pokeys, pillars or the fireworks). A Gecko probe of the generator's callers changed the timing and so the race,
+  so it was dropped; the next try would be a breakpoint log in Dolphin's debugger at that frame.
+- Not ported: GBA Shy Guy Beach's crabs; the objects Kinoko does not create on Mushroom Gorge (0xEE, 0x1F5, 0x1F6,
+  0x1FA), Dry Dry Ruins (0x16A, 0x208) and DS Delfino Square (0x156, 0x163, 0x189).
+- Matrices only (no effect on karts or items): the Wiggler's main object, Coconut Mall's escalator group, the Shy
+  Guy ship's heading (0x806D1DD4), the seagulls, Dry Dry Ruins' bat tumble and Pokey rotation.
+- Bomb cars (Moonview Highway) are not in Kinoko, so their blasts are not compared.
+- The stretches where Dolphin ran free in `test3` (6713 to 8431) and `test4` (18555 to 20470) would need a
+  re-record.
 - Two karts side by side at speed for a long time (only pushing at low speed so far).
 - Status bit 131 (a racer driven by another console online; raises the speed limit to the soft limit that console
   sent): ported 2026-11-04, but no recording or Kinoko race can have a remote racer.

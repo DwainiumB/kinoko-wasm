@@ -3,8 +3,19 @@
 #include "game/item/ItemDirector.hh"
 #include "game/item/ItemRaceFlags.hh"
 #include "game/item/ItemSlotData.hh"
+#include "game/item/KartItem.hh"
 
 namespace Kinoko::Item {
+
+std::array<ItemId, ItemRoulette::FORCED_ITEM_PLAYERS> ItemRoulette::s_forcedItem = {{
+        ItemId::NONE, ItemId::NONE, ItemId::NONE, ItemId::NONE, ItemId::NONE, ItemId::NONE,
+        ItemId::NONE, ItemId::NONE, ItemId::NONE, ItemId::NONE, ItemId::NONE, ItemId::NONE,
+}};
+
+void ItemRoulette::SetForcedItem(size_t playerIdx, ItemId id) {
+    ASSERT(playerIdx < FORCED_ITEM_PLAYERS);
+    s_forcedItem[playerIdx] = id;
+}
 
 /// @addr{0x807B9F48}
 ItemRoulette::ItemRoulette()
@@ -54,6 +65,11 @@ void ItemRoulette::start(u16 boxSetting, u8 rank, bool human, bool isShort) {
     bool noTriples = m_kartItem->hasTripleItem(true);
     m_decided =
             ItemSlotData::Instance()->decideItem(boxSetting, rank, human, noTriples, m_kartItem);
+
+    ItemId forced = s_forcedItem[m_kartItem->playerIdx()];
+    if (forced != ItemId::NONE) {
+        m_decided = forced;
+    }
 
     if (!ItemDirector::Instance()->hasRoomFor(m_decided)) {
         if (m_decided != ItemId::TRIPLE_MUSHROOM) {

@@ -4,6 +4,8 @@
 
 #include <Common.hh>
 
+#include <array>
+
 namespace Kinoko::Item {
 
 class KartItem;
@@ -60,8 +62,17 @@ public:
     }
     /// @endGetters
 
+    /// @brief Test hook, off by default: every item box gives this player `id`. Mirrors the
+    /// Gecko code used for the Dolphin test recordings, which overwrites the item that
+    /// `decideItem` returned where `start` stores it (0x807BA164). The draw itself still happens.
+    /// @param id ItemId::NONE turns it off.
+    static void SetForcedItem(size_t playerIdx, ItemId id);
+
 private:
     void showNext();
+
+    static constexpr size_t FORCED_ITEM_PLAYERS = 12;
+    static std::array<ItemId, FORCED_ITEM_PLAYERS> s_forcedItem; ///< Not in the game.
 
     KartItem *m_kartItem; ///< +0x00
     State m_state;        ///< +0x04

@@ -17,6 +17,7 @@ namespace Kinoko {
 ///   kinoko_host versus --course <id> --kart <character>:<vehicle>[:auto] --kart ...
 ///       --inputs <file> --out <file> [--frames <n>] [--cc 50|100|150] [--start <p0>,<p1>,...]
 ///       [--seed <seed1>[:<seed2>]] [--item-mode 0..3] [--human <i>,<j>,...]
+///       [--items <file>] [--objects <file>] [--force-item <player>:<item id>]
 /// --start gives each kart's 1-based place on the starting grid (default: player index + 1).
 /// --seed sets RaceManager's two random seeds (hex or decimal; default 0x74A1B095:0): every client
 /// of a lockstep race must use the same ones, they decide the items. --item-mode is balanced,
@@ -70,6 +71,7 @@ private:
     void applyInputs();
     void writeRows(FILE *out) const;
     void writeItemRows(FILE *out) const;
+    void writeObjectRows(FILE *out);
 
     static void OnInit(System::RaceConfig *config, void *arg);
 
@@ -88,6 +90,9 @@ private:
     const char *m_inputPath;
     const char *m_outPath;
     const char *m_itemsPath; ///< --items: every item object on the course, per frame.
+    /// --objects: every course object's position and transform, a row whenever they change.
+    const char *m_objectsPath;
+    std::vector<std::array<f32, 15>> m_lastObjectRows; ///< Per object, the values last written.
     u32 m_maxFrames;
     u32 m_frameIdx;
     std::vector<Input> m_inputs;

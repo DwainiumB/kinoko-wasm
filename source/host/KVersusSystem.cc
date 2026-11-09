@@ -2,7 +2,10 @@
 
 #include "host/SceneCreatorDynamic.hh"
 
+#include <game/field/ObjectDirector.hh>
+#include <game/field/obj/ObjectBase.hh>
 #include <game/item/ItemDirector.hh>
+#include <game/item/ItemRoulette.hh>
 #include <game/kart/KartCollide.hh>
 #include <game/kart/KartMove.hh>
 #include <game/kart/KartObjectManager.hh>
@@ -59,6 +62,12 @@ bool KVersusSystem::run() {
                 "velZ,scale,hitRadius,inBoxCol\n");
     }
 
+    FILE *objects = m_objectsPath ? fopen(m_objectsPath, "w") : nullptr;
+    if (objects) {
+        fprintf(objects, "frame,raceFrame,idx,id,posX,posY,posZ,m00,m01,m02,m03,m10,m11,m12,m13,m20,"
+                         "m21,m22,m23\n");
+    }
+
     if (auto *race = System::RaceManager::Instance()) {
         for (u32 i = 0; i < m_rng1Skip; ++i) {
             race->random().next();
@@ -72,6 +81,9 @@ bool KVersusSystem::run() {
         if (items) {
             writeItemRows(items);
         }
+        if (objects) {
+            writeObjectRows(objects);
+        }
         ++m_frameIdx;
     }
 
@@ -81,6 +93,10 @@ bool KVersusSystem::run() {
 
     if (items) {
         fclose(items);
+    }
+
+    if (objects) {
+        fclose(objects);
     }
 
     return true;
@@ -108,6 +124,8 @@ void KVersusSystem::parseOptions(int argc, char **argv) {
             m_outPath = value;
         } else if (strcmp(flag, "--items") == 0) {
             m_itemsPath = value;
+        } else if (strcmp(flag, "--objects") == 0) {
+            m_objectsPath = value;
         } else if (strcmp(flag, "--frames") == 0) {
             m_maxFrames = static_cast<u32>(std::atoi(value));
         } else if (strcmp(flag, "--cc") == 0) {
@@ -135,6 +153,17 @@ void KVersusSystem::parseOptions(int argc, char **argv) {
                 const char *comma = strchr(p, ',');
                 p = comma ? comma + 1 : p + strlen(p);
             }
+        } else if (strcmp(flag, "--force-item") == 0) {
+            // Matches the Gecko test code: every box gives this player the item (ItemId number).
+            int player = 0;
+            int item = 0;
+            if (sscanf(value, "%d:%i", &player, &item) != 2 || player < 0 || player > 11 ||
+                    item < 0 || item > 0x14) {
+                PANIC("Expected --force-item <player>:<item id>, got %s", value);
+            }
+
+            Item::ItemRoulette::SetForcedItem(static_cast<size_t>(player),
+                    static_cast<Item::ItemId>(item));
         } else if (strcmp(flag, "--start") == 0) {
             for (const char *p = value; *p;) {
                 m_startPlacements.push_back(static_cast<u8>(std::atoi(p)));
@@ -164,8 +193,8 @@ KVersusSystem::KVersusSystem()
     : m_sceneMgr(nullptr), m_courseId(8),
       m_engineClass(System::RaceConfig::Scenario::EngineClass::CC150), m_humans{0},
       m_seed1(0x74A1B095), m_seed2(0), m_itemMode(System::RaceConfig::Scenario::ItemMode::Balanced),
-      m_inputPath(nullptr), m_outPath(nullptr), m_itemsPath(nullptr), m_maxFrames(1000),
-      m_frameIdx(0), m_nextInput(0) {}
+      m_inputPath(nullptr), m_outPath(nullptr), m_itemsPath(nullptr), m_objectsPath(nullptr),
+      m_maxFrames(1000), m_frameIdx(0), m_nextInput(0) {}
 
 KVersusSystem::~KVersusSystem() {
     if (s_instance) {
@@ -211,7 +240,13 @@ void KVersusSystem::loadInputs() {
 void KVersusSystem::applyInputs() {
     auto *padDir = System::KPadDirector::Instance();
     const auto *race = System::RaceManager::Instance();
-    u32 nextRaceFrame = (race ? race->timer() : 0) + 1;
+    // The race frame the next calc produces. The timer stays 0 through the intro and only counts
+    // from the countdown on, so during the intro the next frame is still race frame 0 (an input
+    // logged for race frame 1 was applied a frame early before: Dolphin test11).
+    u32 nextRaceFrame = 1;
+    if (race) {
+        nextRaceFrame = race->stage() == System::RaceManager::Stage::Intro ? 0 : race->timer() + 1;
+    }
     while (m_nextInput < m_inputs.size() && m_inputs[m_nextInput].frame <= nextRaceFrame) {
         const Input &input = m_inputs[m_nextInput++];
         if (input.item >= 0) {
@@ -258,6 +293,38 @@ void KVersusSystem::writeItemRows(FILE *out) const {
                     D(pos.z), D(vel.x), D(vel.y), D(vel.z), D(obj->scale()), D(obj->hitRadius()),
                     obj->isInBoxCol() ? 1 : 0);
         }
+    }
+}
+
+/// One row per course object (ObjectDirector order) on the first frame and whenever its position
+/// or transform changed since its last row.
+void KVersusSystem::writeObjectRows(FILE *out) {
+    const auto *objDir = Field::ObjectDirector::Instance();
+    const auto *race = System::RaceManager::Instance();
+    if (!objDir) {
+        return;
+    }
+
+    const auto &objs = objDir->objects();
+    m_lastObjectRows.resize(objs.size());
+    for (size_t i = 0; i < objs.size(); ++i) {
+        const Field::ObjectBase *obj = objs[i];
+        const EGG::Vector3f &pos = obj->pos();
+        const EGG::Matrix34f &mat = obj->transform();
+        std::array<f32, 15> row = {{pos.x, pos.y, pos.z, mat[0, 0], mat[0, 1], mat[0, 2],
+                mat[0, 3], mat[1, 0], mat[1, 1], mat[1, 2], mat[1, 3], mat[2, 0], mat[2, 1],
+                mat[2, 2], mat[2, 3]}};
+        if (m_frameIdx != 0 && row == m_lastObjectRows[i]) {
+            continue;
+        }
+
+        m_lastObjectRows[i] = row;
+        fprintf(out, "%u,%u,%zu,%u", m_frameIdx, race ? race->timer() : 0u, i,
+                static_cast<u32>(obj->id()));
+        for (f32 v : row) {
+            fprintf(out, ",%.9g", v);
+        }
+        fprintf(out, "\n");
     }
 }
 
