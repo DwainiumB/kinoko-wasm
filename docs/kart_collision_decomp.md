@@ -1183,3 +1183,30 @@ on frames 1, 5, 9, ... Kinoko looked at every racer every frame. Ported (`ItemRa
 round-robin skip in `searchTarget`); `test12` then matches every kart frame up to 7126 (was 2555). The remaining
 difference starts at race frame 2979 with 24 race-generator draws Kinoko does not make (caller not identified yet;
 see `DOLPHIN_VERIFY_RESULT.md`).
+
+## Object creation, cannonballs and the pirate ship (nineteenth pass, 2026-11-09)
+
+Found by `test13` (GBA Shy Guy Beach; the replay chose items "None" through a menu desync, which made it a test of
+the items-off race instead).
+
+```
+// ObjectDirector::createObjects 0x80826E8C, per KMP object:
+//   skip unless presence (+0x3A) has the bit of the local player count (RaceConfig +0x27):
+//     1 -> 1, 2 -> 2, 3 -> 4, 4 -> 4                                  // Kinoko always used bit 1
+//   with items off (RaceConfig +0xB80 == 3) skip "itembox", "f_itembox", "s_itembox", "sin_itembox", "w_itembox";
+//   in Time Trials / ghost races (+0x55) skip the same and "K_bomb_car" (already handled).
+// ObjectHeyhoBall::onCollision 0x806D0880 (kart hit; +0x12C intensity, 1 = the weaker blast after frame 32):
+//   if (!director +0x55) {                                          // VS
+//     if (intensity == 1) { if (onKart == 0x20) onKart = 10; hitDepth = 0; }
+//     if ((onObj == 3 || onObj == 5) && state (+0xB8) != 3) nextState (+0xBC) = 3;   // explode next frame
+//     return onKart;                                                // the hit table's reaction
+//   }
+//   return state == 3 ? (intensity == 0 ? 0x20 : (hitDepth = 0, 10)) : 8;   // Time Trial (already ported)
+// ObjectHeyhoBall idle calc 0x806D0A14: if (stateFrame (+0xC0) == 100) workingPos = shipPos;   // once
+// ObjectHeyhoShip calcPos 0x806D1D10: y += amplitude * sin(DEG2FIDX * (360 * frame / period)); frame++
+//   (the frame before the increment; Kinoko incremented first).
+```
+
+Ported. `test13` is then identical for all 38,906 kart-frames (P1 is blasted by a cannonball it touched at race
+frame 2893). Left: the crabs (not ported) and the ship's heading (the game turns it gradually, 0x806D1DD4; karts
+cannot reach the ship). `test1`-`test12` and the 56 ghosts unchanged.

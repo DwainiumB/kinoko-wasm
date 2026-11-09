@@ -62,7 +62,8 @@ void ObjectHeyhoShip::calcPos() {
 
     setPos(m_railInterpolator->curPos());
 
-    f32 fidx = DEG2FIDX * (360.0f * static_cast<f32>(++m_frame) / PERIOD);
+    // The bob uses the frame count before it is incremented (+0xE4, 0x806D1D10; Dolphin test13).
+    f32 fidx = DEG2FIDX * (360.0f * static_cast<f32>(m_frame++) / PERIOD);
     f32 posY = m_yAmplitude * EGG::Mathf::SinFIdx(fidx) + pos().y;
     setPos(EGG::Vector3f(pos().x, posY, pos().z));
 }

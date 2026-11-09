@@ -84,8 +84,14 @@ private:
     }
 
     /// @addr{0x806D0A14}
+    /// @brief The idle ball goes back to the ship once, 100 frames after it exploded (until then it
+    /// stays where it blew up; Dolphin test13).
     void calcIntangible() {
-        m_workingPos = m_shipPos;
+        constexpr u32 RETURN_FRAME = 100;
+
+        if (m_currentFrame == RETURN_FRAME) {
+            m_workingPos = m_shipPos;
+        }
     }
 
     void calcFalling();

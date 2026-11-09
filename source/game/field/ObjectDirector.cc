@@ -1,5 +1,8 @@
 #include "ObjectDirector.hh"
 
+#include <array>
+#include <cstring>
+
 #include "game/field/BoxColManager.hh"
 #include "game/field/ObjectDrivableDirector.hh"
 #include "game/field/obj/ObjectRegistry.hh"
@@ -265,6 +268,34 @@ ObjectDirector::~ObjectDirector() {
     }
 }
 
+namespace {
+
+/// @brief The item box objects createObjects (0x80826E8C) leaves out with items off.
+[[nodiscard]] bool IsItemBox(const ObjectFlowTable &flowTable, u16 id) {
+    constexpr std::array<const char *, 5> NAMES = {{
+            "itembox",
+            "f_itembox",
+            "s_itembox",
+            "sin_itembox",
+            "w_itembox",
+    }};
+
+    const auto *set = flowTable.set(flowTable.slot(static_cast<ObjectId>(id)));
+    if (!set) {
+        return false;
+    }
+
+    for (const char *name : NAMES) {
+        if (strcmp(set->name, name) == 0) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+} // namespace
+
 /// @addr{0x80826E8C}
 void ObjectDirector::createObjects() {
     const auto *courseMap = System::CourseMap::Instance();
@@ -279,12 +310,28 @@ void ObjectDirector::createObjects() {
     // so we set it here instead of in the Chain Chomp constructor.
     s_wanwanMaxPitch = course == Course::GCN_Mario_Circuit ? -20.0f : -30.0f;
 
+    const auto &scenario = System::RaceConfig::Instance()->raceScenario();
+    size_t localPlayers = 0;
+    for (size_t i = 0; i < scenario.playerCount; ++i) {
+        if (scenario.players[i].type == System::RaceConfig::Player::Type::Local) {
+            ++localPlayers;
+        }
+    }
+    u16 presenceBit = localPlayers <= 1 ? 1 : (localPlayers == 2 ? 2 : 4);
+    bool itemsOff = scenario.itemMode == System::RaceConfig::Scenario::ItemMode::None;
+
     for (size_t i = 0; i < objectCount; ++i) {
         const auto *pObj = courseMap->getGeoObj(i);
         ASSERT(pObj);
 
-        // Assume one player - if the presence flag isn't set, don't construct it
-        if (!(pObj->presenceFlag() & 1)) {
+        // The presence flag has one bit per local player count: 1 player bit 0, 2 players bit 1,
+        // 3 or 4 players bit 2 (RaceConfig +0x27).
+        if (!(pObj->presenceFlag() & presenceBit)) {
+            continue;
+        }
+
+        // With items off (RaceConfig +0xB80 == 3) no item boxes are created.
+        if (itemsOff && IsItemBox(m_flowTable, pObj->id())) {
             continue;
         }
 

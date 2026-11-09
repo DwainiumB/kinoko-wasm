@@ -31,9 +31,29 @@ void ObjectHeyhoBall::init() {
 }
 
 /// @addr{0x806D0880}
+/// @details Outside Time Trials (ObjectDirector +0x55) the kart gets the hit table's reaction, the
+/// weaker blast turning an explosion into a spin without a push, and a kart touching the ball
+/// (object reaction 3 or 5) makes it explode on the next frame (Dolphin test13). In Time Trials it
+/// only explodes on its timer.
 Kart::Reaction ObjectHeyhoBall::onCollision(Kart::KartObject * /*kartObj*/,
-        Kart::Reaction /*reactionOnKart*/, Kart::Reaction /*reactionOnObj*/,
-        EGG::Vector3f &hitDepth) {
+        Kart::Reaction reactionOnKart, Kart::Reaction reactionOnObj, EGG::Vector3f &hitDepth) {
+    if (!ObjectDirector::Instance()->isTimeTrial()) {
+        if (m_intensity == ExplosionIntensity::SpinSomeSpeed) {
+            if (reactionOnKart == Kart::Reaction::ExplosionLoseItem) {
+                reactionOnKart = Kart::Reaction::SpinSomeSpeed;
+            }
+
+            hitDepth.setZero();
+        }
+
+        if ((reactionOnObj == Kart::Reaction::UNK_3 || reactionOnObj == Kart::Reaction::UNK_5) &&
+                m_currentStateId != 3) {
+            m_nextStateId = 3;
+        }
+
+        return reactionOnKart;
+    }
+
     if (m_currentStateId == 3) {
         if (m_intensity == ExplosionIntensity::ExplosionLoseItem) {
             return Kart::Reaction::ExplosionLoseItem;
