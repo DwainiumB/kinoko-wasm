@@ -346,6 +346,8 @@ ObjectBase *ObjectDirector::createObject(const System::MapdataGeoObj &params) {
         return EGG::egg_new<ObjectPsea>(params);
     case ObjectId::Woodbox:
         return EGG::egg_new<ObjectWoodbox>(params);
+    case ObjectId::Karehayama:
+        return EGG::egg_new<ObjectKarehayama>(params);
     case ObjectId::WLWallGC:
         return EGG::egg_new<ObjectWLWallGC>(params);
     case ObjectId::CarA1:

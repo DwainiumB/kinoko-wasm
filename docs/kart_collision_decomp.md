@@ -1072,3 +1072,38 @@ Beach among them, so the new blasts already run in those Time Trials. In a VS ra
 inputs) the blasts run on 918 and 560 frames and never reach an item or a reacting object. A blast forced onto
 DS Delfino Square's first wooden box (temporary hook, removed) broke both boxes there, and each dropped its item
 credited to player 0.
+
+## Maple Treeway's leaf piles (sixteenth pass, 2026-11-09)
+
+Found by `test8` (Maple Treeway, Dolphin): at race frame 1131 P1 drove through a pile of dry leaves and the game
+spawned a mushroom item object 380 units above it, credited to P1. Kinoko created the piles as `ObjectNoImpl`, so the
+mushroom and the pile's random draws were missing, and the next item roll (1473) decided a banana instead of the
+game's green shell. Object 0x176 is "karehayama" (ObjFlow.bin; 0x175 "leaf_effect", 0x2ED / 0x2F1 "EnvKareha*" are
+its visual neighbours). It is an `ObjectBreakable`, the wooden boxes' base class.
+
+```
+// ObjectKarehayama, vtable 0x808CE020 (constructor 0x80766F4C: base constructor 0x8076EBE0, then the vtable;
+// destructor 0x80766F88). Shared with the base: init 0x80766FE0 (base init 0x8076EC68 + effects), loadFlags
+// 0x807677E4 (1), calc 0x8076ED1C, onCollision 0x8076F0AC, onItemCollision 0x8076F1DC, enableCollision 0x8076ED70.
+// +0xF4 respawn 0x80767250: base respawn 0x8076EDD4 (enableCollision, state 1) + model / effect calls (visual).
+// +0xF8 breakObject 0x807672A4 (player r4, dir r5):
+//   r = ObjectDirector::random()->nextF32(10.0);                   // 0x80782F74, 0x805556A8, 10 at 0x808CE018
+//   m.setAxisRotation((r - 10 * 0.5) * 0.017453292, ey);           // 0x802303BC, 0.5 at 0x808A3B50, 0x808A3B54
+//   ObjectBreakable::breakObject(player, PSMTXMultVec(m, dir));      // 0x8076EDE4: drop chance draw, decideItem,
+//                                                                    //   speed draw, spawnFromObject, state 2
+// +0xFC calcFall 0x807677E0: nothing.  +0x100 0x8076724C: nothing.
+// +0x104 breakByKart 0x8076734C (object reaction 3):
+//   if (kart->speedRatioCapped() <= 0.4) { model off (+0x68); state = 2; disableCollision (+0x90); }   // 0x808A3B58
+//   else breakObject(kart->playerIdx(), kart->velocity());          // 0x80590A5C, 0x80590D08
+//   effects +0x118 (0x80767114) / +0x11C (0x807671DC); respawnTimer +0xB4 = 138;   // 0x808CE008
+// +0x108 breakByKartUntimed 0x80767448 (object reaction 5): returns at once for a ghost kart outside a Time Trial
+//   replay; otherwise as +0x104, but also scatters without a drop when director +0x55 (Time Trial / ghost race).
+// +0x10C breakByItem 0x8076757C: breakObject(item flags +0x78 & 0x8000 ? 12 : owner +0x6C, -hitDepth); +0x11C;
+//   respawnTimer = 138; sound 0x2E7.
+// +0x110 breakByItemUntimed 0x80767648: model off; state 2; disableCollision; +0x11C; respawnTimer = 138; sound.
+//   (Offline outside Time Trials processItemReactions 0x8081F778 turns object reaction 5 into 3, so an item breaks
+//   a pile with a drop there.)
+```
+
+Ported as `ObjectKarehayama` (effects, model and sounds left out: nothing in the race reads them). With it `test8`
+is identical: 19,460 kart-frames, 33,368 item-object frames bit-exact.

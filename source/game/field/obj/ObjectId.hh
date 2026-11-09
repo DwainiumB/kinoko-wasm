@@ -55,6 +55,7 @@ enum class ObjectId {
     ParasolR = 0x16e,
     ObakeBlock2SFCc = 0x16f,
     ObakeBlock3SFCc = 0x170,
+    Karehayama = 0x176,
     KoopaFigure64 = 0x18b,
     Kuribo = 0x191,
     Choropu = 0x192,

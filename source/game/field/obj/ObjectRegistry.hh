@@ -36,6 +36,7 @@
 #include "game/field/obj/ObjectItembox.hh"
 #include "game/field/obj/ObjectItemboxLine.hh"
 #include "game/field/obj/ObjectKCL.hh"
+#include "game/field/obj/ObjectKarehayama.hh"
 #include "game/field/obj/ObjectKinoko.hh"
 #include "game/field/obj/ObjectKoopaBall.hh"
 #include "game/field/obj/ObjectKoopaFigure64.hh"
