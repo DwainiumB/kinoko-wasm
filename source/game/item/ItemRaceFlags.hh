@@ -29,6 +29,15 @@ struct ItemRaceFlags {
     static bool s_battle;    ///< 0x809C38BB Offline or online battle.
     static bool s_timeTrial; ///< 0x809C38BC Time Trial and ghost race: no roulette.
     static bool s_teams;     ///< 0x809C38BD Team race (mode flag 2).
+
+    /// @addr{0x807BD340}
+    /// @brief Run at the start of every ItemDirector::calc: keeps the race frame and its low bits.
+    static void CalcRaceFrame();
+
+    static s32 s_raceFrame;      ///< 0x809C38C0 RaceManager +0x20.
+    static u32 s_raceFrameMod2;  ///< 0x809C38C4
+    static u32 s_raceFrameMod4;  ///< 0x809C38C8 Red shells look at racer i only when i & 3 is this.
+    static u32 s_raceFrameMod8;  ///< 0x809C38CC
 };
 
 } // namespace Item

@@ -36,7 +36,7 @@ void ItemDirector::calc() {
     constexpr s32 TOTAL_LIMIT = 30;
 
     ItemSlotData::Instance()->calcTimers();
-    // 0x807BD340 is not ported.
+    ItemRaceFlags::CalcRaceFrame();
     m_blooperManager.calc();
     m_powManager.calc();
 

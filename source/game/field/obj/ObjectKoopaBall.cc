@@ -3,6 +3,7 @@
 #include "game/item/ItemDirector.hh"
 
 #include "game/field/CollisionDirector.hh"
+#include "game/field/ObjectDirector.hh"
 
 #include "game/kart/KartCollide.hh"
 
@@ -35,6 +36,7 @@ void ObjectKoopaBall::init() {
     curTanDirNorm.normalise();
     setMatrixFromOrthonormalBasisAndPos(curTanDirNorm);
     calcTransform();
+    m_baseTransform = transform(); // 0x807704A4: +0x58 copied to +0xF0
 
     m_angleRad = 0.0f;
     m_angSpeed = INITIAL_ANGULAR_SPEED;
@@ -52,9 +54,6 @@ void ObjectKoopaBall::init() {
     anmMgr->playAnim(0.0f, 1.0f, 0);
     m_animFramecount = anmMgr->activeAnim(Render::AnmType::Chr)->frameCount();
     m_explodeTimer = -1;
-
-    EGG::Matrix34f mat;
-    mat.makeR(rot());
 
     resize(RADIUS_AABB, 0.0f);
 }
@@ -119,9 +118,11 @@ void ObjectKoopaBall::calcTangible() {
 
     m_angleRad += -m_angSpeed * DEG2RAD;
 
+    // The spin is applied to the matrix init kept, not to the current one (the turns do not
+    // compound), and on its left (Dolphin test10).
     EGG::Matrix34f mat = EGG::Matrix34f::ident;
     mat.makeR(EGG::Vector3f(m_angleRad, 0.0f, 0.0f));
-    mat = transform().multiplyTo(mat);
+    mat = mat.multiplyTo(m_baseTransform);
     mat.setBase(3, pos());
     setTransform(mat);
 }
@@ -161,7 +162,10 @@ void ObjectKoopaBall::calcExploding() {
 
 /// @addr{0x80771248}
 void ObjectKoopaBall::calcIntangible() {
-    constexpr s32 COOLDOWN_FRAMES = 210;
+    // 210 frames between shots in Time Trials and ghost races (0x808CF3EC), 270 otherwise
+    // (0x808CF3E8; Dolphin test10).
+    constexpr s32 COOLDOWN_FRAMES_TIME_TRIAL = 210;
+    constexpr s32 COOLDOWN_FRAMES = 270;
 
     if (m_cooldownTimer >= 0) {
         return;
@@ -171,7 +175,8 @@ void ObjectKoopaBall::calcIntangible() {
     m_railInterpolator->setCurrVel(INITIAL_VELOCITY);
     m_angSpeed = INITIAL_ANGULAR_SPEED;
     m_vel.y = INITIAL_Y_VEL;
-    m_cooldownTimer = COOLDOWN_FRAMES;
+    m_cooldownTimer = ObjectDirector::Instance()->isTimeTrial() ? COOLDOWN_FRAMES_TIME_TRIAL :
+                                                                  COOLDOWN_FRAMES;
 }
 
 /// @addr{0x80771624}

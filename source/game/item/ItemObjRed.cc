@@ -1,6 +1,7 @@
 #include "ItemObjRed.hh"
 
 #include "game/item/ItemDirector.hh"
+#include "game/item/ItemRaceFlags.hh"
 #include "game/item/ItemMath.hh"
 #include "game/item/ItemTrail.hh"
 #include "game/item/KartItem.hh"
@@ -279,11 +280,18 @@ void ItemObjRedShell::calcStateLost() {
 }
 
 /// @addr{0x807B3BAC}
-/// @brief Looks at every racer for a target in front of the shell.
-bool ItemObjRedShell::searchTarget(bool fromOwnerPlace, bool /*roundRobin*/) {
+/// @brief Looks at the racers for a target in front of the shell. In round-robin mode (17 frames
+/// after the shell started searching) racer i is only looked at on race frames where frame & 3 is
+/// i & 3 (0x807B3C10; Dolphin test12).
+bool ItemObjRedShell::searchTarget(bool fromOwnerPlace, bool roundRobin) {
     f32 best = std::numeric_limits<f32>::max();
     bool found = false;
     for (size_t i = 0; i < PlayerCount(); ++i) {
+        if (roundRobin && ItemRaceFlags::s_raceFrame >= 1 &&
+                (i & 3) != ItemRaceFlags::s_raceFrameMod4) {
+            continue;
+        }
+
         if (tryTarget(static_cast<u8>(i), best, fromOwnerPlace)) {
             found = true;
         }

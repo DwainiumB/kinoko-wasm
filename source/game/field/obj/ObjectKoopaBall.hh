@@ -58,6 +58,7 @@ private:
     s32 m_explodeTimer;
     u32 m_animFramecount;
     f32 m_angleRad;
+    EGG::Matrix34f m_baseTransform; ///< +0xF0 The transform init built; the spin turns this.
     f32 m_curScale;
 
     static constexpr f32 RADIUS_AABB = 870.0f * 2.0f;

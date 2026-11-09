@@ -61,6 +61,9 @@ public:
         GroundBoostPanelOrRamp = 7,
         Trickable = 11,
         NotTrickable = 12,
+        /// The floor has moving-road KCL (type 0x15: escalators, conveyors). Set by processFloor,
+        /// cleared every frame by calcFloorEffect; read by KartSub::calcMovingObj.
+        MovingRoad = 15,
         StopHalfPipeState = 16,
     };
     typedef EGG::TBitFlag<u32, eSurfaceFlags> SurfaceFlags;

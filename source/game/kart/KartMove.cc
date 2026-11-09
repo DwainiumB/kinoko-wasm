@@ -1301,19 +1301,31 @@ void KartMove::calcRotation() {
                 }
             }
             if (forwards && !noTurn) {
-                if (m_speed >= 20.0f) {
+                // A mega kart's speed range is 25% wider (0x808B59CC), except the "fast" test
+                // against 70, which the game leaves unscaled (Dolphin test11).
+                f32 rangeScale = status.onBit(eStatus::InMega) ? 1.25f : 1.0f;
+                f32 slowSpeed = 20.0f * rangeScale;
+                if (m_speed >= slowSpeed) {
                     turn *= 0.5f;
                     if (m_speed < 70.0f) {
-                        turn += (1.0f - (m_speed - 20.0f) / 50.0f) * turn;
+                        turn += (1.0f - (m_speed - slowSpeed) / (70.0f * rangeScale - slowSpeed)) *
+                                turn;
                     }
                 } else {
-                    turn = (turn * 0.4f) + (m_speed / 20.0f) * (turn * 0.6f);
+                    turn = (turn * 0.4f) + (m_speed / slowSpeed) * (turn * 0.6f);
                 }
             }
         }
 
         if (!forwards) {
             turn = -turn;
+        }
+
+        // A star, mega mushroom or thunder cloud turns 10% sharper outside a manual drift
+        // (0x808B59C8; Dolphin test10 and test11).
+        if (status.onBit(eStatus::InStar, eStatus::InMega, eStatus::ThunderCloud) &&
+                status.offBit(eStatus::DriftManual)) {
+            turn *= 1.1f;
         }
 
         if (status.onBit(eStatus::ZipperBoost) && status.offBit(eStatus::DriftManual)) {

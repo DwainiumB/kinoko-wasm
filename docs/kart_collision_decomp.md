@@ -1107,3 +1107,79 @@ its visual neighbours). It is an `ObjectBreakable`, the wooden boxes' base class
 
 Ported as `ObjectKarehayama` (effects, model and sounds left out: nothing in the race reads them). With it `test8`
 is identical: 19,460 kart-frames, 33,368 item-object frames bit-exact.
+
+## Stars, megas, Thwomps, cars and Bowser's fireball (seventeenth pass, 2026-11-09)
+
+Found by `test10` (Bowser's Castle, P1 forced to a star by the Gecko test code) and `test11` (Coconut Mall, forced
+mega). Both diverged on the first frame P1 steered after the power-up started; the object diff (new
+`course_object_logger.lua`) showed the rest.
+
+```
+// KartMove::calcRotation 0x8057C69C, the turn's speed shaping and multipliers (not drifting, going forwards):
+//   s = (status +0xC & 0x8000 InMega) ? 1.25 : 1.0;                 // 0x808B59CC
+//   low = 20 * s;                                                    // 0x808B5974
+//   if (speed >= low) turn = (speed >= 70)                          // 0x808B5978, NOT scaled
+//       ? turn * 0.5 : turn * 0.5 + (1 - (speed - low) / (70 * s - low)) * (turn * (1 - 0.5));
+//   else turn = turn * 0.4 + (speed / low) * (turn * (1 - 0.4));    // 0x808B5970
+//   if (!forwards) turn = -turn;
+//   if ((InStar 63 || InMega 79 || ThunderCloud 93) && !DriftManual 3) turn *= 1.1;   // 0x808B59C8
+//   if (ZipperBoost && !DriftManual) turn *= 2.0;                   // 0x808B5B44 (already ported)
+
+// ObjectDossunNormal::init 0x8076023C: base init 0x8075EEA8; stomp state 0; rot from the matrix if not locked;
+//   restRot +0xFC = rot.y; if (pi (0x808A38F0) <= restRot) restRot -= 2 pi (0x808A38EC).
+//   Kinoko had `<=` the other way round: every Thwomp below pi rested at angle - 2 pi. Same direction, but
+//   sin / cos (table lookups, 0x80085110) of -0.785398 and -7.068583 fall on different table steps:
+//   cos 0x3F3504F8 / sin 0x3F3504F5 in the game, 0x3F3504F7 for both in Kinoko.
+
+// ObjectCarA launch 0x806B89A8 (a car hit by a mega, star, bullet or item):
+//   ... parabola above the rail, then a 30% bounce once below it (constants 90, 3, 0.3, 30 at 0x808C2204,
+//   0x808C2208, 0x8089F1E0, 0x8089F1E4) ...
+//   on the landing frame: baseY = rail y; landed = 1; landFrame = timer; f31 (the height) = 0.0 (0x806B8AC0,
+//   loaded for the landing sound 0x2AE), so the car sits at the rail's height that frame.
+//   mat = basis(tangent) * makeRT((0, 0, angle * DEG2RAD)): the car rolls about its own z axis (Kinoko had x).
+
+// ObjectKoopaBall (Bowser's fireball): init 0x807703D0 copies the transform it just built from the rail
+//   tangent (+0x58) to +0xF0 (0x807704A4). Each frame of flight (0x80770F4C):
+//   angle +0x120 += -angSpeed * DEG2RAD; transform = makeR((angle, 0, 0)) * base(+0xF0); translation = pos.
+//   Kinoko multiplied the current transform on the left, so the turns compounded.
+// calcIntangible 0x80771248: when the cooldown +0xE0 runs out, fire; cooldown = director +0x55 (Time Trial /
+//   ghost race) ? 210 (0x808CF3EC) : 270 (0x808CF3E8). Kinoko always used 210.
+
+// KartSub::calcMovingObj 0x80597A88 (ported, not exercised by any recording yet):
+//   if ((status +0x8 & 0x4000000, bit 58) || InBullet || !movingObjCount) decay(0.7, airtime < 20 ? 1 : 0.9, floor);
+//   else { objVel /= floorCount;
+//          if (KartCollide +0x2C & 0x8000 MovingRoad && (InStar || InMega || InBullet || ThunderCloud)) {
+//              objVel = proj(objVel, KartMove +0x68 lastDir); if (dot(objVel, lastDir) < 0) objVel = 0; }
+//          else if (CPU) { ... split along lastDir, forward part scaled by KartSub +0x5C ... }
+//          setMovingRoadVel(0.2, objVel); }
+//   KartCollide::processFloor 0x8056EA04 sets +0x2C 0x8000 when the floor mask has KCL type 0x15 (moving road),
+//   at 0x8056EDF4; calcFloorEffect 0x80571634 clears it (reset mask 0xFFFE04AC).
+```
+
+Ported: the turn multipliers, the Thwomp rest angle, the car roll axis and landing frame, the fireball's base
+matrix and VS cooldown, and the moving-road branch. With them `test10` and `test11` are identical for every kart
+frame, and every course object is bit-exact except Coconut Mall's two escalator groups, whose own matrix the game
+keeps at the KMP rotation while Kinoko leaves it identity (the escalators themselves are right; nothing reads the
+group's matrix).
+
+## Red shells: the staggered target search (eighteenth pass, 2026-11-09)
+
+Found by `test12` (Dry Dry Ruins, P1 forced to triple red shells): a red shell following the item route locked on to
+P2 (parked at the start line) one frame earlier in Kinoko, slowed down a frame early and missed the hit the game made.
+
+```
+// ItemObjRedShell::searchTarget 0x807B3BAC (fromOwnerPlace r4, roundRobin r5), called by the free, search and route
+// states once the state is 5 frames old (roundRobin = 0) and from 17 frames on (roundRobin = 1):
+//   for (i = 0; i < playerCount (0x809C38B8); ++i) {
+//     if (roundRobin && !(raceFrame (0x809C38C0) < 1 || (i & 3) == raceFrameMod4 (0x809C38C8))) continue;
+//     if (tryTarget(i, &bestDistSq, fromOwnerPlace)) found = 1;   // 0x807B381C
+//   }
+// ItemRaceFlags frame copy 0x807BD340, the first call of ItemDirector::calc 0x80799850:
+//   +0x08 = RaceManager +0x20 (the race frame); +0x0C = frame & 1; +0x10 = frame & 3; +0x14 = frame & 7.
+```
+
+So after its first 17 frames a red shell looks at racer i only on race frames where frame & 3 == i & 3: P2 (index 1)
+on frames 1, 5, 9, ... Kinoko looked at every racer every frame. Ported (`ItemRaceFlags::CalcRaceFrame`, the
+round-robin skip in `searchTarget`); `test12` then matches every kart frame up to 7126 (was 2555). The remaining
+difference starts at race frame 2979 with 24 race-generator draws Kinoko does not make (caller not identified yet;
+see `DOLPHIN_VERIFY_RESULT.md`).

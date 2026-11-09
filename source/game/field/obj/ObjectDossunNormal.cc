@@ -14,9 +14,12 @@ void ObjectDossunNormal::init() {
     ObjectDossun::init();
 
     m_stompState = StompState::Inactive;
+    // The resting angle, kept in (-pi, pi]: only an angle of at least pi (0x808A38F0) loses a turn
+    // (0x808A38EC). The comparison was reversed, so almost every Thwomp rested at its angle minus
+    // 2 pi: the same direction, but its sin / cos fall on other table steps (Dolphin test10).
     m_currRot = rot().y;
 
-    if (m_currRot <= F_PI) {
+    if (m_currRot >= F_PI) {
         m_currRot -= F_TAU;
     }
 }

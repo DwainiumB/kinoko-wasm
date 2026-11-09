@@ -425,14 +425,39 @@ void KartSub::tryEndHWG() {
 }
 
 /// @addr{0x80597A88}
+/// @details On a moving road (escalators, conveyors) a kart in a star, mega mushroom, bullet or
+/// thunder cloud only keeps the part of the road's velocity along its last direction, and none of
+/// it when that part points backwards (Dolphin test10 and test11). The game decays instead of
+/// composing also under status bit 58 (never set in Kinoko) or in a bullet. The CPU branch (the
+/// road's velocity split along the last direction, the forward part scaled by KartSub +0x5C) is
+/// left out: Kinoko has no CPU drivers.
 void KartSub::calcMovingObj() {
-    if (m_movingObjCollisionCount == 0) {
-        f32 scalar = state()->airtime() < 20 ? 1.0f : 0.9f;
-        physics()->composeDecayingMovingObjVel(0.7f, scalar, m_floorCollisionCount != 0);
-    } else {
-        m_objVel *= 1.0f / static_cast<f32>(m_floorCollisionCount);
-        physics()->composeMovingObjVel(m_objVel, 0.2f);
+    constexpr f32 DECAY_FLOOR_SCALAR = 0.7f; ///< 0x808B654C
+    constexpr f32 DECAY_AIR_SCALAR = 0.9f;   ///< 0x808B6550
+    constexpr f32 COMPOSE_RATE = 0.2f;       ///< 0x808B6548
+
+    const auto &status = KartObjectProxy::status();
+
+    if (m_movingObjCollisionCount == 0 || status.onBit(eStatus::InBullet)) {
+        f32 scalar = state()->airtime() < 20 ? 1.0f : DECAY_AIR_SCALAR;
+        physics()->composeDecayingMovingObjVel(DECAY_FLOOR_SCALAR, scalar,
+                m_floorCollisionCount != 0);
+        return;
     }
+
+    m_objVel *= 1.0f / static_cast<f32>(m_floorCollisionCount);
+
+    if (collide()->surfaceFlags().onBit(KartCollide::eSurfaceFlags::MovingRoad) &&
+            status.onBit(eStatus::InStar, eStatus::InMega, eStatus::InBullet,
+                    eStatus::ThunderCloud)) {
+        const EGG::Vector3f &lastDir = move()->lastDir();
+        m_objVel = m_objVel.proj(lastDir);
+        if (m_objVel.dot(lastDir) < 0.0f) {
+            m_objVel = EGG::Vector3f::zero;
+        }
+    }
+
+    physics()->composeMovingObjVel(m_objVel, COMPOSE_RATE);
 }
 
 /// @addr{0x80597D4C}

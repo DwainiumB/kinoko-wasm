@@ -17,6 +17,10 @@ void ItemRaceFlags::Init() {
     s_versus = false;
     s_battle = false;
     s_timeTrial = false;
+    s_raceFrame = 0;
+    s_raceFrameMod2 = 0;
+    s_raceFrameMod4 = 0;
+    s_raceFrameMod8 = 0;
 
     switch (scenario.gameMode) {
     case GameMode::Grand_Prix:
@@ -61,5 +65,18 @@ bool ItemRaceFlags::s_versus = false;
 bool ItemRaceFlags::s_battle = false;
 bool ItemRaceFlags::s_timeTrial = false;
 bool ItemRaceFlags::s_teams = false;
+s32 ItemRaceFlags::s_raceFrame = 0;
+u32 ItemRaceFlags::s_raceFrameMod2 = 0;
+u32 ItemRaceFlags::s_raceFrameMod4 = 0;
+u32 ItemRaceFlags::s_raceFrameMod8 = 0;
+
+/// @addr{0x807BD340}
+void ItemRaceFlags::CalcRaceFrame() {
+    u32 frame = System::RaceManager::Instance()->timer();
+    s_raceFrame = static_cast<s32>(frame);
+    s_raceFrameMod2 = frame & 1;
+    s_raceFrameMod4 = frame & 3;
+    s_raceFrameMod8 = frame & 7;
+}
 
 } // namespace Kinoko::Item

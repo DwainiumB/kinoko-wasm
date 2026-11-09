@@ -166,14 +166,18 @@ void ObjectCarA::calcLaunch() {
         m_launchBaseY = railPos.y;
         m_landed = true;
         m_landFrame = static_cast<f32>(m_launchTimer);
+        // On the landing frame the car sits at the rail's height: the game reuses the height's
+        // register for the landing sound's 0.0 argument (f31 at 0x806B8AC0; Dolphin test11).
+        height = 0.0f;
     }
 
     EGG::Vector3f carPos(railPos.x, m_launchBaseY + height, railPos.z);
     setPos(carPos);
 
     EGG::Matrix34f mat = OrthonormalBasis(m_currTangent);
+    // The car rolls about its own z axis (the game's makeRT gets (0, 0, angle); Dolphin test11).
     EGG::Matrix34f pitch;
-    pitch.makeRT(EGG::Vector3f(m_launchPitch * DEG2RAD, 0.0f, 0.0f), EGG::Vector3f::zero);
+    pitch.makeRT(EGG::Vector3f(0.0f, 0.0f, m_launchPitch * DEG2RAD), EGG::Vector3f::zero);
     mat = mat.multiplyTo(pitch);
     mat.setBase(3, carPos);
     setTransform(mat);

@@ -287,7 +287,7 @@ void KartCollide::calcFloorEffect() {
     m_sumHitboxBottomHeightFloorOnly = 0.0f;
     m_surfaceFlags.resetBit(eSurfaceFlags::Wall, eSurfaceFlags::SolidOOB, eSurfaceFlags::BoostRamp,
             eSurfaceFlags::Offroad, eSurfaceFlags::Trickable, eSurfaceFlags::NotTrickable,
-            eSurfaceFlags::StopHalfPipeState);
+            eSurfaceFlags::MovingRoad, eSurfaceFlags::StopHalfPipeState);
     m_sumHitboxBottomHeightSoftWall = 0.0f;
     m_numFloorOnlyCollisions = 0;
     m_numSoftWallCollisions = 0;
@@ -1160,6 +1160,11 @@ void KartCollide::processFloor(CollisionData &collisionData, Hitbox &hitbox,
             state()->setJumpPadVariant(closestColEntry->variant());
         }
         collisionData.bTrickable = true;
+    }
+
+    // 0x8056EDF4
+    if (*maskOut & KCL_TYPE_BIT(COL_TYPE_MOVING_ROAD)) {
+        m_surfaceFlags.setBit(eSurfaceFlags::MovingRoad);
     }
 }
 
