@@ -67,8 +67,14 @@
       <label><strong>Track:</strong> </label><select id="trackSelect"></select>
       <label style="margin-left: 8px;"><strong>Character:</strong> </label><select id="charSelect"></select>
       <label style="margin-left: 8px;"><strong>Vehicle:</strong> </label><select id="vehSelect"></select>
+      <label style="margin-left: 8px;"><strong>Mode:</strong> </label><select id="modeSelect"><option value="0">Time Trial</option><option value="1">VS</option></select>
+      <select id="cpuSelect" title="CPU racers"></select>
       <button id="restartBtn" class="btn-blue" style="margin-left: 10px;">Restart</button>
       <button id="openControlsBtn" style="margin-left: 6px;">Controls</button>
+      <button id="moreBtn" style="margin-left: 6px;" title="Show or hide the extra options: camera, ghosts, post-effects, TAS and the debug readouts">More &#9662;</button>
+    </div>
+    <div id="moreControls" style="display: none; border-top: 1px solid #333; margin-top: 8px; padding-top: 2px;">
+      <div style="margin-top: 6px;">
       <button id="perfBtn" style="margin-left: 6px;" title="Performance overlay (F3)">Perf</button>
       <button id="tasBtn" style="margin-left: 6px;" title="TAS mode: live physics for the loaded ghost with snapshots, rewind, input override, undo, branches and a real .rkg export (reloads the page once)">TAS</button>
       <button id="editBtn" style="margin-left: 6px;" title="Edit the inputs of ghost 1: pause, change sticks / drift / item, Apply re-simulates the ghost">Edit inputs</button>
@@ -87,8 +93,6 @@
       <button id="nameTagsBtn" style="margin-left: 6px;" title="Floating name tag above each loaded ghost, like the game's in-race nameplate -- click to toggle between fully opaque and a dimmer, more translucent look">Tags: on</button>
       <label style="margin-left: 8px;"><strong>Camera:</strong> </label><select id="camSelect"></select>
       <button id="rearBtn" style="margin-left: 6px;" title="Rear camera: look behind the kart you are watching or driving, and stay there (the game's Look Back, but latched). Holding Look Back while it is on flips back to the front. Key: B (rebindable in Controls)">Rear cam: off</button>
-      <label style="margin-left: 8px;"><strong>Mode:</strong> </label><select id="modeSelect"><option value="0">Time Trial</option><option value="1">VS</option></select>
-      <select id="cpuSelect" title="CPU racers"></select>
       <label style="margin-left: 8px;"><strong>Ghost:</strong> </label><select id="ghostSelect" style="max-width: 260px;"><option value="">No ghost</option></select>
       <label style="margin-left: 4px;"><strong>vs.</strong> </label><select id="ghost2Select" style="max-width: 260px;"><option value="">No 2nd ghost</option></select>
       <span id="ghostGapLabel" style="margin-left: 6px; display: none; font-family: monospace;"></span>
@@ -98,6 +102,9 @@
       <span id="ghostFrameLabel" style="margin-left: 6px; display: none;"></span>
       <canvas id="ghostStickCanvas" width="44" height="44" style="margin-left: 8px; vertical-align: middle; display: none; background: #222; border-radius: 4px;"></canvas>
       <span id="ghostButtonsLabel" style="margin-left: 4px; display: none; font-family: monospace;"></span>
+      </div>
+    <div id="pos" style="margin-top: 6px;">Pos: [0, 0, 0]</div>
+    <div id="ghostStats" style="margin-top: 3px; font-family: monospace; white-space: pre; display: none;" title="Speed and airtime of the loaded ghosts: airborne = no wheel on the ground. Airtime is counted over the frame window shown (default 564-621, the wall ride on DS Yoshi Falls)."></div>
     </div>
     <div id="tasStrip" style="display:none;margin-top:4px;font:12px/1.5 monospace;padding:3px 6px;border:1px solid #3a4452;border-radius:4px;background:rgba(8,10,14,.55)">
       <b>TAS</b> frame <b id="tasF">0</b> &nbsp;
@@ -112,8 +119,6 @@
       <button id="tasExport">export .rkg</button> <button id="tasExit" title="Leave TAS mode (reloads the page)">exit TAS</button>
       <span id="tasStatus" style="opacity:.85"></span>
     </div>
-    <div id="pos" style="margin-top: 6px;">Pos: [0, 0, 0]</div>
-    <div id="ghostStats" style="margin-top: 3px; font-family: monospace; white-space: pre; display: none;" title="Speed and airtime of the loaded ghosts: airborne = no wheel on the ground. Airtime is counted over the frame window shown (default 564-621, the wall ride on DS Yoshi Falls)."></div>
   </div>
 
   <div id="hud">
@@ -148,6 +153,20 @@
     const trackSelect = document.getElementById('trackSelect');
     const charSelect = document.getElementById('charSelect');
     const vehSelect = document.getElementById('vehSelect');
+
+    // The bar only shows what a race needs (track, kart, mode, restart, controls, online); the rest (camera, ghosts, post-effects, TAS, debug
+    // readouts) sits behind the More button. Keyboard shortcuts for those keep working while they are hidden.
+    {
+      const moreBtn = document.getElementById('moreBtn'), moreBox = document.getElementById('moreControls');
+      let on = false; try { on = localStorage.getItem('mkw_more') === '1'; } catch (e) {}
+      const apply = () => {
+        moreBox.style.display = on ? '' : 'none';
+        moreBtn.innerHTML = on ? 'Less &#9652;' : 'More &#9662;';
+        try { localStorage.setItem('mkw_more', on ? '1' : '0'); } catch (e) {}
+      };
+      moreBtn.onclick = () => { on = !on; apply(); moreBtn.blur(); };
+      apply();
+    }
 
     // IDs and folders match Kinoko's Course enum and COURSE_NAMES (include/Common.hh), in cup order.
     const TRACKS = [
@@ -4431,7 +4450,7 @@
       document.head.appendChild(css);
       const panel = document.createElement('div'); panel.id = 'netPanel'; document.body.appendChild(panel);
       const btn = document.createElement('button'); btn.id = 'netBtn'; btn.textContent = 'Online'; btn.style.marginLeft = '6px'; btn.title = 'Race other players live (ghosts streamed over WebRTC)';
-      document.getElementById('perfBtn').after(btn);
+      document.getElementById('openControlsBtn').after(btn);
       let open = !!sess;
       btn.onclick = () => { open = !open; draw(); };
       const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
