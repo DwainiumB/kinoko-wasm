@@ -63,6 +63,7 @@ def build_steps(mk):
     lang = ui_language(mk)
     if lang:
         steps.append(('hud', 'race HUD art (language %s)' % lang, [py('export_hud.py', os.path.join(mk, 'Scene', 'UI'), lang)]))
+        steps.append(('pause_menu', 'pause menu art (language %s)' % lang, [py('export_pause_menu.py', os.path.join(mk, 'Scene', 'UI'), lang)]))
     steps += [
         ('sounds', 'sound effects + course music', [py('export_web_sounds.py', mk)]),
         ('karts', 'kart + driver models (every vehicle/character)', [py('brres_to_glb.py', mk)]),

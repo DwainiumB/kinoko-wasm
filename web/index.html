@@ -59,6 +59,10 @@
     .pm-btn.cur { background: linear-gradient(#58b86a, #23783a); }
     .pm-btn.sel { border-color: #ffe14d; background: linear-gradient(#5aa0ff, #2a68d8); transform: scale(1.04); box-shadow: 0 0 18px 3px rgba(255, 225, 77, .75); }
     .pm-btn.cur.sel { background: linear-gradient(#78d88a, #2f9a4c); }
+    #pmCanvas { display: none; position: absolute; inset: 0; width: 100%; height: 100%; }
+    #pauseMenu.art { background: none; backdrop-filter: none; }
+    #pauseMenu.art #pmCanvas { display: block; }
+    #pauseMenu.art #pmTitle, #pauseMenu.art #pmList, #pauseMenu.art #pmHint { display: none; }
     #pmHint { margin-top: 14px; font: 14px sans-serif; opacity: .8; text-shadow: 1px 1px 0 #000; }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -69,6 +73,7 @@
   <script src="config.js?v=1"></script>
   <script src="online.js?v=2"></script>
   <script src="hud.js?v=3"></script>
+  <script src="pausemenu.js?v=5"></script>
   <script src="cpu.js?v=4"></script>
   <script src="kinoko_web.js?v=42"></script>
   <script src="assetgate.js?v=3"></script>   <!-- starts #mainApp once the game assets are reachable (see assetgate.js) -->
@@ -160,7 +165,7 @@
     </div>
   </div>
 
-  <div id="pauseMenu"><div id="pmTitle"></div><div id="pmList"></div><div id="pmHint">&uarr;&darr; choose &nbsp;&middot;&nbsp; Enter / A confirm &nbsp;&middot;&nbsp; Esc / B back</div></div>
+  <div id="pauseMenu"><canvas id="pmCanvas"></canvas><div id="pmTitle"></div><div id="pmList"></div><div id="pmHint">&uarr;&darr; choose &nbsp;&middot;&nbsp; Enter / A confirm &nbsp;&middot;&nbsp; Esc / B back</div></div>
 
   <script type="text/plain" id="mainApp">
     const statusEl = document.getElementById('status');
@@ -179,10 +184,36 @@
       const modeSelect = document.getElementById('modeSelect'), restartBtn = document.getElementById('restartBtn'), ghostSel = document.getElementById('ghostSelect');
       let items = [], sel = 0, back = null;
 
+      // The game's own menu art (pausemenu.js, from assets/ui/pause_menu.json written by tools/export_pause_menu.py). Until it has loaded, or if
+      // those files are not in the assets folder, the plain buttons below are used.
+      const pmCanvas = document.getElementById('pmCanvas');
+      let art = null, artState = 'idle', openT0 = 0, raf = 0;
+      function ensureArt() {
+        if (artState !== 'idle') return;
+        artState = 'loading';
+        const a = new PauseArt(gameHud);
+        a.load().then(() => { art = a; artState = 'ok'; if (racePaused) { paint(); loop(); } }).catch(e => { artState = 'failed'; console.warn('pause menu art:', e); });
+      }
+      function loop() {
+        cancelAnimationFrame(raf);
+        if (!racePaused || !art) return;
+        const dpr = window.devicePixelRatio || 1, W = Math.round(innerWidth * dpr), H = Math.round(innerHeight * dpr);
+        if (pmCanvas.width !== W || pmCanvas.height !== H) { pmCanvas.width = W; pmCanvas.height = H; }
+        const t = Math.min(1, (performance.now() - openT0) / 160);
+        art.draw(pmCanvas.getContext('2d'), W, H, t * t * (3 - 2 * t));
+        raf = requestAnimationFrame(loop);
+      }
+      const artXY = e => { const r = pmCanvas.getBoundingClientRect(), k = pmCanvas.width / r.width; return [(e.clientX - r.left) * k, (e.clientY - r.top) * k]; };
+      pmCanvas.addEventListener('mousemove', e => { if (!art) return; const i = art.hitTest(...artXY(e)); if (i >= 0 && i !== sel) { sel = i; art.select(i); } pmCanvas.style.cursor = i >= 0 ? 'pointer' : 'default'; });
+      pmCanvas.addEventListener('click', e => { if (!art) return; const i = art.hitTest(...artXY(e)); if (i >= 0) { sel = i; art.select(i); activate(); } });
+      pmCanvas.addEventListener('wheel', e => { if (!art || !items.length) return; e.preventDefault(); sel = (sel + (e.deltaY > 0 ? 1 : items.length - 1)) % items.length; art.select(sel); }, { passive: false });
+
       const canPause = () => !racePaused && statusEl.innerText === 'Running!' && !(typeof tas !== 'undefined' && tas)
         && !(net.state && net.state.room) && !listeningAction && getComputedStyle(modal).display === 'none';
 
       function paint() {
+        menu.classList.toggle('art', !!art);
+        if (art) { art.setItems(items.map(it => ({ label: it.label, current: it.current })), sel); return; }
         pmList.innerHTML = '';
         items.forEach((it, i) => {
           const b = document.createElement('button');
@@ -194,7 +225,7 @@
         });
         const picked = pmList.children[sel]; if (picked) picked.scrollIntoView({ block: 'nearest' });
       }
-      const mark = () => { [...pmList.children].forEach((b, i) => b.classList.toggle('sel', i === sel)); };
+      const mark = () => { if (art) art.select(sel); else [...pmList.children].forEach((b, i) => b.classList.toggle('sel', i === sel)); };
       function show(title, list, opts) {
         pmTitle.textContent = title; items = list; back = (opts && opts.back) || null;
         sel = Math.max(0, list.findIndex(it => it.current)); if (opts && opts.sel !== undefined) sel = opts.sel;
@@ -205,10 +236,11 @@
       function open() {
         racePaused = true;
         try { if (sound.ctx) sound.ctx.suspend(); } catch (e) {}
-        menu.classList.add('open'); top();
+        openT0 = performance.now(); ensureArt();
+        menu.classList.add('open'); top(); loop();
       }
       function close() {
-        racePaused = false; menu.classList.remove('open');
+        racePaused = false; menu.classList.remove('open'); cancelAnimationFrame(raf);
         try { sound.resume(); } catch (e) {}
       }
       const pickFrom = (title, select, apply, backTo) => show(title,
@@ -246,7 +278,7 @@
         else if (k === 'Enter' || k === 'NumpadEnter' || k === 'Space' || k === userBinds['Accelerate (A)']) { if (!e.repeat) activate(); }
         else if (k === userBinds['Pause Menu'] || k === userBinds['Brake / Reverse (B)'] || k === 'Backspace') { if (!e.repeat) (back || close)(); }
         else return;
-        e.preventDefault(); e.stopImmediatePropagation(); mark(); const picked = pmList.children[sel]; if (picked) picked.scrollIntoView({ block: 'nearest' });
+        e.preventDefault(); e.stopImmediatePropagation(); mark(); if (!art) { const picked = pmList.children[sel]; if (picked) picked.scrollIntoView({ block: 'nearest' }); }
       }, true);
       window.pauseMenu = { open, close, get paused() { return racePaused; } };
     }
