@@ -73,7 +73,7 @@
   <script src="config.js?v=1"></script>
   <script src="online.js?v=2"></script>
   <script src="hud.js?v=3"></script>
-  <script src="pausemenu.js?v=5"></script>
+  <script src="pausemenu.js?v=6"></script>
   <script src="cpu.js?v=4"></script>
   <script src="kinoko_web.js?v=42"></script>
   <script src="assetgate.js?v=3"></script>   <!-- starts #mainApp once the game assets are reachable (see assetgate.js) -->
@@ -254,13 +254,14 @@
       }
       function top() {
         const list = [
-          { label: 'Continue', go: close },
+          { label: 'Continue Game', go: close },
           { label: 'Restart', go: () => restartBtn.click() },
           { label: 'Change Course', go: () => pickFrom('Change Course', trackSelect, v => { trackSelect.value = v; restartBtn.click(); }, top) },
           { label: 'Change Character', go: pickCharacter },
         ];
         if (modeSelect.value === '0') list.push({ label: 'Change Ghost', go: () => pickFrom('Change Ghost', ghostSel, v => { ghostSel.value = v; ghostSel.onchange && ghostSel.onchange(); }, top) });
         list.push({ label: 'Controls', go: () => document.getElementById('openControlsBtn').click() });
+        list.push({ label: 'Quit Game', go: () => show('Quit Game?', [{ label: 'Yes', go: () => location.reload() }, { label: 'No', go: top }], { back: top, sel: 1 }) });   // the page has no title screen: Quit reloads it
         show('Paused', list, { back: close, sel: 0 });
       }
 

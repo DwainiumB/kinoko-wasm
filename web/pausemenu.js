@@ -50,8 +50,6 @@
       if (!this.hud.msgs || !this.tex['tt_pattern_chek_bokashi_32x32.tpl']) throw new Error('pause menu art missing');
       await Promise.all(this.hud.msgs.sheets.map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; })));   // the font sheets must be in before any label is drawn
       this.fsheets = await Promise.all([...Array(j.font.sheetCount).keys()].map(i => loadImg(`pause_font_${i}`)));
-      for (const p of j.button.panes) if (p.type === 'pic1') this.layers[p.name] = this.raster(p);
-      this.dimLayer = this.raster(j.dim.panes.find(p => p.name === 'fade_parts00'));
       this.ready = true;
     }
 
@@ -95,9 +93,9 @@
 
     // a label as an offscreen canvas. The game's kart font only has capitals and digits, so other glyphs come from kart_kanji_font (the
     // fallback font). Glyph intensity is mapped fore -> back like the text pane's material.
-    textLayer(label, pane, wUnits) {
-      if (pane.name === 'text') pane = Object.assign({}, pane, { fore: [140, 105, 20, 0], back: [255, 255, 255, 255] });   // text_light_02_stop, frame 0: the settled colours
-      const key = label + '|' + pane.name;
+    textLayer(label, pane, wUnits, kind) {
+      if (pane.name === 'text') pane = Object.assign({}, pane, kind === 'free' ? { fore: [90, 70, 20, 0], back: [190, 184, 172, 255] } : { fore: [140, 105, 20, 0], back: [255, 255, 255, 255] });   // selected = text_light_02_stop frame 0; free = the dimmer text seen in game
+      const key = label + '|' + pane.name + '|' + (kind || '');
       let c = this.cache.get(key); if (c) return c;
       const fonts = [{ F: this.hud.msgs.font, sheets: this.hud.msgs.sheets }, { F: this.J.font, sheets: this.fsheets }];
       const run = [...label].map(ch => {
@@ -139,7 +137,7 @@
       this.sel = i; this.scrollTo(i);
     }
     // the window of rows that fit on screen follows the selection
-    get rows() { return 6; }
+    get rows() { return 5; }
     scrollTo(i, snap) {
       const n = this.items.length, r = this.rows;
       this.top = Math.max(0, Math.min(Math.max(0, n - r), i - Math.floor(r / 2)));
@@ -161,27 +159,31 @@
     // pane origin (0..8 as a 3x3 grid, 4 = centre) -> offset of the pane's top-left from its position
     static topLeft(p, w, h) { const col = p.origin % 3, row = Math.floor(p.origin / 3); return [-w * col / 2, h * row / 2]; }
 
+    // The button body is set by the game's code, not by the layout file, so it is matched to a Dolphin recording of the real pause menu:
+    // a black outline, a thin yellow rim and a dark see-through fill; the selected button has a brighter rim and an almost clear fill.
+    // The pane values (button scale, glow text, "color_down" overlay) are still the layout's own animations.
     drawButton(g, label, cx, cy, k, v, alphaAll) {
       const P = this.J.button.panes, root = P.find(p => p.name === 'pause_w_fade_n'), rv = v[root.name] || {};
-      const rs = rv.sx ?? root.sx;
+      const rs = rv.sx ?? root.sx, down = Math.max(0, Math.min(1, (v.color_down ? v.color_down.alpha : 100) / 100)), t = 1 - down;   // 0 free .. 1 selected
       g.save(); g.translate(cx, cy); g.scale(rs * k, rs * k); g.globalAlpha = alphaAll;
+      const W = 506, H = 65, mix = (a, b) => Math.round(lerp(a, b, t));
+      g.fillStyle = '#000'; g.fillRect(-W / 2, -H / 2, W, H);                                          // outer black outline
+      g.fillStyle = `rgb(${mix(116, 200)},${mix(117, 191)},${mix(10, 3)})`; g.fillRect(-W / 2 + 2, -H / 2 + 2, W - 4, H - 4);   // yellow rim
+      g.globalCompositeOperation = 'destination-out'; g.globalAlpha = 1; g.fillRect(-W / 2 + 5, -H / 2 + 5, W - 10, H - 10); g.globalCompositeOperation = 'source-over';   // hollow
+      g.globalAlpha = alphaAll * lerp(0.62, 0.06, t); g.fillStyle = '#0a0802'; g.fillRect(-W / 2 + 5, -H / 2 + 5, W - 10, H - 10);                   // fill
       for (const p of P) {
-        if (p.parent !== root.name || !p.visible || p.type === 'bnd1' || p.type === 'pan1') continue;
+        if (p.type !== 'txt1') continue;
         const pv = v[p.name] || {}, a = (pv.alpha ?? p.alpha) / 255, sx = pv.sx ?? p.sx, sy = pv.sy ?? p.sy;
         if (a <= 0 || !sx) continue;
-        g.save(); g.globalAlpha = alphaAll * a; g.translate(p.x, -p.y); g.scale(sx, sy);
-        if (p.type === 'pic1') {
-          const L = this.layers[p.name], [ox, oy] = PauseArt.topLeft(p, p.w, p.h);
-          if (p.name === 'fuchi_pattern') {
-            // common_w004_menu_fuchi_check_loop: the pattern's texture slides 5 tiles along U in 200 frames, so the shine travels along the rim
-            const sh = (((performance.now() * 59.94 / 1000) / 40) % 1) * p.w;
-            g.beginPath(); g.rect(ox, -oy, p.w, p.h); g.clip();
-            g.drawImage(L, ox - sh, -oy, p.w, p.h); g.drawImage(L, ox - sh + p.w, -oy, p.w, p.h);
-          } else g.drawImage(L, ox, -oy, p.w, p.h);       // layout y is up, canvas y is down
-        } else if (p.type === 'txt1') {
-          const T = this.textLayer(label, p, p.w);
-          g.drawImage(T, -T.width / S / 2, -T.height / S / 2, T.width / S, T.height / S);
-        }
+        g.save(); g.translate(p.x, -p.y); g.scale(sx, sy);
+        if (p.name === 'text') {
+          // free text is a dimmer grey-white, selected is white (cross-faded)
+          for (const [kind, w] of [['free', 1 - t], ['sel', t]]) {
+            if (w <= 0.01) continue;
+            const T = this.textLayer(label, p, p.w, kind);
+            g.globalAlpha = alphaAll * a * w; g.drawImage(T, -T.width / S / 2, -T.height / S / 2, T.width / S, T.height / S);
+          }
+        } else { g.globalAlpha = alphaAll * a; const T = this.textLayer(label, p, p.w); g.drawImage(T, -T.width / S / 2, -T.height / S / 2, T.width / S, T.height / S); }
         g.restore();
       }
       g.restore();
@@ -193,12 +195,7 @@
       const u = Math.min(H / 456, W / 832), now = performance.now();
       g.clearRect(0, 0, W, H);
       g.save(); g.translate(W / 2, H / 2);
-      // the dim: the layout's pattern layer, tinted, over the whole screen
-      const dv = paneValues(this.J.anims.black_down_race_fade_in || { entries: [] }, 99, {});
-      g.globalAlpha = 0.5 * open; g.fillStyle = 'rgb(8,12,30)'; g.fillRect(-W / 2, -H / 2, W, H);
-      g.globalAlpha = 0.10 * open; g.drawImage(this.dimLayer, -475 * u, -241.5 * u, 950 * u, 483 * u);
-      g.globalAlpha = 1;
-      const pitch = 64, n = this.items.length, rows = Math.min(this.rows, n), y0 = -(rows - 1) * pitch / 2;
+      const pitch = 75, n = this.items.length, rows = Math.min(this.rows, n), y0 = -(rows - 1) * pitch / 2;
       this.hit = [];
       for (let r = 0; r < rows; r++) {
         const i = this.top + r, it = this.items[i]; if (!it) continue;
