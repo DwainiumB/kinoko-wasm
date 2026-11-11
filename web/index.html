@@ -47,6 +47,19 @@
                     padding: 5px 10px; border-radius: 5px; white-space: nowrap;
                     text-shadow: 1px 1px 0 #000; transition: opacity .15s; }
     body.nameTagsDim .ghostNameTag { opacity: .35; }
+
+    /* In-race pause menu (Continue / Restart / Change Course / Change Character / Change Ghost) */
+    #pauseMenu { display: none; position: fixed; inset: 0; z-index: 90; background: rgba(6, 14, 48, .62); backdrop-filter: blur(3px);
+                 align-items: center; justify-content: center; flex-direction: column; font-family: "Arial Black", Impact, sans-serif; color: #fff; }
+    #pauseMenu.open { display: flex; }
+    #pmTitle { font-size: 30px; font-style: italic; letter-spacing: 1px; margin-bottom: 14px; text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000; }
+    #pmList { display: flex; flex-direction: column; gap: 10px; width: min(440px, 88vw); max-height: 66vh; overflow-y: auto; padding: 6px 10px; scrollbar-width: thin; }
+    .pm-btn { height: 56px; flex: 0 0 auto; border-radius: 30px; border: 3px solid #e8f0ff; background: linear-gradient(#3b82e8, #1a4fa8); color: #fff;
+              font: italic 22px "Arial Black", Impact, sans-serif; text-shadow: 1px 1px 0 #0a2a66; cursor: pointer; transition: transform .08s, box-shadow .08s; }
+    .pm-btn.cur { background: linear-gradient(#58b86a, #23783a); }
+    .pm-btn.sel { border-color: #ffe14d; background: linear-gradient(#5aa0ff, #2a68d8); transform: scale(1.04); box-shadow: 0 0 18px 3px rgba(255, 225, 77, .75); }
+    .pm-btn.cur.sel { background: linear-gradient(#78d88a, #2f9a4c); }
+    #pmHint { margin-top: 14px; font: 14px sans-serif; opacity: .8; text-shadow: 1px 1px 0 #000; }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
@@ -147,12 +160,96 @@
     </div>
   </div>
 
+  <div id="pauseMenu"><div id="pmTitle"></div><div id="pmList"></div><div id="pmHint">&uarr;&darr; choose &nbsp;&middot;&nbsp; Enter / A confirm &nbsp;&middot;&nbsp; Esc / B back</div></div>
+
   <script type="text/plain" id="mainApp">
     const statusEl = document.getElementById('status');
     const posEl = document.getElementById('pos');
     const trackSelect = document.getElementById('trackSelect');
     const charSelect = document.getElementById('charSelect');
     const vehSelect = document.getElementById('vehSelect');
+
+    // --- Pause menu ---
+    // The game's in-race menu. Pausing freezes the physics, effects and animations (the main loop sees racePaused) and suspends the audio.
+    // It is not available in an online race (the others cannot be paused), in TAS mode (which has its own stepping) or while the
+    // Controls window is open. Wording is the game's own (Race.bmg).
+    let racePaused = false;
+    {
+      const menu = document.getElementById('pauseMenu'), pmTitle = document.getElementById('pmTitle'), pmList = document.getElementById('pmList');
+      const modeSelect = document.getElementById('modeSelect'), restartBtn = document.getElementById('restartBtn'), ghostSel = document.getElementById('ghostSelect');
+      let items = [], sel = 0, back = null;
+
+      const canPause = () => !racePaused && statusEl.innerText === 'Running!' && !(typeof tas !== 'undefined' && tas)
+        && !(net.state && net.state.room) && !listeningAction && getComputedStyle(modal).display === 'none';
+
+      function paint() {
+        pmList.innerHTML = '';
+        items.forEach((it, i) => {
+          const b = document.createElement('button');
+          b.className = 'pm-btn' + (it.current ? ' cur' : '') + (i === sel ? ' sel' : '');
+          b.textContent = it.label;
+          b.onmouseenter = () => { sel = i; mark(); };
+          b.onclick = () => { sel = i; activate(); };
+          pmList.appendChild(b);
+        });
+        const picked = pmList.children[sel]; if (picked) picked.scrollIntoView({ block: 'nearest' });
+      }
+      const mark = () => { [...pmList.children].forEach((b, i) => b.classList.toggle('sel', i === sel)); };
+      function show(title, list, opts) {
+        pmTitle.textContent = title; items = list; back = (opts && opts.back) || null;
+        sel = Math.max(0, list.findIndex(it => it.current)); if (opts && opts.sel !== undefined) sel = opts.sel;
+        paint();
+      }
+      const activate = () => { const it = items[sel]; if (it && it.go) it.go(); };
+
+      function open() {
+        racePaused = true;
+        try { if (sound.ctx) sound.ctx.suspend(); } catch (e) {}
+        menu.classList.add('open'); top();
+      }
+      function close() {
+        racePaused = false; menu.classList.remove('open');
+        try { sound.resume(); } catch (e) {}
+      }
+      const pickFrom = (title, select, apply, backTo) => show(title,
+        [...select.options].map(o => ({ label: o.text.replace(/^\d+\.\s*/, ''), current: o.value === select.value, go: () => apply(o.value) })), { back: backTo });
+
+      function pickCharacter() {
+        pickFrom('Change Character', charSelect, v => {
+          charSelect.value = v; charSelect.dispatchEvent(new Event('change'));
+          pickFrom('Change Kart', vehSelect, vv => { vehSelect.value = vv; restartBtn.click(); }, pickCharacter);
+        }, top);
+      }
+      function top() {
+        const list = [
+          { label: 'Continue', go: close },
+          { label: 'Restart', go: () => restartBtn.click() },
+          { label: 'Change Course', go: () => pickFrom('Change Course', trackSelect, v => { trackSelect.value = v; restartBtn.click(); }, top) },
+          { label: 'Change Character', go: pickCharacter },
+        ];
+        if (modeSelect.value === '0') list.push({ label: 'Change Ghost', go: () => pickFrom('Change Ghost', ghostSel, v => { ghostSel.value = v; ghostSel.onchange && ghostSel.onchange(); }, top) });
+        list.push({ label: 'Controls', go: () => document.getElementById('openControlsBtn').click() });
+        show('Paused', list, { back: close, sel: 0 });
+      }
+
+      // The menu owns the keyboard while it is open (capture phase, so the game's own key handlers never see those keys).
+      window.addEventListener('keydown', e => {
+        const tag = e.target && e.target.tagName;
+        if (!racePaused) {
+          if (e.code === userBinds['Pause Menu'] && !e.repeat && tag !== 'INPUT' && tag !== 'TEXTAREA' && canPause()) { e.preventDefault(); e.stopImmediatePropagation(); open(); }
+          return;
+        }
+        if (getComputedStyle(modal).display !== 'none' || listeningAction) return;           // the Controls window is on top of the menu
+        const k = e.code;
+        if (k === 'ArrowUp') sel = (sel + items.length - 1) % items.length;
+        else if (k === 'ArrowDown') sel = (sel + 1) % items.length;
+        else if (k === 'Enter' || k === 'NumpadEnter' || k === 'Space' || k === userBinds['Accelerate (A)']) { if (!e.repeat) activate(); }
+        else if (k === userBinds['Pause Menu'] || k === userBinds['Brake / Reverse (B)'] || k === 'Backspace') { if (!e.repeat) (back || close)(); }
+        else return;
+        e.preventDefault(); e.stopImmediatePropagation(); mark(); const picked = pmList.children[sel]; if (picked) picked.scrollIntoView({ block: 'nearest' });
+      }, true);
+      window.pauseMenu = { open, close, get paused() { return racePaused; } };
+    }
 
     // The bar only shows what a race needs (track, kart, mode, restart, controls, online); the rest (camera, ghosts, post-effects, TAS, debug
     // readouts) sits behind the More button. Keyboard shortcuts for those keep working while they are hidden.
@@ -344,7 +441,8 @@
       "Trick Right": "KeyE",
       "Trick Down": "KeyV",
       "Look Back": "ShiftLeft",
-      "Toggle Rear Camera": "KeyB"
+      "Toggle Rear Camera": "KeyB",
+      "Pause Menu": "Escape"
     };
 
     // Merge over the defaults (not replace) so a key added here later still shows up for players with saved binds.
@@ -849,7 +947,7 @@
         bone.quaternion.copy(q2.invert().multiply(q));    // back to the parent's space
       }
     }
-    window.addEventListener('keydown', () => sound.resume());
+    window.addEventListener('keydown', () => { if (!racePaused) sound.resume(); });
     window.addEventListener('click',   () => sound.resume());
 
     // --- Course Music (BRSTM streams, decoded in the browser) ---
@@ -5371,8 +5469,9 @@
           if (since > GAME_FRAME_MS * 4) cap.last = now;          // after a stall, don't try to catch up
         }
 
-        frameDt = now - lastTime;
-        perf.frame(frameDt);
+        const rawDt = now - lastTime;
+        frameDt = racePaused ? 0 : rawDt;   // paused: no time passes for physics, effects, animations or the camera
+        perf.frame(rawDt);
         accumulator += frameDt;
         lastTime = now;
         if (accumulator > FRAME_MS * MAX_STEPS_PER_RENDER) {
@@ -5386,11 +5485,11 @@
         // Watching the ghost: the camera follows it and your own kart stands still (no input) and is hidden
         const watching = !!(ghostRig && CAMERA_VIEWS[camState.view].ghost) && !tas;   // in TAS mode the live kart is always the one followed
         const followNode = watching ? ghostRig.group : kartMesh;
-        const input = watching ? { buttons: 0, stickX: 0, stickY: 0, trick: 0 } : pollInputs();
+        const input = watching || racePaused ? { buttons: 0, stickX: 0, stickY: 0, trick: 0 } : pollInputs();
         kartMesh.visible = !watching;
         if (ghostPaused) accumulator = 0;
         const tPhys = performance.now(); let steps = 0;
-        while (!ghostPaused && accumulator >= FRAME_MS) {
+        while (!ghostPaused && !racePaused && accumulator >= FRAME_MS) {
           prevPos.copy(currPos);
           prevQuat.copy(currQuat);
           const sIn = tas ? tas.inputFor(simFrames) : input;
