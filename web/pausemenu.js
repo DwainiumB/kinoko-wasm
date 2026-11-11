@@ -132,6 +132,7 @@
     }
     select(i) {
       if (i === this.sel || !this.btn[i]) return;
+      this.flashT0 = 0;
       const now = performance.now();
       this.btn[this.sel] = { state: 'free', t0: now, from: 'sel' }; this.btn[i] = { state: 'sel', t0: now, from: 'free' };
       this.sel = i; this.scrollTo(i);
@@ -153,8 +154,16 @@
       } else {
         if (b.from === 'sel' && f < A.select_to_free.frames) paneValues(A.select_to_free, f, out); else paneValues(A.free, 0, out);
       }
+      // the lime glow on the label is the confirm flash only (text_light_01_ok), not part of simply moving the selection
+      delete out.text_light_01;
+      if (b.state === 'sel' && this.flashT0) {
+        const ff = (now - this.flashT0) * 59.94 / 1000;
+        if (ff < A.text_light_01_ok.frames) { const o2 = paneValues(A.text_light_01_ok, ff, {}); if (o2.text_light_01) out.text_light_01 = o2.text_light_01; }
+      }
       return out;
     }
+    flash() { this.flashT0 = performance.now(); }
+    get flashing() { return !!this.flashT0 && (performance.now() - this.flashT0) * 59.94 / 1000 < this.J.anims.text_light_01_ok.frames; }
 
     // pane origin (0..8 as a 3x3 grid, 4 = centre) -> offset of the pane's top-left from its position
     static topLeft(p, w, h) { const col = p.origin % 3, row = Math.floor(p.origin / 3); return [-w * col / 2, h * row / 2]; }

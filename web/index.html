@@ -73,7 +73,7 @@
   <script src="config.js?v=1"></script>
   <script src="online.js?v=2"></script>
   <script src="hud.js?v=3"></script>
-  <script src="pausemenu.js?v=7"></script>
+  <script src="pausemenu.js?v=8"></script>
   <script src="cpu.js?v=4"></script>
   <script src="kinoko_web.js?v=42"></script>
   <script src="assetgate.js?v=3"></script>   <!-- starts #mainApp once the game assets are reachable (see assetgate.js) -->
@@ -231,7 +231,14 @@
         sel = Math.max(0, list.findIndex(it => it.current)); if (opts && opts.sel !== undefined) sel = opts.sel;
         paint();
       }
-      const activate = () => { const it = items[sel]; if (it && it.go) it.go(); };
+      // with the game's art the label flashes first (text_light_01_ok), then the choice happens
+      let confirming = false;
+      const activate = () => {
+        const it = items[sel]; if (!it || !it.go || confirming) return;
+        if (!art) { it.go(); return; }
+        confirming = true; art.flash();
+        setTimeout(() => { confirming = false; if (racePaused) it.go(); }, 300);
+      };
 
       function open() {
         racePaused = true;
