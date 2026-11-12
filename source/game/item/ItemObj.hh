@@ -76,6 +76,7 @@ struct ItemObjProperties {
 /// ported. States are member function pointers, as in the game (+0x168 and +0x174).
 /// @nosubgrouping
 class ItemObj {
+    friend class Host::Context;
     friend class ItemDirector;
     friend class ItemObjHolder;
     friend class ItemTrail;

@@ -11,9 +11,11 @@
 #include <game/field/obj/ObjectFlamePoleFoot.hh>
 
 #include <game/item/ItemDirector.hh>
+#include <game/item/ItemObj.hh>
 #include <game/item/ItemRaceFlags.hh>
 #include <game/item/ItemSlotData.hh>
 
+#include <game/kart/KartAction.hh>
 #include <game/kart/KartObjectManager.hh>
 #include <game/kart/KartParamFileManager.hh>
 
@@ -71,6 +73,12 @@ Context::Context(size_t bytes) : m_size(bytes) {
     m_statics.m_basabasaInitialXRange = Field::ObjectBasabasa::s_initialXRange;
     m_statics.m_basabasaInitialYRange = Field::ObjectBasabasa::s_initialYRange;
     m_statics.m_flamePoleCount = Field::ObjectFlamePoleFoot::s_flamePoleCount;
+    m_statics.m_itemPointCollision = Item::ItemObj::s_pointCollision;
+    m_statics.m_powStrike = Kart::KartAction::s_powStrike;
+    m_statics.m_powStrikeTimer = Kart::KartAction::s_powStrikeTimer;
+    m_statics.m_powStage = Kart::KartAction::s_powStage;
+    m_statics.m_megaScaleUpAnmChr = Kart::KartObjectManager::s_megaScaleUpAnmChr;
+    m_statics.m_megaScaleDownAnmChr = Kart::KartObjectManager::s_megaScaleDownAnmChr;
 }
 
 Context::Context(const Context &c) : m_size(c.m_size) {
@@ -161,6 +169,11 @@ bool Context::operator==(const Context &rhs) const {
     ret = ret && m_statics.m_basabasaInitialXRange == rhs.m_statics.m_basabasaInitialXRange;
     ret = ret && m_statics.m_basabasaInitialYRange == rhs.m_statics.m_basabasaInitialYRange;
     ret = ret && m_statics.m_flamePoleCount == rhs.m_statics.m_flamePoleCount;
+    ret = ret && m_statics.m_powStrike == rhs.m_statics.m_powStrike;
+    ret = ret && m_statics.m_powStrikeTimer == rhs.m_statics.m_powStrikeTimer;
+    ret = ret && m_statics.m_powStage == rhs.m_statics.m_powStage;
+    ret = ret && m_statics.m_megaScaleUpAnmChr == rhs.m_statics.m_megaScaleUpAnmChr;
+    ret = ret && m_statics.m_megaScaleDownAnmChr == rhs.m_statics.m_megaScaleDownAnmChr;
 
     return ret;
 }
@@ -242,6 +255,12 @@ void Context::SetActiveContext(const Context &rhs) {
     Field::ObjectBasabasa::s_initialXRange = rhs.m_statics.m_basabasaInitialXRange;
     Field::ObjectBasabasa::s_initialYRange = rhs.m_statics.m_basabasaInitialYRange;
     Field::ObjectFlamePoleFoot::s_flamePoleCount = rhs.m_statics.m_flamePoleCount;
+    Item::ItemObj::s_pointCollision = rhs.m_statics.m_itemPointCollision;
+    Kart::KartAction::s_powStrike = rhs.m_statics.m_powStrike;
+    Kart::KartAction::s_powStrikeTimer = rhs.m_statics.m_powStrikeTimer;
+    Kart::KartAction::s_powStage = rhs.m_statics.m_powStage;
+    Kart::KartObjectManager::s_megaScaleUpAnmChr = rhs.m_statics.m_megaScaleUpAnmChr;
+    Kart::KartObjectManager::s_megaScaleDownAnmChr = rhs.m_statics.m_megaScaleDownAnmChr;
 }
 
 } // namespace Kinoko::Host

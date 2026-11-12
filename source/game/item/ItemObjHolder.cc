@@ -18,7 +18,7 @@ ItemObjHolder::ItemObjHolder()
 
 ItemObjHolder::~ItemObjHolder() {
     for (auto *obj : m_objs) {
-        delete obj;
+        EGG::egg_delete(obj);
     }
 }
 
@@ -193,28 +193,30 @@ void ItemObjHolder::despawnAll() {
     }
 }
 
+// Item objects must live in the engine heap (egg_new), not in plain malloc memory: a snapshot (Host::Context) only
+// copies the engine heap, so objects outside it keep their post-snapshot state after a restore and the replay diverges.
 /// @addr{0x807AEAEC}
 /// @brief The game's per-kind array constructors (property +0x00). Only the ported kinds.
 ItemObj *ItemObjHolder::Create(ItemObjKind kind) {
     switch (kind) {
     case ItemObjKind::GreenShell:
-        return new ItemObjGreenShell;
+        return EGG::egg_new<ItemObjGreenShell>();
     case ItemObjKind::RedShell:
-        return new ItemObjRedShell;
+        return EGG::egg_new<ItemObjRedShell>();
     case ItemObjKind::Banana:
-        return new ItemObjBanana;
+        return EGG::egg_new<ItemObjBanana>();
     case ItemObjKind::Mushroom:
-        return new ItemObjMushroom;
+        return EGG::egg_new<ItemObjMushroom>();
     case ItemObjKind::Star:
-        return new ItemObjStar;
+        return EGG::egg_new<ItemObjStar>();
     case ItemObjKind::FakeItemBox:
-        return new ItemObjFakeItemBox;
+        return EGG::egg_new<ItemObjFakeItemBox>();
     case ItemObjKind::BlueShell:
-        return new ItemObjBlueShell;
+        return EGG::egg_new<ItemObjBlueShell>();
     case ItemObjKind::BobOmb:
-        return new ItemObjBobOmb;
+        return EGG::egg_new<ItemObjBobOmb>();
     case ItemObjKind::ThunderCloud:
-        return new ItemObjThunderCloud;
+        return EGG::egg_new<ItemObjThunderCloud>();
     default:
         return nullptr;
     }

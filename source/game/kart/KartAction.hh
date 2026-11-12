@@ -2,6 +2,14 @@
 
 #include "game/kart/KartObjectProxy.hh"
 
+namespace Kinoko {
+
+namespace Host {
+class Context;
+} // namespace Host
+
+} // namespace Kinoko
+
 namespace Kinoko::Kart {
 
 enum class Action {
@@ -28,6 +36,8 @@ enum class Action {
 };
 
 class KartAction : KartObjectProxy {
+    friend class Host::Context;
+
 public:
     enum class eFlags {
         Landing = 0,

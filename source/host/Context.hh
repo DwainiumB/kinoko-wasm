@@ -2,6 +2,8 @@
 
 #include "Common.hh"
 
+#include "game/field/ObjectCollisionPoint.hh"
+
 #include <filesystem>
 #include <functional>
 #include <optional>
@@ -133,6 +135,14 @@ private:
         f32 m_basabasaInitialXRange;
         f32 m_basabasaInitialYRange;
         u32 m_flamePoleCount;
+        // Mutable statics the item and kart code write while a race runs: a snapshot that misses them restores
+        // the heap but not these, and the replay then diverges (tools/lockstep/determinism_check.mjs).
+        Field::ObjectCollisionPoint m_itemPointCollision;
+        bool m_powStrike;
+        s16 m_powStrikeTimer;
+        u8 m_powStage;
+        Abstract::g3d::ResAnmChr *m_megaScaleUpAnmChr;
+        Abstract::g3d::ResAnmChr *m_megaScaleDownAnmChr;
     };
 
     void *m_contextMemory;
