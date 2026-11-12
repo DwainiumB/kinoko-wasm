@@ -107,11 +107,11 @@ void ItemRouteSpline::calc() {
     controls[0] = points[1];
     controls[3] = points[2];
 
-    EGG::Vector3f t1;
+    EGG::Vector3f t1(0.0f, 0.0f, 0.0f);
     NormaliseLength(t1, points[2] - points[0]);
     controls[1] = controls[0] + t1 * (len / THIRD);
 
-    EGG::Vector3f t2;
+    EGG::Vector3f t2(0.0f, 0.0f, 0.0f);
     NormaliseLength(t2, points[3] - points[1]);
     controls[2] = controls[3] + t2 * (-len / THIRD);
 

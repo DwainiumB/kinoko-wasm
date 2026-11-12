@@ -944,7 +944,7 @@ void ItemObj::placeDropped(u32 dropIdx, const EGG::Vector3f &kartPos,
     m_vel += up * upSpeed;
 
     if (dropIdx != 0) {
-        EGG::Vector3f away;
+        EGG::Vector3f away(0.0f, 0.0f, 0.0f);
         NormaliseInto(away, m_pos - kartPos);
         m_vel += away * (SPREAD_SPEED * static_cast<f32>(dropIdx));
     }

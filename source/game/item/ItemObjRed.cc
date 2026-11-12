@@ -400,7 +400,7 @@ bool ItemObjRedShell::calcHoming(f32 speed, f32 rate, bool breakOnWall) {
             lost = true;
         }
 
-        EGG::Vector3f dir;
+        EGG::Vector3f dir(0.0f, 0.0f, 0.0f);
         m_targetDist = NormaliseLength(dir, toAim);
         EGG::Vector3f want = dir * speed;
 
@@ -418,7 +418,7 @@ bool ItemObjRedShell::calcHoming(f32 speed, f32 rate, bool breakOnWall) {
         if (owner < NO_PLAYER) {
             EGG::Vector3f fromOwner = m_pos - Kart(owner)->pos();
             if (match.ps_dot(fromOwner) < 0.0f) {
-                EGG::Vector3f n;
+                EGG::Vector3f n(0.0f, 0.0f, 0.0f);
                 f32 len = NormaliseLength(n, fromOwner);
                 f32 k = std::min(std::max(0.0f + (1.0f * (len - OWNER_FAR)) /
                                                          (OWNER_NEAR - OWNER_FAR),
