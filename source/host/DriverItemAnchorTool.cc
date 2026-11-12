@@ -163,9 +163,11 @@ bool GenerateDriverItemAnchors(const char *kartDir, const char *outPath) {
             entries.push_back(e);
         }
 
+        const auto &t = anchors.throwForward;
+        const auto &d = anchors.dropBehind;
         printf("%-24s throw (%.4f %.4f %.4f) drop (%.4f %.4f %.4f)\n", stem.c_str(),
-                anchors.throwForward.x, anchors.throwForward.y, anchors.throwForward.z,
-                anchors.dropBehind.x, anchors.dropBehind.y, anchors.dropBehind.z);
+                static_cast<double>(t.x), static_cast<double>(t.y), static_cast<double>(t.z),
+                static_cast<double>(d.x), static_cast<double>(d.y), static_cast<double>(d.z));
     }
 
     if (entries.empty()) {
