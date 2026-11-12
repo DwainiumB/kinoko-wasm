@@ -27,10 +27,10 @@ namespace ItemHit {
 
 enum : s32 {
     None = 0,
-    Bounce = 1,     ///< The item bounces off like off a wall.
-    Break = 2,      ///< The item is knocked aside and breaks.
-    ObjHit = 3,     ///< The object is hit.
-    ObjHitHard = 4, ///< The object is hit harder (some objects also get pushed).
+    Bounce = 1,             ///< The item bounces off like off a wall.
+    Break = 2,              ///< The item is knocked aside and breaks.
+    ObjHit = 3,             ///< The object is hit.
+    ObjHitHard = 4,         ///< The object is hit harder (some objects also get pushed).
     ObjHitRaceOnly = 5,     ///< ObjHit in offline races other than Time Trials (0x8081F778).
     ObjHitHardRaceOnly = 6, ///< ObjHitHard in offline races other than Time Trials.
     Pass = 7,               ///< The item never collides with the object.
@@ -68,8 +68,8 @@ public:
     /// @brief An item touched this object (vtable +0xC4): the object reacts to `reactionOnObj`.
     /// @param item Can be null in the game (the overrides check it); never null in Kinoko.
     /// @return What happens to the item.
-    virtual s32 onItemCollision(Item::ItemObj * /*item*/, s32 reactionOnItem,
-            s32 /*reactionOnObj*/, EGG::Vector3f & /*hitDepth*/) {
+    virtual s32 onItemCollision(Item::ItemObj * /*item*/, s32 reactionOnItem, s32 /*reactionOnObj*/,
+            EGG::Vector3f & /*hitDepth*/) {
         return reactionOnItem;
     }
 

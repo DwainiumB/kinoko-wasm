@@ -39,8 +39,7 @@ void ObjectBasabasaDummy::init() {
 
 /// @addr{0x806B6874}
 Kart::Reaction ObjectBasabasaDummy::onCollision(Kart::KartObject *kartObj,
-        Kart::Reaction reactionOnKart, Kart::Reaction reactionOnObj,
-        EGG::Vector3f & /*hitDepth*/) {
+        Kart::Reaction reactionOnKart, Kart::Reaction reactionOnObj, EGG::Vector3f & /*hitDepth*/) {
     auto course = System::RaceConfig::Instance()->raceScenario().course;
     if (course == Course::Dry_Dry_Ruins && m_bigBump) {
         const auto *director = ObjectDirector::Instance();
@@ -63,8 +62,8 @@ Kart::Reaction ObjectBasabasaDummy::onCollision(Kart::KartObject *kartObj,
 /// @addr{0x806B6A18}
 /// @brief An item knocks the bat away along its velocity, or away from the item when it is slow
 /// (the game also handles a null item: then backwards from the bat's facing).
-s32 ObjectBasabasaDummy::onItemCollision(Item::ItemObj *item, s32 reactionOnItem,
-        s32 reactionOnObj, EGG::Vector3f & /*hitDepth*/) {
+s32 ObjectBasabasaDummy::onItemCollision(Item::ItemObj *item, s32 reactionOnItem, s32 reactionOnObj,
+        EGG::Vector3f & /*hitDepth*/) {
     constexpr f32 SLOW_SPEED = 30.0f;
     constexpr f32 PUSH_SPEED = 80.0f;
 

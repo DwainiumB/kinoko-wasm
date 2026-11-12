@@ -9,10 +9,9 @@ namespace Kinoko::Item {
 /// @addr{0x807B9F48}
 ItemRoulette::ItemRoulette()
     : m_kartItem(nullptr), m_state(State::Idle), m_frame(0), m_duration(0), m_speed(0.0f),
-      m_progress(0.0f), m_prevShown(ItemId::NONE), m_shown(ItemId::NONE),
-      m_decided(ItemId::NONE), m_pending(ItemId::NONE), m_boxSetting(0), m_rank(0),
-      m_byRank(false), m_isShort(false), m_waitingForNet(false), m_replaced(false),
-      m_rollCount(0) {}
+      m_progress(0.0f), m_prevShown(ItemId::NONE), m_shown(ItemId::NONE), m_decided(ItemId::NONE),
+      m_pending(ItemId::NONE), m_boxSetting(0), m_rank(0), m_byRank(false), m_isShort(false),
+      m_waitingForNet(false), m_replaced(false), m_rollCount(0) {}
 
 /// @addr{0x807B9F80}
 void ItemRoulette::init(KartItem *kartItem) {
@@ -53,8 +52,8 @@ void ItemRoulette::start(u16 boxSetting, u8 rank, bool human, bool isShort) {
     }
 
     bool noTriples = m_kartItem->hasTripleItem(true);
-    m_decided = ItemSlotData::Instance()->decideItem(boxSetting, rank, human, noTriples,
-            m_kartItem);
+    m_decided =
+            ItemSlotData::Instance()->decideItem(boxSetting, rank, human, noTriples, m_kartItem);
 
     if (!ItemDirector::Instance()->hasRoomFor(m_decided)) {
         if (m_decided != ItemId::TRIPLE_MUSHROOM) {
@@ -97,8 +96,8 @@ bool ItemRoulette::calc() {
         }
 
         if (m_frame <= m_duration) {
-            bool stop = m_kartItem->rouletteStopRequested() && m_frame > EARLY_STOP_FRAME &&
-                    !m_isShort;
+            bool stop =
+                    m_kartItem->rouletteStopRequested() && m_frame > EARLY_STOP_FRAME && !m_isShort;
             if (!stop) {
                 return false;
             }
@@ -142,8 +141,7 @@ void ItemRoulette::cancel() {
 
 /// @addr{0x807BA56C}
 void ItemRoulette::showNext() {
-    ItemId next =
-            ItemSlotData::Instance()->pickShownItem(m_boxSetting, m_rank, m_shown, m_byRank);
+    ItemId next = ItemSlotData::Instance()->pickShownItem(m_boxSetting, m_rank, m_shown, m_byRank);
     m_prevShown = m_shown;
     m_shown = next;
 }

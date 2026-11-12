@@ -130,8 +130,7 @@ void ObjectPakkunF::enterAttack() {
 /// (the rumble is left out). Any other touch only notes the racer for the VS targeting (see
 /// calcDamage), which Kinoko does not have.
 Kart::Reaction ObjectPakkunF::onCollision(Kart::KartObject * /*kartObj*/,
-        Kart::Reaction reactionOnKart, Kart::Reaction reactionOnObj,
-        EGG::Vector3f & /*hitDepth*/) {
+        Kart::Reaction reactionOnKart, Kart::Reaction reactionOnObj, EGG::Vector3f & /*hitDepth*/) {
     if (reactionOnObj == Kart::Reaction::UNK_3 || reactionOnObj == Kart::Reaction::UNK_5) {
         startDamage();
     }

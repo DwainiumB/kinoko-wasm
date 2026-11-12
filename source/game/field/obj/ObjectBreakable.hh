@@ -65,10 +65,9 @@ protected:
 
     /// @brief Broken by an item outside Time Trials (object reaction 5, online races).
     /// @addr{0x8076F2DC}
-    virtual void breakByItemUntimed(Item::ItemObj * /*item*/, const EGG::Vector3f & /*hitDepth*/) {
-    }
+    virtual void breakByItemUntimed(Item::ItemObj * /*item*/, const EGG::Vector3f & /*hitDepth*/) {}
 
-    u32 m_state;         ///< +0xB0: 1 standing, 2 broken, 3 falling back.
+    u32 m_state;        ///< +0xB0: 1 standing, 2 broken, 3 falling back.
     s32 m_respawnTimer; ///< +0xB4: frames until a broken object comes back (0: never).
 };
 

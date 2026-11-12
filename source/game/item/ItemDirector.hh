@@ -95,10 +95,10 @@ private:
     ItemDirector();
     ~ItemDirector() override;
 
-    owning_span<KartItem> m_karts;                                             ///< +0x14
+    owning_span<KartItem> m_karts;                                                ///< +0x14
     std::array<ItemObjHolder, static_cast<size_t>(ItemObjKind::Count)> m_holders; ///< +0x48
-    ItemObjBlastProbe m_blastProbe;                                            ///< +0x2A4
-    s32 m_overLimit;                                                           ///< +0x42C
+    ItemObjBlastProbe m_blastProbe;                                               ///< +0x2A4
+    s32 m_overLimit;                                                              ///< +0x42C
     ItemBlooperManager m_blooperManager; ///< @addr{0x809C3610} (a separate instance in the game)
     ItemPowManager m_powManager;         ///< @addr{0x809C3640} (a separate instance in the game)
 

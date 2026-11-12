@@ -49,10 +49,9 @@ Context::Context(size_t bytes) : m_size(bytes) {
     m_statics.m_railMgr = Field::RailManager::s_instance;
     m_statics.m_itemDir = Item::ItemDirector::s_instance;
     m_statics.m_itemSlotData = Item::ItemSlotData::s_instance;
-    m_statics.m_itemRaceFlags = {Item::ItemRaceFlags::s_playerCount,
-            Item::ItemRaceFlags::s_online, Item::ItemRaceFlags::s_versus,
-            Item::ItemRaceFlags::s_battle, Item::ItemRaceFlags::s_timeTrial,
-            Item::ItemRaceFlags::s_teams};
+    m_statics.m_itemRaceFlags = {Item::ItemRaceFlags::s_playerCount, Item::ItemRaceFlags::s_online,
+            Item::ItemRaceFlags::s_versus, Item::ItemRaceFlags::s_battle,
+            Item::ItemRaceFlags::s_timeTrial, Item::ItemRaceFlags::s_teams};
     m_statics.m_kartObjMgr = Kart::KartObjectManager::s_instance;
     m_statics.m_paramFileMgr = Kart::KartParamFileManager::s_instance;
     m_statics.m_courseMap = System::CourseMap::s_instance;

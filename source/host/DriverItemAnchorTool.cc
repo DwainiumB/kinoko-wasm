@@ -189,8 +189,8 @@ bool GenerateDriverItemAnchors(const char *kartDir, const char *outPath) {
     file.write(reinterpret_cast<const char *>(entries.data()),
             static_cast<std::streamsize>(entries.size() * sizeof(TableEntry)));
 
-    printf("item-anchors: wrote %zu entries to %s (%zu archives skipped)\n", entries.size(), outPath,
-            skipped);
+    printf("item-anchors: wrote %zu entries to %s (%zu archives skipped)\n", entries.size(),
+            outPath, skipped);
     return true;
 }
 

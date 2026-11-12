@@ -260,16 +260,17 @@ struct Vector3f {
     }
 
     /// @addr{0x8019ACCC}
-    /// @brief PSVECCrossProduct: each component is one product fused onto the other's rounded product (ps_msub),
-    /// the y and z components negated after. Differs from cross() in rounding.
+    /// @brief PSVECCrossProduct: each component is one product fused onto the other's rounded
+    /// product (ps_msub), the y and z components negated after. Differs from cross() in rounding.
     [[nodiscard]] constexpr Vector3f ps_cross(const Vector3f &rhs) const {
         return Vector3f(Mathf::fms(y, rhs.z, rhs.y * z), -Mathf::fms(x, rhs.z, rhs.x * z),
                 -Mathf::fms(y, rhs.x, rhs.y * x));
     }
 
     /// @addr{0x8019AC68}
-    /// @brief PSVECMag: the square is z*z fused onto x*x, then y*y is added (the same order as ps_squareMag), and the
-    /// root is x * frsqrt(x). Checked against the shell flight in a Dolphin recording (2026-11-03).
+    /// @brief PSVECMag: the square is z*z fused onto x*x, then y*y is added (the same order as
+    /// ps_squareMag), and the root is x * frsqrt(x). Checked against the shell flight in a Dolphin
+    /// recording (2026-11-03).
     [[nodiscard]] constexpr f32 ps_length() const {
         f32 dot = ps_squareMag();
         return dot == 0.0f ? 0.0f : Mathf::sqrt(dot);

@@ -28,8 +28,8 @@ bool CollisionDirector::checkSpherePartial(f32 radius, const EGG::Vector3f &pos,
             courseColMgr->checkSpherePartial(1.0f, radius, nullptr, pos, prevPos, flags, info,
                     typeMaskOut);
 
-    colliding |= ObjectDrivableDirector::Instance()->checkSpherePartial(radius, pos, prevPos,
-            flags, info, typeMaskOut, timeOffset);
+    colliding |= ObjectDrivableDirector::Instance()->checkSpherePartial(radius, pos, prevPos, flags,
+            info, typeMaskOut, timeOffset);
 
     if (colliding && info) {
         info->tangentOff = info->bbox.min + info->bbox.max;

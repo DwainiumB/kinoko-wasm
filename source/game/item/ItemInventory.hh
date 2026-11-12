@@ -66,15 +66,15 @@ private:
     void spawnDrop();
     void dropOne();
 
-    KartItem *m_kartItem;              ///< Offset 0x00.
-    ItemId m_currentId;                ///< Offset 0x04.
-    int m_currentCount;                ///< Offset 0x08.
-    std::array<ItemObj *, 3> m_drops;  ///< Offset 0x0C. Objects waiting to be dropped.
-    int m_dropTimer;                   ///< Offset 0x18. Drops one object at 7, 5 and 3.
-    bool m_hasTimer;                   ///< Offset 0x1C. Only the golden mushroom.
-    int m_timer;                       ///< Offset 0x20. Frames left of a timed item.
-    int m_timerUse;                    ///< Offset 0x24. m_timer - 12 at the last use.
-    bool m_replaced;                   ///< Offset 0x29. The roulette replaced the item it drew.
+    KartItem *m_kartItem;             ///< Offset 0x00.
+    ItemId m_currentId;               ///< Offset 0x04.
+    int m_currentCount;               ///< Offset 0x08.
+    std::array<ItemObj *, 3> m_drops; ///< Offset 0x0C. Objects waiting to be dropped.
+    int m_dropTimer;                  ///< Offset 0x18. Drops one object at 7, 5 and 3.
+    bool m_hasTimer;                  ///< Offset 0x1C. Only the golden mushroom.
+    int m_timer;                      ///< Offset 0x20. Frames left of a timed item.
+    int m_timerUse;                   ///< Offset 0x24. m_timer - 12 at the last use.
+    bool m_replaced;                  ///< Offset 0x29. The roulette replaced the item it drew.
 };
 
 } // namespace Kinoko::Item

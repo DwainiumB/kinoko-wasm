@@ -69,9 +69,9 @@ private:
     bool m_touchingGround;
     f32 m_initJumpVel;
     f32 m_targetY;
-    s32 m_hitLandFrame;  ///< +0x404 The hit state's frame it landed on, -1 before.
-    f32 m_hitJumpSpeed;  ///< +0x410
-    u32 m_floorVariant;  ///< +0x49C KCL variant of the floor last touched.
+    s32 m_hitLandFrame; ///< +0x404 The hit state's frame it landed on, -1 before.
+    f32 m_hitJumpSpeed; ///< +0x410
+    u32 m_floorVariant; ///< +0x49C KCL variant of the floor last touched.
 
     static constexpr f32 DIAMETER = 400.0f;
     static constexpr EGG::Vector3f GRAVITY = EGG::Vector3f(0.0f, 2.5f, 0.0f);
@@ -79,8 +79,8 @@ private:
     static constexpr std::array<StateManagerEntry, 3> STATE_ENTRIES = {{
             {StateEntry<ObjectHwanwan, &ObjectHwanwan::enterState0, &ObjectHwanwan::calcState0>(0)},
             {StateEntry<ObjectHwanwan, &ObjectHwanwan::enterState1, &ObjectHwanwan::calcState1>(1)},
-            {StateEntry<ObjectHwanwan, &ObjectHwanwan::enterStateHit,
-                    &ObjectHwanwan::calcStateHit>(2)},
+            {StateEntry<ObjectHwanwan, &ObjectHwanwan::enterStateHit, &ObjectHwanwan::calcStateHit>(
+                    2)},
     }};
 };
 

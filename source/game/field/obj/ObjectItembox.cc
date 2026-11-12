@@ -70,9 +70,8 @@ void ObjectItembox::calc() {
 /// of the special table: setting 1 for humans, setting 2 for CPUs; setting 5 = 2, 3 or 4 makes a
 /// short roulette. The controller rumble, the sounds and effects, the CPU's record of the box
 /// (0x809C21D0 +0x68, +0xAD and +0x100) and the mission counter are not ported.
-Kart::Reaction ObjectItembox::onCollision(Kart::KartObject *kartObj,
-        Kart::Reaction reactionOnKart, Kart::Reaction /*reactionOnObj*/,
-        EGG::Vector3f & /*hitDepth*/) {
+Kart::Reaction ObjectItembox::onCollision(Kart::KartObject *kartObj, Kart::Reaction reactionOnKart,
+        Kart::Reaction /*reactionOnObj*/, EGG::Vector3f & /*hitDepth*/) {
     if (!m_active) {
         return reactionOnKart;
     }

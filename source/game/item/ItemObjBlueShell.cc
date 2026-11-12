@@ -42,9 +42,8 @@ const Kart::KartObject *Kart(u8 idx) {
 /// @brief Respawning or otherwise out of play (the same bits as the thunder cloud's strike check).
 bool IsHidden(const Kart::KartObject *kart) {
     return kart->status().onBit(Kart::eStatus::TriggerRespawn, Kart::eStatus::NoKartCollision40,
-            Kart::eStatus::InRespawn, Kart::eStatus::AfterRespawn,
-            Kart::eStatus::NoKartCollision82, Kart::eStatus::Vanished,
-            Kart::eStatus::NoKartCollision89);
+            Kart::eStatus::InRespawn, Kart::eStatus::AfterRespawn, Kart::eStatus::NoKartCollision82,
+            Kart::eStatus::Vanished, Kart::eStatus::NoKartCollision89);
 }
 
 /// @addr{0x80591378}
@@ -99,8 +98,7 @@ ItemObjBlueShell::ItemObjBlueShell()
     : m_target(NO_PLAYER), m_tracking(false), m_onRoute(false), m_lockCandidate(NO_PLAYER),
       m_circleAngle(0), m_state(State::Slide), m_nextState(-1), m_stateFrame(0), m_height(0.0f),
       m_heightRate(0.0f), m_chosen(NO_PLAYER), m_chaseNext(false), m_flySpeed(0.0f),
-      m_chosenMask(0), m_lowDive(false), m_circleRadius(0.0f), m_circleStep(0),
-      m_weakened(false) {}
+      m_chosenMask(0), m_lowDive(false), m_circleRadius(0.0f), m_circleStep(0), m_weakened(false) {}
 
 ItemObjBlueShell::~ItemObjBlueShell() = default;
 
@@ -226,8 +224,8 @@ void ItemObjBlueShell::calcBlue() {
     m_moveDelta = m_pos - before;
     if (m_moveDelta.x * m_moveDelta.x + m_moveDelta.z * m_moveDelta.z < MIN_MOVE_SQ) {
         const EGG::Vector3f &forward = m_basis[2];
-        m_moveDelta += forward.x * forward.x + forward.z * forward.z >= MIN_MOVE_SQ ? forward :
-                                                                                    m_basis[1];
+        m_moveDelta +=
+                forward.x * forward.x + forward.z * forward.z >= MIN_MOVE_SQ ? forward : m_basis[1];
     }
 
     // The target warning on the HUD and the camera are visual.
@@ -407,10 +405,9 @@ void ItemObjBlueShell::calcStateCircle() {
     calcHeight(false);
 
     if (m_circleAngle < END_ANGLE) {
-        f32 turn = static_cast<f32>(static_cast<s32>(m_circleAngle - TURN)) /
-                static_cast<f32>(TURN);
-        EGG::Vector3f move(TILT_SIDE * m_aimOffset.z, TILT_UP * turn,
-                -TILT_SIDE * m_aimOffset.x);
+        f32 turn =
+                static_cast<f32>(static_cast<s32>(m_circleAngle - TURN)) / static_cast<f32>(TURN);
+        EGG::Vector3f move(TILT_SIDE * m_aimOffset.z, TILT_UP * turn, -TILT_SIDE * m_aimOffset.x);
         if (m_stateFrame == 0) {
             m_lastMove = move - m_tilt;
         }

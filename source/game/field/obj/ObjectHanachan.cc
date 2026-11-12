@@ -124,8 +124,7 @@ void ObjectHanachanPart::calc() {
 /// reaction into WallSpark (+0xE0 with status bits 64 or 65, +0xE1) are never set in the game's
 /// code (+0xE0 has only a vtable setter, 0x806C6C08, with no caller).
 Kart::Reaction ObjectHanachanPart::onCollision(Kart::KartObject * /*kartObj*/,
-        Kart::Reaction reactionOnKart, Kart::Reaction reactionOnObj,
-        EGG::Vector3f & /*hitDepth*/) {
+        Kart::Reaction reactionOnKart, Kart::Reaction reactionOnObj, EGG::Vector3f & /*hitDepth*/) {
     if (!m_inHitWave &&
             (reactionOnObj == Kart::Reaction::UNK_3 || reactionOnObj == Kart::Reaction::UNK_5) &&
             m_hopTimer == -1) {
@@ -137,8 +136,8 @@ Kart::Reaction ObjectHanachanPart::onCollision(Kart::KartObject * /*kartObj*/,
 
 /// @addr{0x806C6E40}
 /// @brief Items other than bob-ombs make the part hop.
-s32 ObjectHanachanPart::onItemCollision(Item::ItemObj *item, s32 reactionOnItem,
-        s32 reactionOnObj, EGG::Vector3f & /*hitDepth*/) {
+s32 ObjectHanachanPart::onItemCollision(Item::ItemObj *item, s32 reactionOnItem, s32 reactionOnObj,
+        EGG::Vector3f & /*hitDepth*/) {
     bool bobOmb = item && item->kind() == Item::ItemObjKind::BobOmb;
     if (!m_inHitWave && !bobOmb && reactionOnObj >= ItemHit::ObjHit &&
             reactionOnObj <= ItemHit::ObjHitHardRaceOnly && m_hopTimer == -1) {

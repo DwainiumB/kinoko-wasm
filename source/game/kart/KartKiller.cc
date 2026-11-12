@@ -104,8 +104,7 @@ KartKiller::KartKiller()
     : m_point(NO_POINT), m_prevPoint(NO_POINT), m_frame(0), m_endRank(1), m_wallFrames(0),
       m_wallGrace(0), m_turnRate(0.0f), m_speedScale(1.0f), m_ending(false), m_finished(false),
       m_raised(false), m_flying(false), m_voidCheck(false), m_noFlyTimer(0), m_pointFlags(0),
-      m_wallNrm(EGG::Vector3f::ex), m_liftTimer(0), m_lift(0.0f), m_sideTimer(0),
-      m_side(0.0f) {
+      m_wallNrm(EGG::Vector3f::ex), m_liftTimer(0), m_lift(0.0f), m_sideTimer(0), m_side(0.0f) {
     // 0x8059B658: the end of the bullet can fall through on Rainbow Road.
     m_voidCheck = System::RaceConfig::Instance()->raceScenario().course == Course::Rainbow_Road;
 }
@@ -173,8 +172,10 @@ void KartKiller::calc() {
     calcPoint();
 
     if (m_wallFrames == RESYNC_FRAME_1 || m_wallFrames == RESYNC_FRAME_2) {
-        u8 point =
-                Item::ItemDirector::Instance()->kartItem(param()->playerIdx()).itemPointTracker().idx;
+        u8 point = Item::ItemDirector::Instance()
+                           ->kartItem(param()->playerIdx())
+                           .itemPointTracker()
+                           .idx;
         u8 next = NextPoint(point);
         if (m_point != point && m_point != next) {
             m_prevPoint = NO_POINT;
@@ -404,7 +405,7 @@ void KartKiller::calcLift() {
 
             EGG::Vector3f right = dynamics()->mainRot().rotateVector(EGG::Vector3f::ex);
             m_side = right.z * perp.z + right.x * perp.x + right.y * perp.y < 0.0f ? -SIDE_TURN :
-                                                                                       SIDE_TURN;
+                                                                                     SIDE_TURN;
         }
     }
 

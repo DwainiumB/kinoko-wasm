@@ -346,7 +346,8 @@ void KartAction::ResetPowStrike() {
 void KartAction::startStub() {}
 
 /// @addr{0x80567F68}
-/// @brief Action 0, the banana spin: one turn (rotation set 1). The rumble (0x8059041C) is left out.
+/// @brief Action 0, the banana spin: one turn (rotation set 1). The rumble (0x8059041C) is left
+/// out.
 void KartAction::startAction0() {
     startRotation(1);
 }

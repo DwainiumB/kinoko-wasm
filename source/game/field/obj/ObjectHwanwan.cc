@@ -106,8 +106,8 @@ Kart::Reaction ObjectHwanwan::onCollision(Kart::KartObject *kartObj, Kart::React
 }
 
 /// @addr{0x806E9D6C}
-s32 ObjectHwanwan::onItemCollision(Item::ItemObj * /*item*/, s32 reactionOnItem,
-        s32 reactionOnObj, EGG::Vector3f & /*hitDepth*/) {
+s32 ObjectHwanwan::onItemCollision(Item::ItemObj * /*item*/, s32 reactionOnItem, s32 reactionOnObj,
+        EGG::Vector3f & /*hitDepth*/) {
     if (reactionOnObj >= ItemHit::ObjHit && reactionOnObj <= ItemHit::ObjHitHardRaceOnly &&
             m_currentStateId != 2) {
         m_nextStateId = 2;

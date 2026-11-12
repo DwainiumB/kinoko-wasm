@@ -35,7 +35,6 @@ private:
     [[nodiscard]] bool calcHoming(f32 speed, f32 rate, bool breakOnWall);
     void dropTarget();
 
-
     u8 m_target;                ///< +0x280 Target racer (the game keeps its KartItem). 12: none.
     f32 m_targetDist;           ///< +0x284
     EGG::Vector3f m_aimPoint;   ///< +0x288

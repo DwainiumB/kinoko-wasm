@@ -20,25 +20,25 @@ namespace {
 /// @brief The game's runtime item behaviour table (0x809C36A0), written out by hand from the
 /// static data `ItemProperties_init` (0x807BCAE0) copies in.
 constexpr std::array<ItemInventory::ItemBehaviour, 19> ITEM_BEHAVIOURS = {{
-        {true, ItemObjKind::GreenShell, 1, false, 1},     // green shell
-        {true, ItemObjKind::RedShell, 1, false, 1},       // red shell
-        {true, ItemObjKind::Banana, 1, false, 1},         // banana
-        {true, ItemObjKind::FakeItemBox, 1, false, 1},    // fake item box
-        {true, ItemObjKind::Mushroom, 1, false, 0},       // mushroom
-        {true, ItemObjKind::Mushroom, 3, false, 0},       // triple mushroom
-        {true, ItemObjKind::BobOmb, 1, false, 1},         // bob-omb
-        {true, ItemObjKind::BlueShell, 1, false, 1},      // blue shell
-        {true, ItemObjKind::Lightning, 1, false, 0},      // lightning
-        {true, ItemObjKind::Star, 1, false, 0},           // star
-        {true, ItemObjKind::GoldenMushroom, 1, true, 0},  // golden mushroom
-        {true, ItemObjKind::MegaMushroom, 1, false, 0},   // mega mushroom
-        {true, ItemObjKind::Blooper, 1, false, 0},        // blooper
-        {true, ItemObjKind::PowBlock, 1, false, 0},       // POW
-        {true, ItemObjKind::ThunderCloud, 1, false, 0},   // thunder cloud
-        {true, ItemObjKind::BulletBill, 1, false, 0},     // bullet bill
-        {true, ItemObjKind::GreenShell, 3, false, 3},     // triple green shells
-        {true, ItemObjKind::RedShell, 3, false, 3},       // triple red shells
-        {true, ItemObjKind::Banana, 3, false, 2},         // triple bananas
+        {true, ItemObjKind::GreenShell, 1, false, 1},    // green shell
+        {true, ItemObjKind::RedShell, 1, false, 1},      // red shell
+        {true, ItemObjKind::Banana, 1, false, 1},        // banana
+        {true, ItemObjKind::FakeItemBox, 1, false, 1},   // fake item box
+        {true, ItemObjKind::Mushroom, 1, false, 0},      // mushroom
+        {true, ItemObjKind::Mushroom, 3, false, 0},      // triple mushroom
+        {true, ItemObjKind::BobOmb, 1, false, 1},        // bob-omb
+        {true, ItemObjKind::BlueShell, 1, false, 1},     // blue shell
+        {true, ItemObjKind::Lightning, 1, false, 0},     // lightning
+        {true, ItemObjKind::Star, 1, false, 0},          // star
+        {true, ItemObjKind::GoldenMushroom, 1, true, 0}, // golden mushroom
+        {true, ItemObjKind::MegaMushroom, 1, false, 0},  // mega mushroom
+        {true, ItemObjKind::Blooper, 1, false, 0},       // blooper
+        {true, ItemObjKind::PowBlock, 1, false, 0},      // POW
+        {true, ItemObjKind::ThunderCloud, 1, false, 0},  // thunder cloud
+        {true, ItemObjKind::BulletBill, 1, false, 0},    // bullet bill
+        {true, ItemObjKind::GreenShell, 3, false, 3},    // triple green shells
+        {true, ItemObjKind::RedShell, 3, false, 3},      // triple red shells
+        {true, ItemObjKind::Banana, 3, false, 2},        // triple bananas
 }};
 
 /// @brief How the drops of one hit spread around the kart (0x808A6628): one row per count.
@@ -206,8 +206,7 @@ void ItemInventory::dropOne() {
 
     const auto *kart = m_kartItem->kartObject();
     ItemDirector::Instance()->holder(obj->kind()).activate(obj);
-    obj->dropFromKart(kart->pos(), kart->velocity(), kart->move()->smoothedUp(),
-            KART_VEL_SCALE);
+    obj->dropFromKart(kart->pos(), kart->velocity(), kart->move()->smoothedUp(), KART_VEL_SCALE);
 }
 
 /// @addr{0x807BCAB0}

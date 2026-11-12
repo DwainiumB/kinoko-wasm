@@ -162,9 +162,8 @@ EGG::Vector3f ItemRouteSpline::evalXZ() const {
     f32 b1 = k * u;
     f32 b2 = k * t;
     f32 b3 = t * t * t;
-    return EGG::Vector3f(controls[0].x * b0 + controls[1].x * b1 + controls[2].x * b2 +
-                    controls[3].x * b3,
-            0.0f,
+    return EGG::Vector3f(
+            controls[0].x * b0 + controls[1].x * b1 + controls[2].x * b2 + controls[3].x * b3, 0.0f,
             controls[0].z * b0 + controls[1].z * b1 + controls[2].z * b2 + controls[3].z * b3);
 }
 
@@ -179,8 +178,8 @@ EGG::Vector3f ItemRouteSpline::evalLerpY() const {
 /// @brief A forward throw onto the item route: some frames of steering towards the next points,
 /// then the spline. The red shell has no wall bounce (a wall breaks it); the blue shell has no
 /// bounce limit (bounces -1) and floats.
-void ItemObjKoura::initRoute(f32 speed, ItemTrail &trail, s32 routeFrames, s32 bounces,
-        bool floats, u8 target, bool branchSearch) {
+void ItemObjKoura::initRoute(f32 speed, ItemTrail &trail, s32 routeFrames, s32 bounces, bool floats,
+        u8 target, bool branchSearch) {
     initThrow(speed, trail, bounces, true, floats);
     m_routeTimer = routeFrames;
     m_routeTimerInv = 1.0f / static_cast<f32>(routeFrames);

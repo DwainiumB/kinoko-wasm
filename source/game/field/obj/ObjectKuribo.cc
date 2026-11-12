@@ -215,7 +215,7 @@ void ObjectKuribo::calcSquash() {
     constexpr f32 MIN_SCALE = 0.1f;
     constexpr f32 MAX_WIDTH = 1.5f;
     constexpr f32 WIDEN_STEP = 0.1f;
-    constexpr f32 TWO_PI = 6.2831855f;    ///< 0x808A03BC
+    constexpr f32 TWO_PI = 6.2831855f;      ///< 0x808A03BC
     constexpr f32 RAD_TO_FIDX = 40.743664f; ///< 0x808A03C4
 
     calcAnim();
@@ -256,8 +256,7 @@ void ObjectKuribo::calcSquash() {
 void ObjectKuribo::calcHidden() {
     calcAnim();
 
-    if (static_cast<s32>(m_hiddenDuration) <
-            m_hiddenTimer + static_cast<s32>(m_squashFrames)) {
+    if (static_cast<s32>(m_hiddenDuration) < m_hiddenTimer + static_cast<s32>(m_squashFrames)) {
         m_hidden = false;
         m_hiddenTimer = 0;
         m_regrowing = true;
@@ -273,7 +272,7 @@ void ObjectKuribo::calcRegrow() {
     constexpr f32 MAX_HEIGHT = 1.5f;
     constexpr f32 WIDEN_STEP = 0.1f;
     constexpr f32 MIN_FRAMES = 10.0f;
-    constexpr f32 TWO_PI = 6.2831855f;    ///< 0x808A03BC
+    constexpr f32 TWO_PI = 6.2831855f;      ///< 0x808A03BC
     constexpr f32 RAD_TO_FIDX = 40.743664f; ///< 0x808A03C4
 
     calcAnim();

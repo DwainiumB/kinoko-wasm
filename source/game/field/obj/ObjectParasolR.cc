@@ -36,8 +36,7 @@ void ObjectParasolR::calc() {
 /// @addr{0x8077971C}
 /// @details Object reactions 3 and 5 only toggle the parasol open or closed (visual).
 Kart::Reaction ObjectParasolR::onCollision(Kart::KartObject * /*kartObj*/,
-        Kart::Reaction reactionOnKart, Kart::Reaction reactionOnObj,
-        EGG::Vector3f & /*hitDepth*/) {
+        Kart::Reaction reactionOnKart, Kart::Reaction reactionOnObj, EGG::Vector3f & /*hitDepth*/) {
     if (reactionOnObj == Kart::Reaction::UNK_4 || reactionOnObj == Kart::Reaction::UNK_6) {
         startHop();
     }
@@ -46,8 +45,8 @@ Kart::Reaction ObjectParasolR::onCollision(Kart::KartObject * /*kartObj*/,
 }
 
 /// @addr{0x80779A68}
-s32 ObjectParasolR::onItemCollision(Item::ItemObj * /*item*/, s32 reactionOnItem,
-        s32 reactionOnObj, EGG::Vector3f & /*hitDepth*/) {
+s32 ObjectParasolR::onItemCollision(Item::ItemObj * /*item*/, s32 reactionOnItem, s32 reactionOnObj,
+        EGG::Vector3f & /*hitDepth*/) {
     if (reactionOnObj == ItemHit::ObjHitHard || reactionOnObj == ItemHit::ObjHitHardRaceOnly) {
         startHop();
     }

@@ -19,7 +19,7 @@ enum class Action {
     LightningHit = 10, ///< Shrunk by lightning: a spin. Start @addr{0x8056804C}.
     PowSpin = 11,      ///< A POW block's last shake on the ground. Start @addr{0x80568064}.
     UNK_12 = 12,
-    MegaSquash = 13,   ///< Squashed by a racer in a mega mushroom. Start @addr{0x80569818}.
+    MegaSquash = 13, ///< Squashed by a racer in a mega mushroom. Start @addr{0x80569818}.
     UNK_14 = 14,
     UNK_15 = 15,
     UNK_16 = 16,
@@ -198,9 +198,9 @@ private:
     s16 m_priority;
     bool m_powAffected; ///< +0xF8 Set at each POW shake: we are among its targets.
 
-    static bool s_powStrike;      ///< @addr{0x809C1898}
-    static s16 s_powStrikeTimer;  ///< @addr{0x809C189A}
-    static u8 s_powStage;         ///< @addr{0x809C189C}
+    static bool s_powStrike;     ///< @addr{0x809C1898}
+    static s16 s_powStrikeTimer; ///< @addr{0x809C189A}
+    static u8 s_powStage;        ///< @addr{0x809C189C}
     static const ActionParams s_powSpinLateParams;
 
     static constexpr size_t MAX_ACTION = static_cast<size_t>(Action::Max);

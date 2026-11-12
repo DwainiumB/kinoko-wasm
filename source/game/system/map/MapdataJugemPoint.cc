@@ -16,7 +16,8 @@ MapdataJugemPoint::MapdataJugemPoint(const SData *data) : m_rawData(data) {
     EGG::RamStream stream = EGG::RamStream(data, sizeof(SData));
     read(stream);
 
-    // The game keeps the rotation in radians and the point's rotated -Z and -X axes for respawnPos().
+    // The game keeps the rotation in radians and the point's rotated -Z and -X axes for
+    // respawnPos().
     EGG::Quatf rot = EGG::Quatf::FromRPY(m_rot.x * DEG2RAD, m_rot.y * DEG2RAD, m_rot.z * DEG2RAD);
     m_backDir = rot.rotateVector(-EGG::Vector3f::ez);
     m_leftDir = rot.rotateVector(-EGG::Vector3f::ex);
@@ -29,18 +30,21 @@ void MapdataJugemPoint::read(EGG::Stream &stream) {
 }
 
 /// @addr{0x805184FC}
-/// @brief Finds the item route point nearest ahead of this point, inside a 15 degree cone around its facing,
-/// so that a player put back on the track here continues the item route from it. Falls back to point 0.
-/// The game links the nearest enemy route point the same way (+0x28) for the CPU AI; Kinoko has no enemy route.
+/// @brief Finds the item route point nearest ahead of this point, inside a 15 degree cone around
+/// its facing, so that a player put back on the track here continues the item route from it. Falls
+/// back to point 0. The game links the nearest enemy route point the same way (+0x28) for the CPU
+/// AI; Kinoko has no enemy route.
 void MapdataJugemPoint::linkNearestItemPoint() {
-    constexpr f32 CONE_HALF_ANGLE_FIDX = 10.6667f; ///< 15 degrees in the sine table's 256-per-turn units.
+    constexpr f32 CONE_HALF_ANGLE_FIDX =
+            10.6667f; ///< 15 degrees in the sine table's 256-per-turn units.
     constexpr f32 NO_DISTANCE = 10000000.0f;
 
     EGG::Quatf rot = EGG::Quatf::FromRPY(m_rot.x * DEG2RAD, m_rot.y * DEG2RAD, m_rot.z * DEG2RAD);
     EGG::Vector3f forward = rot.rotateVector(EGG::Vector3f::ez);
     EGG::Vector3f right = rot.rotateVector(EGG::Vector3f::ex);
     EGG::Vector3f up = rot.rotateVector(EGG::Vector3f::ey);
-    f32 coneTan = EGG::Mathf::SinFIdx(CONE_HALF_ANGLE_FIDX) / EGG::Mathf::CosFIdx(CONE_HALF_ANGLE_FIDX);
+    f32 coneTan =
+            EGG::Mathf::SinFIdx(CONE_HALF_ANGLE_FIDX) / EGG::Mathf::CosFIdx(CONE_HALF_ANGLE_FIDX);
 
     const auto *courseMap = CourseMap::Instance();
     u8 nearest = MapdataItemPoint::NONE;
@@ -72,17 +76,27 @@ void MapdataJugemPoint::linkNearestItemPoint() {
 }
 
 /// @addr{0x8051896C}
-/// @brief Where a player is put back on the track: the point itself in Time Trials and ghost races, otherwise
-/// shifted 150 units to the point's left or right (450 for players 3 and 4) and, from player 5 on, 300 or 600
-/// units behind it, so that players respawning together do not land on each other.
+/// @brief Where a player is put back on the track: the point itself in Time Trials and ghost races,
+/// otherwise shifted 150 units to the point's left or right (450 for players 3 and 4) and, from
+/// player 5 on, 300 or 600 units behind it, so that players respawning together do not land on each
+/// other.
 EGG::Vector3f MapdataJugemPoint::respawnPos(u8 playerIdx) const {
     constexpr f32 SIDE_STEP = 150.0f;
     constexpr f32 BACK_STEP = 300.0f;
     /// {steps to the left, steps back} per player index (0x8088FA08).
     static constexpr std::array<std::array<s8, 2>, 12> PLAYER_STEPS = {{
-            {-1, 0}, {1, 0}, {-3, 0}, {3, 0},
-            {-1, 1}, {1, 1}, {-3, 1}, {3, 1},
-            {-1, 2}, {1, 2}, {-3, 2}, {3, 2},
+            {-1, 0},
+            {1, 0},
+            {-3, 0},
+            {3, 0},
+            {-1, 1},
+            {1, 1},
+            {-3, 1},
+            {3, 1},
+            {-1, 2},
+            {1, 2},
+            {-3, 2},
+            {3, 2},
     }};
 
     using GameMode = RaceConfig::Scenario::GameMode;

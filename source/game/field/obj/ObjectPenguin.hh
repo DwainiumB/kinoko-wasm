@@ -71,8 +71,8 @@ protected:
 
     State m_state;
     EGG::Vector3f m_basis;
-    s32 m_hitTimer;   ///< +0xC0 Frames left in the hit state.
-    f32 m_spinSpeed;  ///< +0xC4 Degrees per frame, from 60 down to 12.
+    s32 m_hitTimer;  ///< +0xC0 Frames left in the hit state.
+    f32 m_spinSpeed; ///< +0xC4 Degrees per frame, from 60 down to 12.
 };
 
 /// @brief Represents the penguins on N64 Sherbet Land that slide on their stomach.

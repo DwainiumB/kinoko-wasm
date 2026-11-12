@@ -2,16 +2,15 @@
 
 #include "game/kart/KartBody.hh"
 #include "game/kart/KartCollide.hh"
-#include "game/kart/KartParamFileManager.hh"
-#include "game/kart/KartPhysics.hh"
 #include "game/kart/KartMove.hh"
 #include "game/kart/KartParam.hh"
+#include "game/kart/KartParamFileManager.hh"
+#include "game/kart/KartPhysics.hh"
 #include "game/kart/KartState.hh"
 
 #include "game/system/RaceConfig.hh"
 
 #include <egg/math/Math.hh>
-
 
 namespace Kinoko::Render {
 
@@ -139,8 +138,8 @@ void KartModel::init() {
     // and the driver matrix starts from the pose at setup.
     const auto &player =
             System::RaceConfig::Instance()->raceScenario().players[param()->playerIdx()];
-    EGG::Vector3f offset = Kart::KartParamFileManager::Instance()->driverOffset(player.vehicle,
-            player.character);
+    EGG::Vector3f offset =
+            Kart::KartParamFileManager::Instance()->driverOffset(player.vehicle, player.character);
     m_driverOffsetMatrix.makeT(offset);
     calcDriverMatrix();
 

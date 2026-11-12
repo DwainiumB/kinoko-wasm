@@ -2422,8 +2422,8 @@ void KartMove::applyShrink(u16 timer) {
 /// @brief Hit by another racer's lightning: the shrink lasts longer the better our rank.
 /// @return Whether it hit (a mega only ends the mega).
 bool KartMove::applyLightning() {
-    static constexpr std::array<s16, 12> SHRINK_DURATIONS = {{
-            690, 645, 600, 555, 510, 450, 390, 330, 270, 210, 150, 90}};
+    static constexpr std::array<s16, 12> SHRINK_DURATIONS = {
+            {690, 645, 600, 555, 510, 450, 390, 330, 270, 210, 150, 90}};
     constexpr s16 SHRINK_DURATION_BASE = 72;
 
     // The game uses a fixed 450 frames in battle; Kinoko has no battle mode.
@@ -2433,8 +2433,8 @@ bool KartMove::applyLightning() {
     }
 
     size_t playerCount = KartObjectManager::Instance()->count();
-    s16 duration = static_cast<s16>(
-            SHRINK_DURATIONS[rank + 11 - playerCount] + SHRINK_DURATION_BASE);
+    s16 duration =
+            static_cast<s16>(SHRINK_DURATIONS[rank + 11 - playerCount] + SHRINK_DURATION_BASE);
     return applyLightningEffect(duration, false, false);
 }
 
@@ -2920,7 +2920,8 @@ void KartMove::calcSlipstream() {
             const auto *kartMgr = KartObjectManager::Instance();
             for (size_t i = 0; i < kartMgr->count(); ++i) {
                 const KartObject *other = kartMgr->object(i);
-                if (other->param()->playerIdx() == selfIdx || other->status().onBit(eStatus::Ghost) ||
+                if (other->param()->playerIdx() == selfIdx ||
+                        other->status().onBit(eStatus::Ghost) ||
                         other->move()->speedRatioCapped() < MIN_SPEED_RATIO) {
                     continue;
                 }

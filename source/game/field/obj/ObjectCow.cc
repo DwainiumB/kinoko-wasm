@@ -28,8 +28,7 @@ Kart::Reaction ObjectCow::onCollision(Kart::KartObject *kartObj, Kart::Reaction 
         if (kartObj->speedRatioCapped() < 0.5f) {
             return Kart::Reaction::WallAllSpeed;
         }
-    } else if ((reactionOnObj == Kart::Reaction::UNK_3 ||
-                       reactionOnObj == Kart::Reaction::UNK_5) &&
+    } else if ((reactionOnObj == Kart::Reaction::UNK_3 || reactionOnObj == Kart::Reaction::UNK_5) &&
             m_hitTimer == -1) {
         startHit();
     }
@@ -76,8 +75,8 @@ void ObjectCow::calcHit() {
 
     CollisionInfoPartial info;
     if (CollisionDirector::Instance()->checkSpherePartial(RADIUS,
-                modelPos + EGG::Vector3f(0.0f, RADIUS, 0.0f), EGG::Vector3f::inf,
-                KCL_TYPE_64EBDFFF, &info, nullptr, 0)) {
+                modelPos + EGG::Vector3f(0.0f, RADIUS, 0.0f), EGG::Vector3f::inf, KCL_TYPE_64EBDFFF,
+                &info, nullptr, 0)) {
         m_hitTimer = -1;
         enableCollision();
     }

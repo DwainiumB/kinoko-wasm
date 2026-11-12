@@ -1,7 +1,7 @@
 #include <Common.hh>
 #include <cmath>
-#include <new>
 #include <emscripten/emscripten.h>
+#include <new>
 
 #include "host/Context.hh"
 #include "host/SceneCreatorDynamic.hh"
@@ -84,7 +84,7 @@ static void OnRaceConfigInit(System::RaceConfig *config, void *) {
     for (int i = 0; i < s_cpuCount; ++i) {
         auto &cpu = scenario.players[1 + i];
         cpu.type = (s_humanMask >> (1 + i)) & 1 ? System::RaceConfig::Player::Type::Local :
-                                                   System::RaceConfig::Player::Type::Cpu;
+                                                  System::RaceConfig::Player::Type::Cpu;
         cpu.character = static_cast<Character>(s_cpuCharacter[i]);
         cpu.vehicle = static_cast<Vehicle>(s_cpuVehicle[i]);
         cpu.driftIsAuto = false;
@@ -184,7 +184,9 @@ void kinoko_set_player_item(int idx, int itemId) {
         return;
     }
 
-    itemDir->kartItem(static_cast<size_t>(idx)).inventory().setItem(static_cast<Item::ItemId>(itemId));
+    itemDir->kartItem(static_cast<size_t>(idx))
+            .inventory()
+            .setItem(static_cast<Item::ItemId>(itemId));
 }
 
 /// Sets the item options of the next kinoko_init_vs race: RaceManager's random seeds, the item
@@ -367,8 +369,8 @@ void kinoko_free_all_states() {
 }
 
 /// Debug (like the host's DIRTY command): compares the live game heap with slot id and writes
-/// {differing 4 KiB pages, differing bytes, highest differing offset} to out. Returns 1, or 0 for an
-/// empty slot. Only the bytes the snapshot kept are compared.
+/// {differing 4 KiB pages, differing bytes, highest differing offset} to out. Returns 1, or 0 for
+/// an empty slot. Only the bytes the snapshot kept are compared.
 EMSCRIPTEN_KEEPALIVE
 int kinoko_state_dirty(int id, int *out) {
     if (id < 0 || id >= MAX_STATES || !s_states[id]) {

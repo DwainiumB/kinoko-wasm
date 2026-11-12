@@ -272,8 +272,8 @@ Kart::Reaction ObjectCarTGE::onCollision(Kart::KartObject *kartObj, Kart::Reacti
 
 /// @addr{0x806D7780}
 /// @details The game also notes a hit by a bob-omb (+0x218), which only bomb cars read.
-s32 ObjectCarTGE::onItemCollision(Item::ItemObj * /*item*/, s32 reactionOnItem,
-        s32 reactionOnObj, EGG::Vector3f & /*hitDepth*/) {
+s32 ObjectCarTGE::onItemCollision(Item::ItemObj * /*item*/, s32 reactionOnItem, s32 reactionOnObj,
+        EGG::Vector3f & /*hitDepth*/) {
     if (reactionOnObj >= ItemHit::ObjHit && reactionOnObj <= ItemHit::ObjHitHardRaceOnly) {
         startLaunch();
     }
@@ -309,7 +309,8 @@ void ObjectCarTGE::startLaunch() {
 /// above it, rolling about its forward axis; when its lower side corner (350 to the side) comes
 /// below the rail it bounces once (30% of the speed, rolling back), and the second landing ends the
 /// launch with the collision back. The sounds are left out. Where the game takes the drawn model's
-/// matrix at a landing, Kinoko takes the car's own (the same rotation: nothing turns it in between).
+/// matrix at a landing, Kinoko takes the car's own (the same rotation: nothing turns it in
+/// between).
 void ObjectCarTGE::calcLaunch() {
     constexpr f32 NORMAL_LENGTH = 1500.0f;
     constexpr f32 TRUCK_LENGTH = 1600.0f;

@@ -30,8 +30,7 @@ void ObjectBreakable::calc() {
 /// @addr{0x8076F0AC}
 /// @details The mission counter and the rumble are left out.
 Kart::Reaction ObjectBreakable::onCollision(Kart::KartObject *kartObj,
-        Kart::Reaction reactionOnKart, Kart::Reaction reactionOnObj,
-        EGG::Vector3f & /*hitDepth*/) {
+        Kart::Reaction reactionOnKart, Kart::Reaction reactionOnObj, EGG::Vector3f & /*hitDepth*/) {
     if (reactionOnObj == Kart::Reaction::UNK_3) {
         breakByKart(kartObj);
     } else if (reactionOnObj == Kart::Reaction::UNK_5) {

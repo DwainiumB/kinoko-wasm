@@ -117,9 +117,9 @@ bool ItemObjBobOmb::onRelease(ItemTrail &trail) {
         return true;
     }
 
-    f32 upSpeed = std::min(std::max(DROP_UP_BASE + trail.kartSpeed() * DROP_UP_PER_SPEED,
-                                   DROP_UP_BASE),
-            BACK_UP_SPEED);
+    f32 upSpeed =
+            std::min(std::max(DROP_UP_BASE + trail.kartSpeed() * DROP_UP_PER_SPEED, DROP_UP_BASE),
+                    BACK_UP_SPEED);
     initThrow(FAR_THROW_SPEED, UP_SPEED, upSpeed, trail, DROP_BOUNCES, false);
     m_fuse = DROP_FUSE;
     return false;

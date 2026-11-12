@@ -708,7 +708,8 @@ void KartCollide::calcPlayerCollision(KartObject *other) {
     }
 
     state()->setKartPairMask(state()->kartPairMask() | static_cast<u16>(1 << otherIdx));
-    other->state()->setKartPairMask(other->state()->kartPairMask() | static_cast<u16>(1 << selfIdx));
+    other->state()->setKartPairMask(
+            other->state()->kartPairMask() | static_cast<u16>(1 << selfIdx));
 
     EGG::BoundBox3f pushBox;
     EGG::BoundBox3f contactBox;
@@ -814,8 +815,8 @@ bool KartCollide::IsPlayerCollisionDisabled(const KartObjectProxy *kart) {
     const auto &status = kart->status();
     if (status.onBit(eStatus::TriggerRespawn, eStatus::NoKartCollision40, eStatus::InRespawn,
                 eStatus::AfterRespawn, eStatus::NoKartCollision82, eStatus::Vanished,
-                eStatus::NoKartCollision89, eStatus::Ghost, eStatus::CannonStart,
-                eStatus::InCannon, eStatus::NoKartCollision72, eStatus::AfterCannon)) {
+                eStatus::NoKartCollision89, eStatus::Ghost, eStatus::CannonStart, eStatus::InCannon,
+                eStatus::NoKartCollision72, eStatus::AfterCannon)) {
         return true;
     }
 
@@ -893,8 +894,7 @@ void KartCollide::applyPlayerBump(f32 sign, const KartObjectProxy *source, KartO
         return;
     }
 
-    Item::ItemDirector::Instance()->passThunderCloud(
-            static_cast<u8>(source->param()->playerIdx()),
+    Item::ItemDirector::Instance()->passThunderCloud(static_cast<u8>(source->param()->playerIdx()),
             static_cast<u8>(target->param()->playerIdx()));
 
     const auto &sourceStatus = source->status();

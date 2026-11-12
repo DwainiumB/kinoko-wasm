@@ -155,8 +155,8 @@ f32 EvalFormat1(const Reader &r, size_t data, f32 frame) {
         return keyValue(k);
     }
 
-    return Hermite(frame, keyFrame(k), keyValue(k), keyTangent(k), keyFrame(k + 1),
-            keyValue(k + 1), keyTangent(k + 1));
+    return Hermite(frame, keyFrame(k), keyValue(k), keyTangent(k), keyFrame(k + 1), keyValue(k + 1),
+            keyTangent(k + 1));
 }
 
 /// @brief Format 2: 6-byte keys, `frame:16/32, quantized value:16, tangent:16/256` (0x800540F0).
@@ -193,8 +193,8 @@ f32 EvalFormat2(const Reader &r, size_t data, f32 frame) {
         return keyValue(k);
     }
 
-    return Hermite(frame, keyFrame(k), keyValue(k), keyTangent(k), keyFrame(k + 1),
-            keyValue(k + 1), keyTangent(k + 1));
+    return Hermite(frame, keyFrame(k), keyValue(k), keyTangent(k), keyFrame(k + 1), keyValue(k + 1),
+            keyTangent(k + 1));
 }
 
 /// @brief Format 3: 12-byte float keys `frame, value, tangent` (0x80053FB0).
@@ -223,8 +223,8 @@ f32 EvalFormat3(const Reader &r, size_t data, f32 frame) {
         return keyValue(k);
     }
 
-    return Hermite(frame, keyFrame(k), keyValue(k), keyTangent(k), keyFrame(k + 1),
-            keyValue(k + 1), keyTangent(k + 1));
+    return Hermite(frame, keyFrame(k), keyValue(k), keyTangent(k), keyFrame(k + 1), keyValue(k + 1),
+            keyTangent(k + 1));
 }
 
 /// @brief Rotation formats 4 to 6: one value per frame (8-bit or 16-bit with a float scale and
@@ -320,7 +320,7 @@ void RotXYZFIdx(EGG::Matrix34f &m, f32 fx, f32 fy, f32 fz) {
 
 /// @brief The posed SRT of one track at one frame: the game's `ChrAnmResult`.
 struct AnmResult {
-    u32 flags;        ///< The track code's low 13 bits, plus bit 31 when there is a rotation.
+    u32 flags; ///< The track code's low 13 bits, plus bit 31 when there is a rotation.
     EGG::Vector3f scale;
     EGG::Matrix34f mtx; ///< Rotation, with the translation in the fourth column.
 };
@@ -384,16 +384,47 @@ void GetAnmResult(const Reader &r, size_t chr0, s32 trackIdx, f32 frame, AnmResu
 // ---------------------------------------------------------------------------------------------
 
 constexpr const char *SKELETON_SLOT_NAMES[] = {
-        "skl_root", "leg_l1", "leg_l2", "ankle_l1", "leg_r1", "leg_r2", "ankle_r1", "spin",
-        "arm_l1", "arm_l2", "wrist_l1", "arm_r1", "arm_r2", "wrist_r1", "face_1", "cap1",
-        "mouth_1", "ca_mouth_1", "yo_mouth_1", "tang_1", "tang_2", "tang_3", "tie_1", "wing_l1",
-        "wing_r1", "tail_1", "tail_2", "tail_3", "skirt_1", "d_hair_1", "d_hair_2", "p_hair_1",
-        "p_hair_2", "unknown_1", "unknown_2", "unknown_3",
+        "skl_root",
+        "leg_l1",
+        "leg_l2",
+        "ankle_l1",
+        "leg_r1",
+        "leg_r2",
+        "ankle_r1",
+        "spin",
+        "arm_l1",
+        "arm_l2",
+        "wrist_l1",
+        "arm_r1",
+        "arm_r2",
+        "wrist_r1",
+        "face_1",
+        "cap1",
+        "mouth_1",
+        "ca_mouth_1",
+        "yo_mouth_1",
+        "tang_1",
+        "tang_2",
+        "tang_3",
+        "tie_1",
+        "wing_l1",
+        "wing_r1",
+        "tail_1",
+        "tail_2",
+        "tail_3",
+        "skirt_1",
+        "d_hair_1",
+        "d_hair_2",
+        "p_hair_1",
+        "p_hair_2",
+        "unknown_1",
+        "unknown_2",
+        "unknown_3",
 };
 constexpr size_t SLOT_COUNT = 36;
-constexpr size_t NAMED_SLOTS = 33;       ///< Bones with other names go into slots 33 to 35.
-constexpr size_t RIGHT_WRIST_SLOT = 13;  ///< The slot the anchors are read from (+0x534).
-constexpr f32 ANCHOR_FRAME = 4.0f;       ///< Both anchors pose the skeleton at frame 4.
+constexpr size_t NAMED_SLOTS = 33;      ///< Bones with other names go into slots 33 to 35.
+constexpr size_t RIGHT_WRIST_SLOT = 13; ///< The slot the anchors are read from (+0x534).
+constexpr f32 ANCHOR_FRAME = 4.0f;      ///< Both anchors pose the skeleton at frame 4.
 
 struct Node {
     size_t bone = 0; ///< ResNodeData offset in the BRRES, 0 when the slot is empty.
@@ -589,13 +620,50 @@ Character ArchiveCharacter(Character character) {
 
 const char *ArchiveCode(Character character) {
     static constexpr const char *CODES[] = {
-            "mr", "bpc", "wl", "kp", "bds", "ka", "bmr", "lg", "ko", "dk", "ys", "wr", "blg",
-            "kk", "nk", "ds", "pc", "ca", "dd", "kt", "jr", "bk", "fk", "rs",
+            "mr",
+            "bpc",
+            "wl",
+            "kp",
+            "bds",
+            "ka",
+            "bmr",
+            "lg",
+            "ko",
+            "dk",
+            "ys",
+            "wr",
+            "blg",
+            "kk",
+            "nk",
+            "ds",
+            "pc",
+            "ca",
+            "dd",
+            "kt",
+            "jr",
+            "bk",
+            "fk",
+            "rs",
             // Miis: small / medium / large, outfits A and B, male / female. Outfit C has no
             // archive of its own and uses outfit A's.
-            "sa_mii_m", "sa_mii_f", "sb_mii_m", "sb_mii_f", "sa_mii_m", "sa_mii_f",
-            "ma_mii_m", "ma_mii_f", "mb_mii_m", "mb_mii_f", "ma_mii_m", "ma_mii_f",
-            "la_mii_m", "la_mii_f", "lb_mii_m", "lb_mii_f", "la_mii_m", "la_mii_f",
+            "sa_mii_m",
+            "sa_mii_f",
+            "sb_mii_m",
+            "sb_mii_f",
+            "sa_mii_m",
+            "sa_mii_f",
+            "ma_mii_m",
+            "ma_mii_f",
+            "mb_mii_m",
+            "mb_mii_f",
+            "ma_mii_m",
+            "ma_mii_f",
+            "la_mii_m",
+            "la_mii_f",
+            "lb_mii_m",
+            "lb_mii_f",
+            "la_mii_m",
+            "la_mii_f",
     };
 
     size_t idx = static_cast<size_t>(ArchiveCharacter(character));

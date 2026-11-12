@@ -17,7 +17,8 @@ namespace Kinoko::Item {
 namespace {
 
 /// @addr{0x807912E0}
-/// @brief Makes right / up / forward orthonormal again, keeping up (PSVECNormalize and PSVECCrossProduct).
+/// @brief Makes right / up / forward orthonormal again, keeping up (PSVECNormalize and
+/// PSVECCrossProduct).
 void Orthonormalise(std::array<EGG::Vector3f, 4> &basis) {
     NormaliseInto(basis[1], basis[1]);
     basis[0] = basis[1].ps_cross(basis[2]);
@@ -32,9 +33,9 @@ bool IsBusy(const Kart::KartObjectProxy &proxy) {
             Kart::eStatus::TrickRot);
 }
 
-/// @brief `v += (target - v) * rate` with the multiply and add fused per component, as the game's paired-single
-/// code does it (`ps_sub` then `ps_madds0`): the trail's up blend (0x80791EBC) and the wall offsets (0x80792984,
-/// 0x80793C7C, 0x807944A0).
+/// @brief `v += (target - v) * rate` with the multiply and add fused per component, as the game's
+/// paired-single code does it (`ps_sub` then `ps_madds0`): the trail's up blend (0x80791EBC) and
+/// the wall offsets (0x80792984, 0x80793C7C, 0x807944A0).
 void LerpFused(EGG::Vector3f &v, const EGG::Vector3f &target, f32 rate) {
     EGG::Vector3f diff = target - v;
     v.x = EGG::Mathf::fma(diff.x, rate, v.x);
@@ -47,11 +48,11 @@ void LerpFused(EGG::Vector3f &v, const EGG::Vector3f &target, f32 rate) {
 ItemTrail::ItemTrail()
     : m_kartItem(nullptr), m_playerIdx(0), m_speed(0.0f), m_speedRatio(0.0f), m_hopHeight(0.0f),
       m_movingForward(false), m_bob(0.0f), m_trailDist(0.0f), m_trailHeight(0.0f),
-      m_trailDistShort(0.0f), m_trailHeightOfs(0.0f), m_trailUpOfs(0.0f),
-      m_chainSlackBase(0.0f), m_chainSlack{}, m_lift(0.0f), m_liftDelta(0.0f), m_followY(0.0f),
-      m_followXZ(0.0f), m_chainLiftRing{}, m_chainRingIdx(0), m_forcedRelease(false),
-      m_orbitAngle(0), m_orbitSpeed(0), m_orbitRadiusSide(0.0f), m_orbitRadiusFwd(0.0f),
-      m_orbitLift(0.0f), m_orbitSlots{} {
+      m_trailDistShort(0.0f), m_trailHeightOfs(0.0f), m_trailUpOfs(0.0f), m_chainSlackBase(0.0f),
+      m_chainSlack{}, m_lift(0.0f), m_liftDelta(0.0f), m_followY(0.0f), m_followXZ(0.0f),
+      m_chainLiftRing{}, m_chainRingIdx(0), m_forcedRelease(false), m_orbitAngle(0),
+      m_orbitSpeed(0), m_orbitRadiusSide(0.0f), m_orbitRadiusFwd(0.0f), m_orbitLift(0.0f),
+      m_orbitSlots{} {
     reset();
 }
 
@@ -235,8 +236,7 @@ bool ItemTrail::calcKartPose() {
     m_movingForward = m_pose[2].ps_dot(m_velocity) > 0.0f || IsBusy(*this);
 
     const EGG::Vector3f &kartScale = scale();
-    bool changed = kartScale.x != m_scale.x || kartScale.y != m_scale.y ||
-            kartScale.z != m_scale.z;
+    bool changed = kartScale.x != m_scale.x || kartScale.y != m_scale.y || kartScale.z != m_scale.z;
     if (changed) {
         m_scale = kartScale;
     }
@@ -334,8 +334,8 @@ void ItemTrail::calcTrailPos() {
     obj->m_pos = m_trailAnchor + m_pose[1] * height;
 
     obj->m_colInfo.bbox.setZero();
-    bool hit = Field::CollisionDirector::Instance()->checkSphereFull(obj->m_kclRadius,
-            obj->m_pos, obj->m_prevPos, 0x20E80FFF, &obj->m_colInfo, nullptr, 0);
+    bool hit = Field::CollisionDirector::Instance()->checkSphereFull(obj->m_kclRadius, obj->m_pos,
+            obj->m_prevPos, 0x20E80FFF, &obj->m_colInfo, nullptr, 0);
     if (!hit) {
         m_trailOffsets[0] *= OFFSET_DECAY;
     } else {
@@ -713,10 +713,10 @@ void ItemTrail::calcOrbit() {
 
     m_orbitLift = (m_orbitLift + HOP_LIFT * m_hopHeight) * LIFT_DECAY;
     // Grouped as the game adds it (0x807947C0..0x807947FC).
-    f32 height = m_objs[0]->m_kclRadius +
-            ((m_orbitLift - m_hopHeight) + m_trailHeightOfs * m_scale.y);
-    m_orbitRadiusSide += RADIUS_RATE *
-            (m_scale.z * (m_trailHeight + RADIUS_BASE) - m_orbitRadiusSide);
+    f32 height =
+            m_objs[0]->m_kclRadius + ((m_orbitLift - m_hopHeight) + m_trailHeightOfs * m_scale.y);
+    m_orbitRadiusSide +=
+            RADIUS_RATE * (m_scale.z * (m_trailHeight + RADIUS_BASE) - m_orbitRadiusSide);
     m_orbitRadiusFwd += RADIUS_RATE * (m_scale.x * (m_trailDist + RADIUS_BASE) - m_orbitRadiusFwd);
     m_orbitCenter = m_pose[3] + m_pose[1] * height;
 

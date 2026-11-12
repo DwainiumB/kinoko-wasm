@@ -88,14 +88,14 @@ private:
     EGG::Vector3f m_up;
     EGG::Vector3f m_tangent;
     std::array<bool, 12> m_squashed;
-    bool m_launched;        ///< +0x1BD Knocked into the air by an item or a special kart.
-    u32 m_launchTimer;      ///< +0x1C0
-    f32 m_launchBaseY;      ///< +0x1C4
-    f32 m_launchRollRate;   ///< +0x204 Degrees per frame on the way up.
-    f32 m_landFrame;        ///< +0x208 Launch frame of the first landing (200/3 before it).
-    bool m_landed;          ///< +0x220 Bounced once.
-    bool m_landedAgain;     ///< +0x221
-    bool m_bouncedOnLeft;   ///< +0x230 The first bounce was on the left corner: the roll reverses.
+    bool m_launched;      ///< +0x1BD Knocked into the air by an item or a special kart.
+    u32 m_launchTimer;    ///< +0x1C0
+    f32 m_launchBaseY;    ///< +0x1C4
+    f32 m_launchRollRate; ///< +0x204 Degrees per frame on the way up.
+    f32 m_landFrame;      ///< +0x208 Launch frame of the first landing (200/3 before it).
+    bool m_landed;        ///< +0x220 Bounced once.
+    bool m_landedAgain;   ///< +0x221
+    bool m_bouncedOnLeft; ///< +0x230 The first bounce was on the left corner: the roll reverses.
     bool m_hasAuxCollision;
     f32 m_hitAngle;
 

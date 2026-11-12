@@ -61,13 +61,13 @@ public:
 private:
     [[nodiscard]] static ItemObj *Create(ItemObjKind kind);
 
-    ItemObjKind m_kind;               ///< +0x00
-    owning_span<ItemObj *> m_objs;    ///< +0x04 (+0x08 capacity)
-    s32 m_room;                       ///< +0x0C limit - 1 + the most one pickup gives.
-    s32 m_spawnedCount;               ///< +0x10
-    s32 m_activeCount;                ///< +0x14
-    s32 m_landedCount;                ///< +0x18 Leading part of the active ones resting on floor.
-    s32 m_limit;                      ///< +0x1C
+    ItemObjKind m_kind;            ///< +0x00
+    owning_span<ItemObj *> m_objs; ///< +0x04 (+0x08 capacity)
+    s32 m_room;                    ///< +0x0C limit - 1 + the most one pickup gives.
+    s32 m_spawnedCount;            ///< +0x10
+    s32 m_activeCount;             ///< +0x14
+    s32 m_landedCount;             ///< +0x18 Leading part of the active ones resting on floor.
+    s32 m_limit;                   ///< +0x1C
 };
 
 } // namespace Kinoko::Item

@@ -73,32 +73,32 @@ private:
     [[nodiscard]] bool calcSquash();
     [[nodiscard]] bool targetInCannon() const;
 
-    u8 m_target;                ///< +0x280 12: none (the game keeps the target's KartItem).
-    EGG::Vector3f m_targetDir;  ///< +0x284 The target's direction of motion.
-    EGG::Vector3f m_aimDiff;    ///< +0x290
-    EGG::Vector3f m_targetPos;  ///< +0x29C
-    bool m_tracking;            ///< +0x2A8 Following the target's position.
-    bool m_onRoute;             ///< +0x2A9 Thrown with an item point: on the item route.
-    u8 m_lockCandidate;         ///< +0x2AA
-    EGG::Vector3f m_aimOffset;  ///< +0x2AC
-    u32 m_circleAngle;          ///< +0x2B8
-    State m_state;              ///< +0x2C0
-    s32 m_nextState;            ///< +0x2C4 -1: none.
-    u32 m_stateFrame;           ///< +0x2C8
-    f32 m_height;               ///< +0x2DC Height of the dive over the target.
-    f32 m_heightRate;           ///< +0x2E0
-    u8 m_chosen;                ///< +0x2EC The racer it is after.
-    bool m_chaseNext;           ///< +0x2ED The thrower leads: it targets them too.
-    f32 m_flySpeed;             ///< +0x2F0
-    u16 m_chosenMask;           ///< +0x2F4 Every racer chosen so far.
-    bool m_lowDive;             ///< +0x2F6
-    f32 m_circleRadius;         ///< +0x2F8
-    u16 m_circleStep;           ///< +0x2FC
-    EGG::Vector3f m_moveDelta;  ///< +0x300 Last frame's motion.
-    EGG::Vector3f m_lastMove;   ///< +0x30C
-    EGG::Vector3f m_tilt;       ///< +0x318
-    EGG::Vector3f m_diveMove;   ///< +0x324
-    bool m_weakened;            ///< +0x334
+    u8 m_target;               ///< +0x280 12: none (the game keeps the target's KartItem).
+    EGG::Vector3f m_targetDir; ///< +0x284 The target's direction of motion.
+    EGG::Vector3f m_aimDiff;   ///< +0x290
+    EGG::Vector3f m_targetPos; ///< +0x29C
+    bool m_tracking;           ///< +0x2A8 Following the target's position.
+    bool m_onRoute;            ///< +0x2A9 Thrown with an item point: on the item route.
+    u8 m_lockCandidate;        ///< +0x2AA
+    EGG::Vector3f m_aimOffset; ///< +0x2AC
+    u32 m_circleAngle;         ///< +0x2B8
+    State m_state;             ///< +0x2C0
+    s32 m_nextState;           ///< +0x2C4 -1: none.
+    u32 m_stateFrame;          ///< +0x2C8
+    f32 m_height;              ///< +0x2DC Height of the dive over the target.
+    f32 m_heightRate;          ///< +0x2E0
+    u8 m_chosen;               ///< +0x2EC The racer it is after.
+    bool m_chaseNext;          ///< +0x2ED The thrower leads: it targets them too.
+    f32 m_flySpeed;            ///< +0x2F0
+    u16 m_chosenMask;          ///< +0x2F4 Every racer chosen so far.
+    bool m_lowDive;            ///< +0x2F6
+    f32 m_circleRadius;        ///< +0x2F8
+    u16 m_circleStep;          ///< +0x2FC
+    EGG::Vector3f m_moveDelta; ///< +0x300 Last frame's motion.
+    EGG::Vector3f m_lastMove;  ///< +0x30C
+    EGG::Vector3f m_tilt;      ///< +0x318
+    EGG::Vector3f m_diveMove;  ///< +0x324
+    bool m_weakened;           ///< +0x334
 };
 
 } // namespace Kinoko::Item

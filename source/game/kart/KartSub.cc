@@ -195,8 +195,8 @@ void KartSub::calcPass1() {
 
     // The flag is really 0x1f, but we only care about drivers and objects.
     Field::BoxColFlag flags;
-    flags.setBit(Field::eBoxColFlag::Driver, Field::eBoxColFlag::Item,
-            Field::eBoxColFlag::Drivable, Field::eBoxColFlag::Object);
+    flags.setBit(Field::eBoxColFlag::Driver, Field::eBoxColFlag::Item, Field::eBoxColFlag::Drivable,
+            Field::eBoxColFlag::Object);
     boxColUnit()->search(flags);
 
     auto *boxColManager = Field::BoxColManager::Instance();

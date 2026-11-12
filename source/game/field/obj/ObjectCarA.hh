@@ -56,12 +56,12 @@ private:
     f32 m_currVel;
     MotionState m_motionState;
     bool m_changingDir;
-    s32 m_launchTimer;      ///< +0x110 Frames since a hit launched the car, -1 when not launched.
-    f32 m_launchBaseY;      ///< +0x114 Height the arc starts from (the rail's after landing).
-    f32 m_landFrame;        ///< +0x118 Launch frame of the first landing (60 before it).
-    bool m_landed;          ///< +0x128 Bounced once.
-    f32 m_launchPitch;      ///< +0x12C Degrees.
-    f32 m_launchPitchRate;  ///< +0x130 Degrees per frame on the way up.
+    s32 m_launchTimer;     ///< +0x110 Frames since a hit launched the car, -1 when not launched.
+    f32 m_launchBaseY;     ///< +0x114 Height the arc starts from (the rail's after landing).
+    f32 m_landFrame;       ///< +0x118 Launch frame of the first landing (60 before it).
+    bool m_landed;         ///< +0x128 Bounced once.
+    f32 m_launchPitch;     ///< +0x12C Degrees.
+    f32 m_launchPitchRate; ///< +0x130 Degrees per frame on the way up.
 
     static constexpr std::array<StateManagerEntry, 3> STATE_ENTRIES = {{
             {StateEntry<ObjectCarA, &ObjectCarA::enterStop, &ObjectCarA::calcStop>(0)},

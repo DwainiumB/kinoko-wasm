@@ -27,7 +27,25 @@ constexpr std::array<u16, 3> ONLINE_BATTLE_OFFSET = {{1, 0, 0}};
 
 /// @brief The item category (behaviour table +0x0C), from the game's static data.
 constexpr std::array<s32, ItemSlotData::ITEM_COUNT> ITEM_CATEGORY = {{
-        0, 1, 0, 1, 0, 1, 1, 2, 2, 2, 2, 2, 1, 1, 1, 2, 1, 2, 2,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        1,
+        2,
+        2,
+        2,
+        2,
+        2,
+        1,
+        1,
+        1,
+        2,
+        1,
+        2,
+        2,
 }};
 
 /// @brief 0x808A6320 + count * 0x18: which of the 12 rows a race of `count` players uses for each
@@ -51,8 +69,8 @@ constexpr std::array<std::array<u16, ItemSlotData::MAX_RANKS>, ItemSlotData::MAX
 
 [[nodiscard]] const u8 *LoadFile() {
     auto *resMgr = System::ResourceManager::Instance();
-    auto *file = reinterpret_cast<const u8 *>(resMgr->getFile("ItemSlotTable/ItemSlotTable.slt",
-            nullptr, System::ArchiveId::Course));
+    auto *file = reinterpret_cast<const u8 *>(
+            resMgr->getFile("ItemSlotTable/ItemSlotTable.slt", nullptr, System::ArchiveId::Course));
     if (!file) {
         file = reinterpret_cast<const u8 *>(
                 resMgr->getFile("ItemSlot.bin", nullptr, System::ArchiveId::Core));
@@ -109,8 +127,8 @@ ItemId ItemSlotData::decideItem(u16 boxSetting, u8 rank, bool human, bool noTrip
     }
 
     const auto &scenario = System::RaceConfig::Instance()->raceScenario();
-    bool limited = scenario.gameMode != System::RaceConfig::Scenario::GameMode::Mission &&
-            noTriples;
+    bool limited =
+            scenario.gameMode != System::RaceConfig::Scenario::GameMode::Mission && noTriples;
     size_t count = limited ? NO_TRIPLES_COUNT : ITEM_COUNT;
 
     const Kart::KartObject *kart = kartItem ? kartItem->kartObject() : nullptr;

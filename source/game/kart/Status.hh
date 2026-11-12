@@ -48,9 +48,9 @@ enum class eStatus {
     TrickStart = 37,
     InATrick = 38,
     BoostOffroadInvincibility = 39, ///< Set if we should ignore offroad slowdown this frame.
-    NoKartCollision40 = 40,         ///< Role not identified; kart-kart collision is skipped while set.
-    HalfPipeRamp = 41,              ///< Set while colliding with zipper KCL.
-    OverZipper = 42,                ///< Set while mid-air from a zipper.
+    NoKartCollision40 = 40, ///< Role not identified; kart-kart collision is skipped while set.
+    HalfPipeRamp = 41,      ///< Set while colliding with zipper KCL.
+    OverZipper = 42,        ///< Set while mid-air from a zipper.
     JumpPadMushroomCollision = 43,
     ZipperInvisibleWall = 44,   ///< Set when colliding with invisible wall above a zipper.
     ZipperBoost = 45,           ///< Set when boosting after landing from a zipper.
@@ -61,15 +61,16 @@ enum class eStatus {
     Burnout = 50,               ///< Set during a burnout on race start.
     TrickRot = 54,
     JumpPadMushroomVelYInc = 55,
-    FloorMomentRateReset = 56, ///< Set with the floor moment rate restart, e.g. on a kart-kart bump.
+    FloorMomentRateReset =
+            56,             ///< Set with the floor moment rate restart, e.g. on a kart-kart bump.
     ChargingSSMT = 57,      ///< Tracks whether we are charging a stand-still mini-turbo.
     RejectRoad = 59,        ///< Collision which causes a change in the player's pos and rot.
     RejectRoadTrigger = 60, ///< e.g. DK Summit ending, and Maple Treeway side walls.
     Trickable = 62,
     InStar = 63, ///< Star power (450 frames): no actions, offroad invincibility, faster.
 
-    SlipstreamCharge = 64, ///< Behind another racer, charging a slipstream (90 frames).
-    SlipstreamBoost = 65,  ///< Boosting from a slipstream (135 frames).
+    SlipstreamCharge = 64,  ///< Behind another racer, charging a slipstream (90 frames).
+    SlipstreamBoost = 65,   ///< Boosting from a slipstream (135 frames).
     WheelieBumpWobble = 66, ///< A bike knocked out of a wheelie by a kart-kart bump wobbles.
 
     WheelieRot = 68,
@@ -86,7 +87,7 @@ enum class eStatus {
     Crushed = 80,
     InCrushAction = 81,     ///< Set by the crush actions; with Crushed, no kart-kart collision.
     NoKartCollision82 = 82, ///< Role not identified; kart-kart collision is skipped while set.
-    Vanished = 83,          ///< Set when the player is hidden (KartObjectProxy::shouldVanishPlayer).
+    Vanished = 83, ///< Set when the player is hidden (KartObjectProxy::shouldVanishPlayer).
     JumpPadFixedSpeed = 84,
     MovingWaterDecaySpeed = 85,
     JumpPadDisableYsusForce = 86,
@@ -106,10 +107,12 @@ enum class eStatus {
     MovingWaterVertical = 105,
     EndHalfPipe = 107,
 
-    OnlineRemote = 131, ///< Driven by another console online (set once, by the KartState constructor).
+    OnlineRemote =
+            131,     ///< Driven by another console online (set once, by the KartState constructor).
     AutoDrift = 133, ///< True if auto transmission, false if manual.
     Ghost = 134,     ///< A ghost racer: no kart-kart collision. Never set yet.
-    NoSlipstreamBoost135 = 135, ///< Role not identified; a charged slipstream doesn't start while set.
+    NoSlipstreamBoost135 =
+            135, ///< Role not identified; a charged slipstream doesn't start while set.
 
     FlagMax, ///< Internal. Total number of bits in the status.
 };

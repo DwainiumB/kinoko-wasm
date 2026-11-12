@@ -56,7 +56,7 @@ private:
 
     EGG::Matrix34f m_driverOffsetMatrix; ///< +0x78: translation to the driver's seat.
     EGG::Matrix34f m_driverMatrix;       ///< +0x114: the driver model's world matrix.
-    DriverItemAnchors m_itemAnchors;    ///< +0x6C0 / +0x6CC.
+    DriverItemAnchors m_itemAnchors;     ///< +0x6C0 / +0x6CC.
     bool m_hasItemAnchors;
 };
 

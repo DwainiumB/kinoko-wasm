@@ -13,8 +13,8 @@
 namespace Kinoko::Item {
 
 ItemObjHolder::ItemObjHolder()
-    : m_kind(ItemObjKind::None), m_room(0), m_spawnedCount(0), m_activeCount(0),
-      m_landedCount(0), m_limit(0) {}
+    : m_kind(ItemObjKind::None), m_room(0), m_spawnedCount(0), m_activeCount(0), m_landedCount(0),
+      m_limit(0) {}
 
 ItemObjHolder::~ItemObjHolder() {
     for (auto *obj : m_objs) {
@@ -168,8 +168,7 @@ void ItemObjHolder::calc() {
     if (m_limit > 1) {
         s32 n = m_spawnedCount + director->heldCount(m_kind);
         s32 over = director->overLimit();
-        if ((m_limit - n < 2 || over > -5) && (m_limit - n < 1 || over > 0) &&
-                m_activeCount > 0) {
+        if ((m_limit - n < 2 || over > -5) && (m_limit - n < 1 || over > 0) && m_activeCount > 0) {
             // 0x8079FE30 (the sort pass 0x80796348 that picks it is not ported: the first one).
             ItemObj *oldest = m_objs[0];
             if (oldest->m_frame > 300 && oldest->m_flags.onBit(ItemObj::eFlags::Landed) &&

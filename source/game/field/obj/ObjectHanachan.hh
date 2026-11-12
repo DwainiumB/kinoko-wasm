@@ -105,12 +105,12 @@ public:
 private:
     void calcHop();
 
-    s32 m_hopTimer = -1;      ///< +0xC4 Frames since a hit, -1 when not hit.
-    u32 m_landFrame = 0;      ///< +0xC8 Frame of the first landing (46 before it).
-    bool m_landed = false;    ///< +0xD0
+    s32 m_hopTimer = -1;       ///< +0xC4 Frames since a hit, -1 when not hit.
+    u32 m_landFrame = 0;       ///< +0xC8 Frame of the first landing (46 before it).
+    bool m_landed = false;     ///< +0xD0
     bool m_justLanded = false; ///< +0xD1 Landed again this frame (the hop is over).
-    bool m_inHitWave = false; ///< +0xD2 Set on every part while a hit wave runs along the body.
-    f32 m_hopHeight = 0.0f;   ///< +0xBC Drawn offset only.
+    bool m_inHitWave = false;  ///< +0xD2 Set on every part while a hit wave runs along the body.
+    f32 m_hopHeight = 0.0f;    ///< +0xBC Drawn offset only.
 
     /// @addr{0x806CA5E4}
     void calcTransformFromUpAndTangent(const EGG::Vector3f &pos, const EGG::Vector3f &up,
@@ -260,9 +260,9 @@ private:
     }
 
     std::array<ObjectHanachanPart *, 7> m_parts;
-    s32 m_hitWaveTimer = -1;    ///< +0x134 Frames since a part was hit, -1 when none.
-    u8 m_hitWaveCenter = 0;     ///< +0x138 The part hit first.
-    u8 m_hitWaveFarPart = 0;    ///< +0x139 The end part the wave reaches last.
+    s32 m_hitWaveTimer = -1; ///< +0x134 Frames since a part was hit, -1 when none.
+    u8 m_hitWaveCenter = 0;  ///< +0x138 The part hit first.
+    u8 m_hitWaveFarPart = 0; ///< +0x139 The end part the wave reaches last.
     HanachanChainManager m_chain;
     const f32 m_movingVel;
     std::array<float, 7> m_partDisplacement; ///< Total distance between a given part and the head

@@ -106,7 +106,8 @@ public:
     virtual void onHop() {}
     virtual void onWallCollision() {}
     /// @addr{0x80570D20}
-    /// @brief Called on both karts after a kart-kart bump (KartMove vtable +0x30). Nothing for karts.
+    /// @brief Called on both karts after a kart-kart bump (KartMove vtable +0x30). Nothing for
+    /// karts.
     virtual void onPlayerBump() {}
     virtual void calcMtCharge();
     virtual void initOob();
@@ -474,10 +475,10 @@ protected:
     f32 m_processedSpeed; ///< Offset 0x28. It's only ever just a copy of @ref m_speed.
     f32 m_hardSpeedLimit; ///< Absolute speed cap. It's 120, unless you're in a bullet (140).
     f32 m_receivedSoftSpeedLimit; ///< KartNetReceiver +0x84: a remote racer's floor (bit 131).
-    f32 m_acceleration;   ///< Captures the acceleration from player input and boosts.
-    f32 m_speedDragMultiplier;  ///< After 5 frames of airtime, this causes speed to slowly decay.
-    EGG::Vector3f m_smoothedUp; ///< A smoothed up vector, mostly used after significant airtime.
-    EGG::Vector3f m_up;         ///< Vector perpendicular to the floor, pointing upwards.
+    f32 m_acceleration;           ///< Captures the acceleration from player input and boosts.
+    f32 m_speedDragMultiplier;    ///< After 5 frames of airtime, this causes speed to slowly decay.
+    EGG::Vector3f m_smoothedUp;   ///< A smoothed up vector, mostly used after significant airtime.
+    EGG::Vector3f m_up;           ///< Vector perpendicular to the floor, pointing upwards.
     EGG::Vector3f m_landingDir;
     EGG::Vector3f m_dir;
     EGG::Vector3f m_lastDir; ///< @ref m_speed from the previous frame but with signed magnitude.
@@ -516,27 +517,27 @@ protected:
     s16 m_ssmtLeewayTimer;       ///< Frames to forgive letting go of A before clearing SSMT charge.
     s16 m_ssmtDisableAccelTimer; ///< Counter that tracks delay before starting to reverse.
     f32 m_realTurn; ///< The "true" turn magnitude. Equal to @ref m_weightedTurn unless drifting.
-    f32 m_weightedTurn;    ///< Magnitude+direction of stick input, factoring in the kart's stats.
-    EGG::Vector3f m_scale; ///< Normally the unit vector, but may vary due to crush animations.
-    f32 m_totalScale;      ///< @unused Always 1.0f
+    f32 m_weightedTurn;      ///< Magnitude+direction of stick input, factoring in the kart's stats.
+    EGG::Vector3f m_scale;   ///< Normally the unit vector, but may vary due to crush animations.
+    f32 m_totalScale;        ///< @unused Always 1.0f
     f32 m_engineSpeedFactor; ///< 0.8 / 0.9 / 1.0 / 0.7 for 50cc / 100cc / 150cc / battle (0x10).
     f32 m_hitboxScale;
     f32 m_shockSpeedMultiplier;
     u16 m_mushroomBoostTimer; ///< Number of frames until the mushroom boost runs out.
     f32 m_invScale;
     u16 m_shockTimer;
-    s16 m_starTimer;      ///< Frames of star left (offset 0x18A).
-    s16 m_inkTimer;       ///< Frames of blooper ink left (offset 0x18E).
-    bool m_inkPending;    ///< Ink not yet faded in on screen (offset 0x190). Visual only.
-    f32 m_bulletScale;    ///< 1.5 in a bullet bill, else 1.0 (offset 0x180).
-    f32 m_bulletTopRate;  ///< (offset 0x198)
+    s16 m_starTimer;           ///< Frames of star left (offset 0x18A).
+    s16 m_inkTimer;            ///< Frames of blooper ink left (offset 0x18E).
+    bool m_inkPending;         ///< Ink not yet faded in on screen (offset 0x190). Visual only.
+    f32 m_bulletScale;         ///< 1.5 in a bullet bill, else 1.0 (offset 0x180).
+    f32 m_bulletTopRate;       ///< (offset 0x198)
     EGG::Vector3f m_bulletTop; ///< (offset 0x19C)
-    s16 m_powDodgeTimer;  ///< Frames a POW spin would still be the light one (offset 0x152).
-    bool m_powHit;        ///< A POW spin reached its hit frame (offset 0x154). Not read yet.
-    s16 m_megaTimer;      ///< Frames of mega mushroom left (offset 0x194).
-    bool m_megaShrinking; ///< The mega's shrink back has started (offset 0x196).
-    f32 m_megaScale;      ///< 1.0, ramps to the stats' mega scale while big (offset 0x17C).
-    u16 m_crushTimer; ///< Number of frames until player will be uncrushed.
+    s16 m_powDodgeTimer;       ///< Frames a POW spin would still be the light one (offset 0x152).
+    bool m_powHit;             ///< A POW spin reached its hit frame (offset 0x154). Not read yet.
+    s16 m_megaTimer;           ///< Frames of mega mushroom left (offset 0x194).
+    bool m_megaShrinking;      ///< The mega's shrink back has started (offset 0x196).
+    f32 m_megaScale;           ///< 1.0, ramps to the stats' mega scale while big (offset 0x17C).
+    u16 m_crushTimer;          ///< Number of frames until player will be uncrushed.
     u32 m_nonZipperAirtime;
     f32 m_jumpPadMinSpeed; ///< Snaps the player to a minimum speed when first touching a jump pad.
     f32 m_jumpPadMaxSpeed;
@@ -558,10 +559,11 @@ protected:
     s16 m_respawnPreLandTimer;  ///< Counts down from 4 when pressing A before landing from respawn.
     s16 m_respawnPostLandTimer; ///< Counts up to 4 if not accelerating after respawn landing.
     s16 m_respawnTimer;
-    s16 m_wheelieBumpWobbleTimer;  ///< Frames since a bump knocked this bike out of a wheelie.
-    u16 m_wheelieBumpWobblePhase;  ///< Sine phase of the wobble, 65536 = one turn. Never reset by a bump.
-    f32 m_wheelieBumpWobbleAngle;  ///< Last yaw rate added by the wobble.
-    s16 m_bumpTimer;                     ///< Set when a @ref Reaction::SmallBump collision occurs.
+    s16 m_wheelieBumpWobbleTimer; ///< Frames since a bump knocked this bike out of a wheelie.
+    u16 m_wheelieBumpWobblePhase; ///< Sine phase of the wobble, 65536 = one turn. Never reset by a
+                                  ///< bump.
+    f32 m_wheelieBumpWobbleAngle; ///< Last yaw rate added by the wobble.
+    s16 m_bumpTimer;              ///< Set when a @ref Reaction::SmallBump collision occurs.
     DrivingDirection m_drivingDirection; ///< Current state of driver's direction.
     s16 m_backwardsAllowCounter;         ///< Tracks the 15f delay before reversing.
     PadType m_padType;

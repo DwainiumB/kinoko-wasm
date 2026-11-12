@@ -94,7 +94,7 @@ protected:
     s32 m_cycleTimer;
     f32 m_currRot;
     bool m_touchingGround;
-    f32 m_spinSpeed = 0.0f; ///< +0xF8 Degrees per frame, from 60 down to 12.
+    f32 m_spinSpeed = 0.0f;  ///< +0xF8 Degrees per frame, from 60 down to 12.
     bool m_spinning = false; ///< +0x100
 
     /// The total number of frames the thwomp rises before crashing down

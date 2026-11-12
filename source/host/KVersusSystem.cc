@@ -46,15 +46,17 @@ bool KVersusSystem::run() {
         PANIC("Cannot open %s", m_outPath);
     }
 
-    fprintf(out, "frame,raceFrame,player,posX,posY,posZ,rotX,rotY,rotZ,rotW,speed,"
-                 "playerBumpTimer,extVelX,extVelY,extVelZ,angVel0Z,slipstream,item,itemCount,"
-                 "effects,rank,action,roulette,rouletteItem,itemPoint,status0,status1,status2,"
-                 "status3,status4,rng1\n");
+    fprintf(out,
+            "frame,raceFrame,player,posX,posY,posZ,rotX,rotY,rotZ,rotW,speed,"
+            "playerBumpTimer,extVelX,extVelY,extVelZ,angVel0Z,slipstream,item,itemCount,"
+            "effects,rank,action,roulette,rouletteItem,itemPoint,status0,status1,status2,"
+            "status3,status4,rng1\n");
 
     FILE *items = m_itemsPath ? fopen(m_itemsPath, "w") : nullptr;
     if (items) {
-        fprintf(items, "frame,raceFrame,kind,idx,owner,trailing,flags,posX,posY,posZ,velX,velY,"
-                       "velZ,scale,hitRadius,inBoxCol\n");
+        fprintf(items,
+                "frame,raceFrame,kind,idx,owner,trailing,flags,posX,posY,posZ,velX,velY,"
+                "velZ,scale,hitRadius,inBoxCol\n");
     }
 
     if (auto *race = System::RaceManager::Instance()) {
@@ -112,7 +114,7 @@ void KVersusSystem::parseOptions(int argc, char **argv) {
             using EngineClass = System::RaceConfig::Scenario::EngineClass;
             int cc = std::atoi(value);
             m_engineClass = cc == 50 ? EngineClass::CC50 :
-                    (cc == 100 ? EngineClass::CC100 : EngineClass::CC150);
+                                       (cc == 100 ? EngineClass::CC100 : EngineClass::CC150);
         } else if (strcmp(flag, "--rng1-skip") == 0) {
             m_rng1Skip = static_cast<u32>(std::atoi(value));
         } else if (strcmp(flag, "--seed") == 0) {
@@ -161,10 +163,9 @@ void KVersusSystem::DestroyInstance() {
 KVersusSystem::KVersusSystem()
     : m_sceneMgr(nullptr), m_courseId(8),
       m_engineClass(System::RaceConfig::Scenario::EngineClass::CC150), m_humans{0},
-      m_seed1(0x74A1B095), m_seed2(0),
-      m_itemMode(System::RaceConfig::Scenario::ItemMode::Balanced), m_inputPath(nullptr),
-      m_outPath(nullptr), m_itemsPath(nullptr),
-      m_maxFrames(1000), m_frameIdx(0), m_nextInput(0) {}
+      m_seed1(0x74A1B095), m_seed2(0), m_itemMode(System::RaceConfig::Scenario::ItemMode::Balanced),
+      m_inputPath(nullptr), m_outPath(nullptr), m_itemsPath(nullptr), m_maxFrames(1000),
+      m_frameIdx(0), m_nextInput(0) {}
 
 KVersusSystem::~KVersusSystem() {
     if (s_instance) {
@@ -254,8 +255,8 @@ void KVersusSystem::writeItemRows(FILE *out) const {
             fprintf(out, "%u,%u,%zu,%d,%u,%d,%u,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%d\n",
                     m_frameIdx, race ? race->timer() : 0u, k, i, obj->owner(),
                     obj->isTrailing() ? 1 : 0, obj->flags().getDirect(), D(pos.x), D(pos.y),
-                    D(pos.z), D(vel.x), D(vel.y), D(vel.z), D(obj->scale()),
-                    D(obj->hitRadius()), obj->isInBoxCol() ? 1 : 0);
+                    D(pos.z), D(vel.x), D(vel.y), D(vel.z), D(obj->scale()), D(obj->hitRadius()),
+                    obj->isInBoxCol() ? 1 : 0);
         }
     }
 }
@@ -294,14 +295,14 @@ void KVersusSystem::writeRows(FILE *out) const {
         const auto &inventory = kartItem.inventory();
         const auto &roulette = kartItem.roulette();
         fprintf(out,
-                "%u,%u,%zu,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%d,%.9g,%.9g,%.9g,%.9g,%d,%d,%d,%d,"
+                "%u,%u,%zu,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%d,%.9g,%.9g,%.9g,%.9g,%d,%d,%d,"
+                "%d,"
                 "%d,%d,%d,%d,%d,%u,%u,%u,%u,%u,%016llx\n",
                 m_frameIdx, race ? race->timer() : 0u, i, D(pos.x), D(pos.y), D(pos.z), D(rot.v.x),
                 D(rot.v.y), D(rot.v.z), D(rot.w), D(kart->move()->speed()),
                 kart->collide()->playerBumpTimer(), D(extVel.x), D(extVel.y), D(extVel.z),
-                D(kart->dynamics()->angVel0().z), slipstream,
-                static_cast<int>(inventory.id()), inventory.currentCount(), effects,
-                race ? race->player(i).rank() : 0,
+                D(kart->dynamics()->angVel0().z), slipstream, static_cast<int>(inventory.id()),
+                inventory.currentCount(), effects, race ? race->player(i).rank() : 0,
                 static_cast<int>(kart->action()->currentAction()),
                 static_cast<int>(roulette.state()), static_cast<int>(roulette.shownItem()),
                 static_cast<int>(kartItem.itemPoint()), statusWords[0], statusWords[1],
@@ -325,8 +326,8 @@ void KVersusSystem::OnInit(System::RaceConfig *config, void * /* arg */) {
 
     for (size_t i = 0; i < self->m_karts.size(); ++i) {
         auto &player = scenario.players[i];
-        bool human = std::find(self->m_humans.begin(), self->m_humans.end(), i) !=
-                self->m_humans.end();
+        bool human =
+                std::find(self->m_humans.begin(), self->m_humans.end(), i) != self->m_humans.end();
         player.type = human ? System::RaceConfig::Player::Type::Local :
                               System::RaceConfig::Player::Type::Cpu;
         player.character = static_cast<Character>(self->m_karts[i].character);

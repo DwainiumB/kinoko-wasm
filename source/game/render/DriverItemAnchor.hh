@@ -12,8 +12,9 @@ namespace Kinoko::Render {
 /// the driver skeleton with the "throw_f" / "throw_b" animations at frame 4 and reading the
 /// `wrist_r1` node. Thrown and dropped items start from these points (0x807D171C).
 struct DriverItemAnchors {
-    EGG::Vector3f throwForward; ///< `wrist_r1` in the "throw_f" pose at frame 4 (kart model +0x6C0).
-    EGG::Vector3f dropBehind;   ///< `wrist_r1` in the "throw_b" pose at frame 4 (kart model +0x6CC).
+    EGG::Vector3f
+            throwForward;     ///< `wrist_r1` in the "throw_f" pose at frame 4 (kart model +0x6C0).
+    EGG::Vector3f dropBehind; ///< `wrist_r1` in the "throw_b" pose at frame 4 (kart model +0x6CC).
 };
 
 namespace DriverItemAnchor {

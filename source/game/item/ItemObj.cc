@@ -5,13 +5,13 @@
 #include "game/item/ItemMath.hh"
 #include "game/item/ItemObjBlueShell.hh"
 #include "game/item/ItemObjBobOmb.hh"
-#include "game/item/ItemTrail.hh"
 #include "game/item/ItemRaceFlags.hh"
+#include "game/item/ItemTrail.hh"
 
 #include "game/field/BoxColManager.hh"
-#include "game/field/ObjectDirector.hh"
 #include "game/field/CollisionDirector.hh"
 #include "game/field/ObjectCollisionKart.hh"
+#include "game/field/ObjectDirector.hh"
 
 #include "game/kart/KartCollide.hh"
 #include "game/kart/KartMove.hh"
@@ -33,26 +33,26 @@ namespace {
 constexpr std::array<ItemObjProperties, static_cast<size_t>(ItemObjKind::Count)> PROPERTIES = {{
         // limit, cap, noVanish, noBreak, noLand, noBoxCol, kclR, trailHitR, hitR, trailScale,
         // scale, throwStep, step, landBounce, survives, breaksOnKart, reactsToKart, weight
-        {12, 32, false, false, false, false, 31.0f, 70.0f, 34.0f, 1.0f, 2.1f, 0.03f, 0.03f,
-                0.002f, true, true, true, 1}, // green shell
-        {8, 12, false, false, false, false, 31.0f, 70.0f, 34.0f, 1.0f, 2.1f, 0.03f, 0.03f,
-                0.002f, true, true, true, 1}, // red shell
+        {12, 32, false, false, false, false, 31.0f, 70.0f, 34.0f, 1.0f, 2.1f, 0.03f, 0.03f, 0.002f,
+                true, true, true, 1}, // green shell
+        {8, 12, false, false, false, false, 31.0f, 70.0f, 34.0f, 1.0f, 2.1f, 0.03f, 0.03f, 0.002f,
+                true, true, true, 1}, // red shell
         {16, 48, false, true, false, false, 31.0f, 60.0f, 29.0f, 1.15f, 2.0f, 0.1f, 0.1f, 0.1f,
                 true, true, true, 1}, // banana
         {12, 16, false, false, false, false, 27.0f, 60.0f, 33.0f, 1.0f, 2.2f, 0.1f, 0.1f, 0.01f,
                 true, false, true, 1}, // mushroom
         {3, 12, false, false, false, false, 27.0f, 60.0f, 33.0f, 1.0f, 2.5f, 0.1f, 0.1f, 0.007f,
                 true, false, true, 1}, // star
-        {1, 1, false, true, false, false, 25.0f, 50.0f, 29.0f, 1.0f, 1.0f, 0.014f, 0.014f,
-                0.002f, false, true, true, 1}, // blue shell
+        {1, 1, false, true, false, false, 25.0f, 50.0f, 29.0f, 1.0f, 1.0f, 0.014f, 0.014f, 0.002f,
+                false, true, true, 1}, // blue shell
         {1, 1, false, false, false, false, 27.0f, 60.0f, 33.0f, 1.0f, 2.2f, 0.1f, 0.1f, 0.01f,
                 false, false, true, 1}, // lightning
-        {6, 6, false, false, false, false, 72.0f, 72.0f, 58.0f, 1.0f, 2.5f, 0.04f, 0.07f,
-                0.002f, true, true, true, 1}, // fake item box
+        {6, 6, false, false, false, false, 72.0f, 72.0f, 58.0f, 1.0f, 2.5f, 0.04f, 0.07f, 0.002f,
+                true, true, true, 1}, // fake item box
         {2, 2, false, false, false, false, 27.0f, 60.0f, 33.0f, 1.0f, 2.2f, 0.1f, 0.1f, 0.01f,
                 false, false, true, 1}, // mega mushroom
-        {3, 16, false, true, true, false, 41.0f, 60.0f, 29.0f, 1.3f, 2.2f, 0.1f, 0.1f, 0.002f,
-                true, true, true, 1}, // bob-omb
+        {3, 16, false, true, true, false, 41.0f, 60.0f, 29.0f, 1.3f, 2.2f, 0.1f, 0.1f, 0.002f, true,
+                true, true, 1}, // bob-omb
         {1, 1, false, false, false, false, 27.0f, 60.0f, 33.0f, 0.4f, 0.4f, 0.03f, 0.03f, 0.01f,
                 false, false, true, 1}, // blooper
         {1, 1, false, false, false, false, 27.0f, 60.0f, 29.0f, 1.0f, 1.0f, 0.07f, 0.07f, 0.01f,
@@ -61,8 +61,8 @@ constexpr std::array<ItemObjProperties, static_cast<size_t>(ItemObjKind::Count)>
                 false, false, true, 1}, // golden mushroom
         {1, 1, false, false, false, false, 27.0f, 60.0f, 33.0f, 1.0f, 2.1f, 0.3f, 0.3f, 0.01f,
                 false, false, true, 1}, // bullet bill
-        {1, 1, false, true, false, false, 0.0f, 0.0f, 0.0f, 0.5f, 0.5f, 0.04f, 0.04f, 0.01f,
-                false, false, false, 1}, // thunder cloud
+        {1, 1, false, true, false, false, 0.0f, 0.0f, 0.0f, 0.5f, 0.5f, 0.04f, 0.04f, 0.01f, false,
+                false, false, 1}, // thunder cloud
 }};
 
 /// The course KCL types an item rests on or is stopped by (floors, walls, item roads).
@@ -255,8 +255,8 @@ bool ItemObj::calc() {
     if (m_flags.onBit(eFlags::Landed) || (m_kclMask & KCL_ITEM_SOLID)) {
         m_airFrames = 0;
 
-        if (((m_landMask & 0x400) || ((m_kclMask & 0x400) &&
-                                             m_frameFlags.offBit(eFrameFlags::WallHit))) &&
+        if (((m_landMask & 0x400) ||
+                    ((m_kclMask & 0x400) && m_frameFlags.offBit(eFrameFlags::WallHit))) &&
                 m_wallTimer == 0 && m_kind != ItemObjKind::BobOmb) {
             m_wallTimer = m_flags.onBit(eFlags::Landed) ? 180 : 60;
         }
@@ -406,8 +406,7 @@ void ItemObj::calcKnockedAway(const EGG::Vector3f &pos, const EGG::Vector3f &vel
         m_vel = vel * KART_VEL_SCALE + m_spinVel;
     } else {
         m_vel += (vel - m_vel) * LANDED_VEL_BLEND;
-        f32 side = LANDED_SIDE_SPEED +
-                ItemRaceFlags::Random().getF32(LANDED_SIDE_RANDOM);
+        f32 side = LANDED_SIDE_SPEED + ItemRaceFlags::Random().getF32(LANDED_SIDE_RANDOM);
         m_spinVel = EGG::Vector3f(sideZ * side, 0.0f, sideX * side);
         m_vel += m_spinVel;
     }
@@ -928,8 +927,8 @@ void ItemObj::calcItemContact(const EGG::Vector3f &otherPos, EGG::Vector3f delta
 
 /// @addr{0x807A6F74}
 /// @brief Places an item dropped by a kart that was hit.
-void ItemObj::placeDropped(u32 dropIdx, const EGG::Vector3f &kartPos,
-        const EGG::Vector3f &kartVel, const EGG::Vector3f &up) {
+void ItemObj::placeDropped(u32 dropIdx, const EGG::Vector3f &kartPos, const EGG::Vector3f &kartVel,
+        const EGG::Vector3f &up) {
     constexpr f32 MAX_UP_SPEED = 1.2f;
     constexpr f32 UP_SPEED_SURVIVOR = 25.0f;
     constexpr f32 UP_SPEED = 35.0f;
@@ -1052,8 +1051,8 @@ void ItemObj::checkLanding(const EGG::Vector3f &nrm) {
 
     EGG::Vector3f probe = m_pos - nrm * m_kclRadius;
     KCLTypeMask mask = KCL_NONE;
-    if (Field::CollisionDirector::Instance()->checkSpherePartial(PROBE_RADIUS * m_kclRadius,
-                probe, m_pos, KCL_ITEM_SOLID, nullptr, &mask, 0)) {
+    if (Field::CollisionDirector::Instance()->checkSpherePartial(PROBE_RADIUS * m_kclRadius, probe,
+                m_pos, KCL_ITEM_SOLID, nullptr, &mask, 0)) {
         if (m_flags.offBit(eFlags::WallSet)) {
             m_frameFlags.setBit(eFrameFlags::Landed);
             m_up = nrm;
@@ -1089,8 +1088,8 @@ void ItemObj::slideOnWall(const EGG::Vector3f &wallNrm) {
 
     f32 minPush = MIN_PUSH;
     if (m_vel.x * wallNrm.x + m_vel.z * wallNrm.z > 0.0f) {
-        minPush = std::min(std::max(MIN_PUSH + (PUSH_PER_Y * wallNrm.y) / KEEP, MIN_PUSH),
-                MAX_PUSH);
+        minPush =
+                std::min(std::max(MIN_PUSH + (PUSH_PER_Y * wallNrm.y) / KEEP, MIN_PUSH), MAX_PUSH);
     }
 
     EGG::Vector3f nrm = wallNrm;
@@ -1152,8 +1151,8 @@ bool ItemObj::checkSphereFull(f32 radius, KCLTypeMask mask) {
     m_colInfo.wallDist = -std::numeric_limits<f32>::min();
     m_colInfo.movingFloorDist = -std::numeric_limits<f32>::min();
     m_colInfo.perpendicularity = 0.0f;
-    return Field::CollisionDirector::Instance()->checkSphereFullPush(radius, m_pos, m_prevPos,
-            mask, &m_colInfo, &m_kclMask, 0);
+    return Field::CollisionDirector::Instance()->checkSphereFullPush(radius, m_pos, m_prevPos, mask,
+            &m_colInfo, &m_kclMask, 0);
 }
 
 bool ItemObj::checkBreakOnWall(const EGG::Vector3f & /*nrm*/) {
@@ -1238,7 +1237,8 @@ void ItemObj::calcItemPairResponse(s32 response, const EGG::Vector3f &otherPos,
         }
 
         if (speed == 0.0f) {
-            // The game reads an unset direction here; a still item never hits, so it does not matter.
+            // The game reads an unset direction here; a still item never hits, so it does not
+            // matter.
             calcKnockedAway(otherPos, otherVel, dir, false);
         } else {
             EGG::Vector3f away = m_pos - otherPos;

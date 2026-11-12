@@ -76,7 +76,7 @@ s32 ObjectBoble::onItemCollision(Item::ItemObj *item, s32 reactionOnItem, s32 re
 /// plus a random 0 to 180 degrees, pitched up 30 to 60), at 30, 50 or 100 by how hard the hit was,
 /// tumbling at random rates. Six draws from the object generator (ObjectDirector::random).
 void ObjectBoble::startKnockAway(const EGG::Vector3f &hitDepth, const EGG::Vector3f &hitterVel) {
-    constexpr f32 RAD_TO_DEG = 57.295776f; ///< 0x808A3830
+    constexpr f32 RAD_TO_DEG = 57.295776f;  ///< 0x808A3830
     constexpr f32 SPIN_BASE = -0.10471976f; ///< 0x808A384C, -6 degrees in radians
     constexpr s32 KNOCK_FRAMES = 180;
 
@@ -126,7 +126,8 @@ void ObjectBoble::startKnockAway(const EGG::Vector3f &hitDepth, const EGG::Vecto
     f32 spinZ = static_cast<f32>(random.getU32(12)) * DEG2RAD;
     f32 spinY = static_cast<f32>(random.getU32(12)) * DEG2RAD;
     f32 spinX = static_cast<f32>(random.getU32(12)) * DEG2RAD;
-    m_spinRate = EGG::Vector3f(SPIN_BASE, SPIN_BASE, SPIN_BASE) + EGG::Vector3f(spinX, spinY, spinZ);
+    m_spinRate =
+            EGG::Vector3f(SPIN_BASE, SPIN_BASE, SPIN_BASE) + EGG::Vector3f(spinX, spinY, spinZ);
 
     switch (random.getU32(3)) {
     case 0:

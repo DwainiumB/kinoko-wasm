@@ -174,7 +174,8 @@ void ItemDirector::explodeAt(f32 radius, const EGG::Vector3f &pos, ItemObjKind k
     m_blastProbe.set(radius, pos, kind);
 
     Field::BoxColFlag flags;
-    flags.setBit(Field::eBoxColFlag::Item, Field::eBoxColFlag::Object, Field::eBoxColFlag::Drivable);
+    flags.setBit(Field::eBoxColFlag::Item, Field::eBoxColFlag::Object,
+            Field::eBoxColFlag::Drivable);
     auto *boxColMgr = Field::BoxColManager::Instance();
     boxColMgr->search(radius, pos, flags);
 
@@ -221,8 +222,8 @@ size_t ItemDirector::checkKartCollision(const Kart::KartObject *kart,
         }
 
         // 0x8079FF14: a dropped item that does not survive just vanishes.
-        bool vanishes = obj->flags().onBit(ItemObj::eFlags::Dropped) &&
-                !obj->properties().survivesHits;
+        bool vanishes =
+                obj->flags().onBit(ItemObj::eFlags::Dropped) && !obj->properties().survivesHits;
         if (vanishes) {
             obj->startVanish(false);
             continue;

@@ -72,8 +72,9 @@ void ObjectDirector::addManagedObject(ObjectCollidable *obj) {
 /// kart (read back with reaction) after the object's own reactions.
 /// @details The kart and object tables are read in the column of the kart's state (star, mega
 /// mushroom, bullet bill or none). The game skips objects whose vtable +0xD8 is false while status
-/// bit 88 is set; nothing in Kinoko sets that bit (its role is not identified), so that skip is left
-/// out. It also sets a byte at object +0xA8, which only the default onObjectCollision effect reads.
+/// bit 88 is set; nothing in Kinoko sets that bit (its role is not identified), so that skip is
+/// left out. It also sets a byte at object +0xA8, which only the default onObjectCollision effect
+/// reads.
 size_t ObjectDirector::checkKartObjectCollision(Kart::KartObject *kartObj,
         ObjectCollisionConvexHull *convexHull) {
     size_t count = 0;
@@ -165,8 +166,7 @@ size_t ObjectDirector::checkItemObjectCollision(f32 radius, Item::ItemObj *item,
             if (reactionOnItem == ItemHit::Bounce && trailing) {
                 continue;
             }
-        } else if (reactionOnItem == ItemHit::None || reactionOnItem == ItemHit::Pass ||
-                trailing) {
+        } else if (reactionOnItem == ItemHit::None || reactionOnItem == ItemHit::Pass || trailing) {
             continue;
         }
 

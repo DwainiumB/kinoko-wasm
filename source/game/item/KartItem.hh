@@ -32,8 +32,8 @@ public:
         setItemPoint(idx, true);
     }
 
-    /// @brief The kart was put back on the track at a respawn point linked to this item point (0x807B99D4 from
-    /// 0x80584334).
+    /// @brief The kart was put back on the track at a respawn point linked to this item point
+    /// (0x807B99D4 from 0x80584334).
     void setRespawnItemPoint(u8 idx) {
         setItemPoint(idx, true);
     }
@@ -148,7 +148,6 @@ public:
     }
 
 private:
-
     [[nodiscard]] bool canStartUse();
     void setItemPoint(u8 idx, bool moved);
     bool calcItemPoint(const EGG::Vector3f &kartPos);
@@ -160,9 +159,9 @@ private:
 
     /// @brief +0x0C.
     enum class eFlags {
-        RouletteHeld = 0,    ///< Pressed while the roulette spins.
-        HasItem = 1,         ///< An item in the inventory.
-        HasTrail = 2,        ///< An item held behind the kart.
+        RouletteHeld = 0, ///< Pressed while the roulette spins.
+        HasItem = 1,      ///< An item in the inventory.
+        HasTrail = 2,     ///< An item held behind the kart.
         StickUp = 4,
         StickDown = 5,
         PressAccepted = 6,   ///< Pressed this frame while allowed to use an item.

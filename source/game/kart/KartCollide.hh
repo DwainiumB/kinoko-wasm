@@ -235,7 +235,7 @@ private:
     s16 m_solidOobTimer;
     s16 m_shrinkTimer;
     s16 m_playerBumpTimer; ///< Offset 0x18. Set to 10 on a kart-kart bump, no bump while > 0.
-    f32 m_smoothedBack; // 0x50
+    f32 m_smoothedBack;    // 0x50
     f32 m_sumHitboxBottomHeightSoftWall;
     u16 m_numSoftWallCollisions;
     f32 m_sumHitboxBottomHeightFloorOnly;

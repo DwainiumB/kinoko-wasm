@@ -34,8 +34,7 @@ ItemObjKoura::~ItemObjKoura() = default;
 
 /// @addr{0x807B5178}
 /// @brief Starts a thrown shell: direction and speed from the kart, the bounce budget.
-void ItemObjKoura::initThrow(f32 speed, ItemTrail &trail, s32 bounces, bool forward,
-        bool floats) {
+void ItemObjKoura::initThrow(f32 speed, ItemTrail &trail, s32 bounces, bool forward, bool floats) {
     constexpr f32 MIN_SCALE = 0.8f;
     constexpr f32 DELTA_SCALE = 1.0f;
     constexpr f32 FORWARD_DIR_SCALE = 35.0f;
@@ -71,8 +70,7 @@ void ItemObjKoura::initThrow(f32 speed, ItemTrail &trail, s32 bounces, bool forw
 
     // The game reads status bits 41 / 42 (word 1, 0x600): released in the air.
     const auto &status = trail.kartObject()->status();
-    m_airTimer = status.onBit(Kart::eStatus::RampBoost, Kart::eStatus::OverZipper) ? AIR_FRAMES :
-                                                                                         0;
+    m_airTimer = status.onBit(Kart::eStatus::RampBoost, Kart::eStatus::OverZipper) ? AIR_FRAMES : 0;
     m_touchedBoundary = false;
     m_flags.setBit(eFlags::Released);
 }

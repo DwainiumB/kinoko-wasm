@@ -70,8 +70,7 @@ void ObjectHeyho::calc() {
 /// @brief A kart in a star, mega mushroom or bullet bill spins the Shy Guy round (the rumble is
 /// left out).
 Kart::Reaction ObjectHeyho::onCollision(Kart::KartObject * /*kartObj*/,
-        Kart::Reaction reactionOnKart, Kart::Reaction reactionOnObj,
-        EGG::Vector3f & /*hitDepth*/) {
+        Kart::Reaction reactionOnKart, Kart::Reaction reactionOnObj, EGG::Vector3f & /*hitDepth*/) {
     if ((reactionOnObj == Kart::Reaction::UNK_3 || reactionOnObj == Kart::Reaction::UNK_5) &&
             !m_hitSpinning) {
         startSpin();

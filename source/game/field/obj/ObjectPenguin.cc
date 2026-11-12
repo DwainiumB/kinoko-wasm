@@ -41,8 +41,7 @@ void ObjectPenguin::enterWalk() {
 /// @brief A kart in a star, mega mushroom or bullet bill knocks the penguin into a spin (the
 /// rumble is left out).
 Kart::Reaction ObjectPenguin::onCollision(Kart::KartObject * /*kartObj*/,
-        Kart::Reaction reactionOnKart, Kart::Reaction reactionOnObj,
-        EGG::Vector3f & /*hitDepth*/) {
+        Kart::Reaction reactionOnKart, Kart::Reaction reactionOnObj, EGG::Vector3f & /*hitDepth*/) {
     if (reactionOnObj == Kart::Reaction::UNK_3 || reactionOnObj == Kart::Reaction::UNK_5) {
         startHit();
     }
@@ -51,8 +50,8 @@ Kart::Reaction ObjectPenguin::onCollision(Kart::KartObject * /*kartObj*/,
 }
 
 /// @addr{0x80775CE0}
-s32 ObjectPenguin::onItemCollision(Item::ItemObj * /*item*/, s32 reactionOnItem,
-        s32 reactionOnObj, EGG::Vector3f & /*hitDepth*/) {
+s32 ObjectPenguin::onItemCollision(Item::ItemObj * /*item*/, s32 reactionOnItem, s32 reactionOnObj,
+        EGG::Vector3f & /*hitDepth*/) {
     if (reactionOnObj == ItemHit::ObjHit || reactionOnObj == ItemHit::ObjHitRaceOnly) {
         startHit();
     }

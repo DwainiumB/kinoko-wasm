@@ -26,8 +26,8 @@ ItemObjThrowable::~ItemObjThrowable() = default;
 
 /// @addr{0x807B7104}
 /// @brief Throws the item forward in an arc, or drops it behind the kart.
-void ItemObjThrowable::initThrow(f32 forwardSpeed, f32 upSpeed, f32 backUpSpeed,
-        ItemTrail &trail, u32 bounces, bool forward) {
+void ItemObjThrowable::initThrow(f32 forwardSpeed, f32 upSpeed, f32 backUpSpeed, ItemTrail &trail,
+        u32 bounces, bool forward) {
     constexpr f32 BACK_SPEED_PER_DELTA = 0.15f;
     constexpr f32 BACK_MIN_SPEED = 14.0f;
     constexpr f32 DELTA_SCALE = 1.0f;
@@ -76,9 +76,9 @@ void ItemObjThrowable::initThrow(f32 forwardSpeed, f32 upSpeed, f32 backUpSpeed,
     if (!forward) {
         up = backUpSpeed + delta.y * (delta.y > 0.0f ? BACK_RISE_SCALE : BACK_FALL_SCALE);
     } else {
-        f32 rise = std::min(std::max(delta.y * (delta.y > 0.0f ? RISE_SCALE : FALL_SCALE),
-                                    -MAX_RISE),
-                MAX_RISE);
+        f32 rise =
+                std::min(std::max(delta.y * (delta.y > 0.0f ? RISE_SCALE : FALL_SCALE), -MAX_RISE),
+                        MAX_RISE);
         up = upSpeed + UP_PER_SPEED * kartSpeed + rise;
     }
 

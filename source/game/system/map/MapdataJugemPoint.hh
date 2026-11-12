@@ -32,7 +32,8 @@ public:
         return m_rot;
     }
 
-    /// @brief The item route point a player continues from after respawning here (+0x29 in the game).
+    /// @brief The item route point a player continues from after respawning here (+0x29 in the
+    /// game).
     [[nodiscard]] u8 itemPointIdx() const {
         return m_itemPointIdx;
     }
@@ -42,7 +43,8 @@ private:
     [[maybe_unused]] const SData *m_rawData;
     EGG::Vector3f m_pos;
     EGG::Vector3f m_rot;     ///< Degrees, as in the file.
-    EGG::Vector3f m_backDir; ///< The point's -Z axis (+0x10 in the game): players 5 to 12 are placed behind the point.
+    EGG::Vector3f m_backDir; ///< The point's -Z axis (+0x10 in the game): players 5 to 12 are
+                             ///< placed behind the point.
     EGG::Vector3f m_leftDir; ///< The point's -X axis (+0x1C): players alternate sides along it.
     u8 m_itemPointIdx;       ///< Set by linkNearestItemPoint().
 };

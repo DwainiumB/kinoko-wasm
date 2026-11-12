@@ -43,13 +43,12 @@ bool IsUntargetable(const Kart::KartObject *kart) {
 /// @addr{0x80591264}
 /// @brief The status bits that make a kart immune to items for now.
 bool IsItemProof(const Kart::KartObject *kart) {
-    return kart->status().onBit(Kart::eStatus::TriggerRespawn,
-            Kart::eStatus::NoKartCollision40, Kart::eStatus::InRespawn,
-            Kart::eStatus::AfterRespawn, Kart::eStatus::NoKartCollision82,
-            Kart::eStatus::Vanished, Kart::eStatus::NoKartCollision89,
-            Kart::eStatus::BeforeRespawn, Kart::eStatus::NoSlipstreamBoost135,
-            Kart::eStatus::InAction, Kart::eStatus::CannonStart, Kart::eStatus::InCannon,
-            Kart::eStatus::InStar, Kart::eStatus::InMega, Kart::eStatus::InBullet);
+    return kart->status().onBit(Kart::eStatus::TriggerRespawn, Kart::eStatus::NoKartCollision40,
+            Kart::eStatus::InRespawn, Kart::eStatus::AfterRespawn, Kart::eStatus::NoKartCollision82,
+            Kart::eStatus::Vanished, Kart::eStatus::NoKartCollision89, Kart::eStatus::BeforeRespawn,
+            Kart::eStatus::NoSlipstreamBoost135, Kart::eStatus::InAction,
+            Kart::eStatus::CannonStart, Kart::eStatus::InCannon, Kart::eStatus::InStar,
+            Kart::eStatus::InMega, Kart::eStatus::InBullet);
 }
 
 u8 Rank(u8 idx) {
@@ -331,8 +330,7 @@ bool ItemObjRedShell::tryTarget(u8 idx, f32 &bestDistSq, bool fromOwnerPlace) {
 
     f32 dot = m_vel.ps_dot(diff);
     if (!(dot > 0.0f &&
-                (1.0f - CONE * CONE) * (m_vel.ps_squareMag() * diff.ps_squareMag()) <
-                        dot * dot)) {
+                (1.0f - CONE * CONE) * (m_vel.ps_squareMag() * diff.ps_squareMag()) < dot * dot)) {
         return false;
     }
 
@@ -420,9 +418,9 @@ bool ItemObjRedShell::calcHoming(f32 speed, f32 rate, bool breakOnWall) {
             if (match.ps_dot(fromOwner) < 0.0f) {
                 EGG::Vector3f n(0.0f, 0.0f, 0.0f);
                 f32 len = NormaliseLength(n, fromOwner);
-                f32 k = std::min(std::max(0.0f + (1.0f * (len - OWNER_FAR)) /
-                                                         (OWNER_NEAR - OWNER_FAR),
-                                         0.0f),
+                f32 k = std::min(
+                        std::max(0.0f + (1.0f * (len - OWNER_FAR)) / (OWNER_NEAR - OWNER_FAR),
+                                0.0f),
                         1.0f);
                 match -= n * match.ps_dot(n) * k;
             }
@@ -432,8 +430,8 @@ bool ItemObjRedShell::calcHoming(f32 speed, f32 rate, bool breakOnWall) {
     } else {
         f32 sq = m_pos.ps_sqDistance(target->pos());
         f32 dist = sq > 0.0f ? sq * EGG::Mathf::frsqrt(sq) : 0.0f;
-        f32 keep = AIR_KEEP + (AIR_KEEP_RANGE * (dist - AIR_DIST_FROM)) /
-                        (AIR_DIST_TO - AIR_DIST_FROM);
+        f32 keep = AIR_KEEP +
+                (AIR_KEEP_RANGE * (dist - AIR_DIST_FROM)) / (AIR_DIST_TO - AIR_DIST_FROM);
         keep = std::min(std::max(keep, AIR_KEEP), 1.0f);
         m_vel.x *= keep;
         m_vel.z *= keep;
