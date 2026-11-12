@@ -193,8 +193,9 @@ void ItemObjHolder::despawnAll() {
     }
 }
 
-// Item objects must live in the engine heap (egg_new), not in plain malloc memory: a snapshot (Host::Context) only
-// copies the engine heap, so objects outside it keep their post-snapshot state after a restore and the replay diverges.
+// Item objects must live in the engine heap (egg_new), not in plain malloc memory: a snapshot
+// (Host::Context) only copies the engine heap, so objects outside it keep their post-snapshot state
+// after a restore and the replay diverges.
 /// @addr{0x807AEAEC}
 /// @brief The game's per-kind array constructors (property +0x00). Only the ported kinds.
 ItemObj *ItemObjHolder::Create(ItemObjKind kind) {

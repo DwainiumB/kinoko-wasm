@@ -309,8 +309,8 @@ void kinoko_set_input(int buttons, float stickX, float stickY, int trick) {
 /// placement new (Context itself mallocs its copy) and the table is static storage.
 static constexpr int MAX_STATES = 1024;
 static constexpr int DEFAULT_STATE_BYTES = 1 << 20;
-/// A VS race (several karts, items) dirties more of the heap than a single-kart race: about 1.05 MiB at
-/// most over 5400 frames of 12 karts on the 32 courses, so it gets a larger default.
+/// A VS race (several karts, items) dirties more of the heap than a single-kart race: about 1.05
+/// MiB at most over 5400 frames of 12 karts on the 32 courses, so it gets a larger default.
 static constexpr int DEFAULT_VS_STATE_BYTES = 4 << 20;
 static Host::Context *s_states[MAX_STATES];
 
