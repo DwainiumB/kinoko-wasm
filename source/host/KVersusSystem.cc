@@ -17,6 +17,13 @@
 
 namespace Kinoko {
 
+namespace {
+// printf takes doubles; make the float -> double widening explicit (-Wdouble-promotion)
+inline double D(f32 v) {
+    return static_cast<double>(v);
+}
+} // namespace
+
 void KVersusSystem::init() {
     ASSERT(!m_karts.empty() && m_karts.size() <= 12);
 
@@ -246,8 +253,8 @@ void KVersusSystem::writeItemRows(FILE *out) const {
             const EGG::Vector3f &vel = obj->vel();
             fprintf(out, "%u,%u,%zu,%d,%u,%d,%u,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%d\n",
                     m_frameIdx, race ? race->timer() : 0u, k, i, obj->owner(),
-                    obj->isTrailing() ? 1 : 0, obj->flags().getDirect(), pos.x, pos.y, pos.z,
-                    vel.x, vel.y, vel.z, obj->scale(), obj->hitRadius(),
+                    obj->isTrailing() ? 1 : 0, obj->flags().getDirect(), D(pos.x), D(pos.y), D(pos.z),
+                    D(vel.x), D(vel.y), D(vel.z), D(obj->scale()), D(obj->hitRadius()),
                     obj->isInBoxCol() ? 1 : 0);
         }
     }
@@ -289,9 +296,10 @@ void KVersusSystem::writeRows(FILE *out) const {
         fprintf(out,
                 "%u,%u,%zu,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%d,%.9g,%.9g,%.9g,%.9g,%d,%d,%d,%d,"
                 "%d,%d,%d,%d,%d,%u,%u,%u,%u,%u,%016llx\n",
-                m_frameIdx, race ? race->timer() : 0u, i, pos.x, pos.y, pos.z, rot.v.x, rot.v.y,
-                rot.v.z, rot.w, kart->move()->speed(), kart->collide()->playerBumpTimer(),
-                extVel.x, extVel.y, extVel.z, kart->dynamics()->angVel0().z, slipstream,
+                m_frameIdx, race ? race->timer() : 0u, i, D(pos.x), D(pos.y), D(pos.z), D(rot.v.x),
+                D(rot.v.y), D(rot.v.z), D(rot.w), D(kart->move()->speed()),
+                kart->collide()->playerBumpTimer(), D(extVel.x), D(extVel.y), D(extVel.z),
+                D(kart->dynamics()->angVel0().z), slipstream,
                 static_cast<int>(inventory.id()), inventory.currentCount(), effects,
                 race ? race->player(i).rank() : 0,
                 static_cast<int>(kart->action()->currentAction()),
