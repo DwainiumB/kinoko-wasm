@@ -253,9 +253,9 @@ void KVersusSystem::writeItemRows(FILE *out) const {
             const EGG::Vector3f &vel = obj->vel();
             fprintf(out, "%u,%u,%zu,%d,%u,%d,%u,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%.9g,%d\n",
                     m_frameIdx, race ? race->timer() : 0u, k, i, obj->owner(),
-                    obj->isTrailing() ? 1 : 0, obj->flags().getDirect(), D(pos.x), D(pos.y), D(pos.z),
-                    D(vel.x), D(vel.y), D(vel.z), D(obj->scale()), D(obj->hitRadius()),
-                    obj->isInBoxCol() ? 1 : 0);
+                    obj->isTrailing() ? 1 : 0, obj->flags().getDirect(), D(pos.x), D(pos.y),
+                    D(pos.z), D(vel.x), D(vel.y), D(vel.z), D(obj->scale()),
+                    D(obj->hitRadius()), obj->isInBoxCol() ? 1 : 0);
         }
     }
 }
