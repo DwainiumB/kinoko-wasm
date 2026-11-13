@@ -1,8 +1,8 @@
 #include "ItemObjRed.hh"
 
 #include "game/item/ItemDirector.hh"
-#include "game/item/ItemRaceFlags.hh"
 #include "game/item/ItemMath.hh"
+#include "game/item/ItemRaceFlags.hh"
 #include "game/item/ItemTrail.hh"
 #include "game/item/KartItem.hh"
 

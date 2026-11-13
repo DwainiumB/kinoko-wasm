@@ -34,10 +34,10 @@ struct ItemRaceFlags {
     /// @brief Run at the start of every ItemDirector::calc: keeps the race frame and its low bits.
     static void CalcRaceFrame();
 
-    static s32 s_raceFrame;      ///< 0x809C38C0 RaceManager +0x20.
-    static u32 s_raceFrameMod2;  ///< 0x809C38C4
-    static u32 s_raceFrameMod4;  ///< 0x809C38C8 Red shells look at racer i only when i & 3 is this.
-    static u32 s_raceFrameMod8;  ///< 0x809C38CC
+    static s32 s_raceFrame;     ///< 0x809C38C0 RaceManager +0x20.
+    static u32 s_raceFrameMod2; ///< 0x809C38C4
+    static u32 s_raceFrameMod4; ///< 0x809C38C8 Red shells look at racer i only when i & 3 is this.
+    static u32 s_raceFrameMod8; ///< 0x809C38CC
 };
 
 } // namespace Item

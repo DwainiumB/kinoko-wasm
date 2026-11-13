@@ -11,12 +11,12 @@ namespace Kinoko::Field {
 /// flow entry) touches the floor, pushes it out, and lets the floor keep it if the floor moves.
 void ObjectItemboxFloor::init() {
     constexpr KCLTypeMask MASK = 0x6CEBDFFF;
-    constexpr f32 STEP = 50.0f;     ///< 0x808AC710
-    constexpr f32 LOWEST = 0.0f;    ///< 0x808AC6E0
+    constexpr f32 STEP = 50.0f;  ///< 0x808AC710
+    constexpr f32 LOWEST = 0.0f; ///< 0x808AC6E0
 
     const auto &flowTable = ObjectDirector::Instance()->flowTable();
-    f32 radius = static_cast<f32>(
-            parse<s16>(flowTable.set(flowTable.slot(id()))->params.sphere.radius));
+    f32 radius =
+            static_cast<f32>(parse<s16>(flowTable.set(flowTable.slot(id()))->params.sphere.radius));
 
     // The wavy road, if the course has one (Bowser's Castle).
     ObjectTwistedWay *road = nullptr;

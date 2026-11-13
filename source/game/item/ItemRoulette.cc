@@ -8,8 +8,18 @@
 namespace Kinoko::Item {
 
 std::array<ItemId, ItemRoulette::FORCED_ITEM_PLAYERS> ItemRoulette::s_forcedItem = {{
-        ItemId::NONE, ItemId::NONE, ItemId::NONE, ItemId::NONE, ItemId::NONE, ItemId::NONE,
-        ItemId::NONE, ItemId::NONE, ItemId::NONE, ItemId::NONE, ItemId::NONE, ItemId::NONE,
+        ItemId::NONE,
+        ItemId::NONE,
+        ItemId::NONE,
+        ItemId::NONE,
+        ItemId::NONE,
+        ItemId::NONE,
+        ItemId::NONE,
+        ItemId::NONE,
+        ItemId::NONE,
+        ItemId::NONE,
+        ItemId::NONE,
+        ItemId::NONE,
 }};
 
 void ItemRoulette::SetForcedItem(size_t playerIdx, ItemId id) {

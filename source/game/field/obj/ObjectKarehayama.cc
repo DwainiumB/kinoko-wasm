@@ -15,9 +15,9 @@ namespace Kinoko::Field {
 /// degrees either way (one draw from the course-object generator), then the pile breaks like
 /// every breakable object.
 void ObjectKarehayama::breakObject(u8 playerIdx, const EGG::Vector3f &dir) {
-    constexpr f32 ANGLE_RANGE = 10.0f;          ///< 0x808CE018, degrees
-    constexpr f32 HALF = 0.5f;                  ///< 0x808A3B50
-    constexpr f32 DEG2RAD = 0.017453292f;       ///< 0x808A3B54
+    constexpr f32 ANGLE_RANGE = 10.0f;    ///< 0x808CE018, degrees
+    constexpr f32 HALF = 0.5f;            ///< 0x808A3B50
+    constexpr f32 DEG2RAD = 0.017453292f; ///< 0x808A3B54
 
     f32 r = ObjectDirector::Instance()->random().getF32(ANGLE_RANGE);
     f32 angle = (r - ANGLE_RANGE * HALF) * DEG2RAD;

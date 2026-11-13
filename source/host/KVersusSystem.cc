@@ -64,8 +64,9 @@ bool KVersusSystem::run() {
 
     FILE *objects = m_objectsPath ? fopen(m_objectsPath, "w") : nullptr;
     if (objects) {
-        fprintf(objects, "frame,raceFrame,idx,id,posX,posY,posZ,m00,m01,m02,m03,m10,m11,m12,m13,m20,"
-                         "m21,m22,m23\n");
+        fprintf(objects,
+                "frame,raceFrame,idx,id,posX,posY,posZ,m00,m01,m02,m03,m10,m11,m12,m13,m20,"
+                "m21,m22,m23\n");
     }
 
     if (auto *race = System::RaceManager::Instance()) {
@@ -311,9 +312,9 @@ void KVersusSystem::writeObjectRows(FILE *out) {
         const Field::ObjectBase *obj = objs[i];
         const EGG::Vector3f &pos = obj->pos();
         const EGG::Matrix34f &mat = obj->transform();
-        std::array<f32, 15> row = {{pos.x, pos.y, pos.z, mat[0, 0], mat[0, 1], mat[0, 2],
-                mat[0, 3], mat[1, 0], mat[1, 1], mat[1, 2], mat[1, 3], mat[2, 0], mat[2, 1],
-                mat[2, 2], mat[2, 3]}};
+        std::array<f32, 15> row = {{pos.x, pos.y, pos.z, mat[0, 0], mat[0, 1], mat[0, 2], mat[0, 3],
+                mat[1, 0], mat[1, 1], mat[1, 2], mat[1, 3], mat[2, 0], mat[2, 1], mat[2, 2],
+                mat[2, 3]}};
         if (m_frameIdx != 0 && row == m_lastObjectRows[i]) {
             continue;
         }
