@@ -323,7 +323,7 @@ void KVersusSystem::writeObjectRows(FILE *out) {
         fprintf(out, "%u,%u,%zu,%u", m_frameIdx, race ? race->timer() : 0u, i,
                 static_cast<u32>(obj->id()));
         for (f32 v : row) {
-            fprintf(out, ",%.9g", v);
+            fprintf(out, ",%.9g", static_cast<double>(v));
         }
         fprintf(out, "\n");
     }
